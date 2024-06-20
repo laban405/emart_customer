@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "422933344495",
+    "firebase_url": "https://agrigo-order-tracking-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "agrigo-order-tracking",
+    "storage_bucket": "agrigo-order-tracking.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:422933344495:android:e00f0f01ec038194d3eb1a",
+        "android_client_info": {
+          "package_name": "com.agrigo.customer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "422933344495-3mv788t461odjb8mn2je7jce7cpqbae7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_DLIBa5zj1mBlyXyiGywwnertmSH_Efk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "422933344495-3mv788t461odjb8mn2je7jce7cpqbae7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "422933344495-jghdnfbncojcs5c4dge5q9nthbfbgo5b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.agrigo.emart"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:422933344495:android:2dd4ce4d74d81f73d3eb1a",
+        "android_client_info": {
+          "package_name": "com.agrigo.store"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "422933344495-3mv788t461odjb8mn2je7jce7cpqbae7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_DLIBa5zj1mBlyXyiGywwnertmSH_Efk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "422933344495-3mv788t461odjb8mn2je7jce7cpqbae7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "422933344495-jghdnfbncojcs5c4dge5q9nthbfbgo5b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.agrigo.emart"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

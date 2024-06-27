@@ -97,7 +97,7 @@ class _ReviewState extends State<Review> {
                             )),
                             errorWidget: (context, url, error) => ClipRRect(
                                 borderRadius: BorderRadius.circular(35),
-                                child: Image.network(
+                                child: Image.asset(
                                   placeholderImage,
                                   fit: BoxFit.cover,
                                 )),
@@ -197,7 +197,7 @@ class _ReviewState extends State<Review> {
                                           ClipRRect(
                                               borderRadius:
                                                   BorderRadius.circular(10),
-                                              child: Image.network(
+                                              child: Image.asset(
                                                 placeholderImage,
                                                 fit: BoxFit.cover,
                                               )),

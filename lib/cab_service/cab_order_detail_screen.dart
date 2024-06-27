@@ -125,7 +125,7 @@ class _CabOrderDetailScreenState extends State<CabOrderDetailScreen> {
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               10),
-                                                      child: Image.network(
+                                                      child: Image.asset(
                                                         placeholderImage,
                                                         fit: BoxFit.cover,
                                                       )),

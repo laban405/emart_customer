@@ -24,7 +24,8 @@ class RentalReviewScreen extends StatefulWidget {
   _RentalReviewScreenState createState() => _RentalReviewScreenState();
 }
 
-class _RentalReviewScreenState extends State<RentalReviewScreen> with TickerProviderStateMixin {
+class _RentalReviewScreenState extends State<RentalReviewScreen>
+    with TickerProviderStateMixin {
   RatingModel? ratingModel;
   final _formKey = GlobalKey<FormState>();
   FireStoreUtils fireStoreUtils = FireStoreUtils();
@@ -60,12 +61,14 @@ class _RentalReviewScreenState extends State<RentalReviewScreen> with TickerProv
       }
     });
 
-    await FireStoreUtils.getCurrentUser(widget.order.driverID.toString()).then((value) {
+    await FireStoreUtils.getCurrentUser(widget.order.driverID.toString())
+        .then((value) {
       driverUser = value;
       if (value != null) {
         if (ratingModel != null) {
           futureCount = value.reviewsCount - 1;
-          futureSum = value.reviewsSum - num.parse(ratingModel!.rating.toString());
+          futureSum =
+              value.reviewsSum - num.parse(ratingModel!.rating.toString());
         } else {
           futureCount = value.reviewsCount;
           futureSum = value.reviewsSum;
@@ -95,7 +98,9 @@ class _RentalReviewScreenState extends State<RentalReviewScreen> with TickerProv
         ),
         title: Text(
           ratingModel != null ? "Update Review".tr() : "Add Review".tr(),
-          style: TextStyle(color: isDarkMode(context) ? Colors.white : Colors.black, fontSize: 16),
+          style: TextStyle(
+              color: isDarkMode(context) ? Colors.white : Colors.black,
+              fontSize: 16),
         ).tr(),
       ),
       body: Form(
@@ -108,10 +113,12 @@ class _RentalReviewScreenState extends State<RentalReviewScreen> with TickerProv
               : Stack(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 20, top: 42, bottom: 20),
+                      padding: const EdgeInsets.only(
+                          left: 20, right: 20, top: 42, bottom: 20),
                       child: Card(
                         elevation: 2,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
                         child: SingleChildScrollView(
                           child: Padding(
                             padding: const EdgeInsets.only(top: 65),
@@ -123,13 +130,24 @@ class _RentalReviewScreenState extends State<RentalReviewScreen> with TickerProv
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.only(top: 8.0),
-                                      child: Text("${widget.order.driver!.firstName} ${widget.order.driver!.lastName}",
-                                          style: TextStyle(color: isDarkMode(context) ? Colors.white : Colors.black87, fontWeight: FontWeight.w600, fontSize: 18)),
+                                      child: Text(
+                                          "${widget.order.driver!.firstName} ${widget.order.driver!.lastName}",
+                                          style: TextStyle(
+                                              color: isDarkMode(context)
+                                                  ? Colors.white
+                                                  : Colors.black87,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 18)),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 6.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 6.0),
                                       child: RatingBar.builder(
-                                        initialRating: driverUser!.reviewsCount != 0 ? (driverUser!.reviewsSum / driverUser!.reviewsCount) : 0.0,
+                                        initialRating:
+                                            driverUser!.reviewsCount != 0
+                                                ? (driverUser!.reviewsSum /
+                                                    driverUser!.reviewsCount)
+                                                : 0.0,
                                         minRating: 1,
                                         direction: Axis.horizontal,
                                         allowHalfRating: true,
@@ -151,12 +169,24 @@ class _RentalReviewScreenState extends State<RentalReviewScreen> with TickerProv
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text(driverUser!.carNumber.toUpperCase().toString(),
-                                        style: TextStyle(color: isDarkMode(context) ? Colors.white : Colors.black87, fontWeight: FontWeight.w600)),
+                                    Text(
+                                        driverUser!.carNumber
+                                            .toUpperCase()
+                                            .toString(),
+                                        style: TextStyle(
+                                            color: isDarkMode(context)
+                                                ? Colors.white
+                                                : Colors.black87,
+                                            fontWeight: FontWeight.w600)),
                                     Padding(
                                       padding: const EdgeInsets.only(left: 8.0),
-                                      child: Text("${driverUser!.carName} ${driverUser!.carMakes}",
-                                          style: TextStyle(color: isDarkMode(context) ? Colors.white : Colors.black38, fontWeight: FontWeight.w600)),
+                                      child: Text(
+                                          "${driverUser!.carName} ${driverUser!.carMakes}",
+                                          style: TextStyle(
+                                              color: isDarkMode(context)
+                                                  ? Colors.white
+                                                  : Colors.black38,
+                                              fontWeight: FontWeight.w600)),
                                     ),
                                   ],
                                 ),
@@ -168,15 +198,26 @@ class _RentalReviewScreenState extends State<RentalReviewScreen> with TickerProv
                                   padding: const EdgeInsets.only(top: 16),
                                   child: Text(
                                     'How is your trip?'.tr(),
-                                    style: TextStyle(fontSize: 18, color: isDarkMode(context) ? Colors.white : Colors.black, fontWeight: FontWeight.bold, letterSpacing: 2),
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        color: isDarkMode(context)
+                                            ? Colors.white
+                                            : Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 2),
                                   ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(top: 8),
                                   child: Text(
-                                    'Your feedback  will help us improve \n driving experience better'.tr(),
+                                    'Your feedback  will help us improve \n driving experience better'
+                                        .tr(),
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(color: isDarkMode(context) ? Colors.white : Colors.black.withOpacity(0.60), letterSpacing: 0.8),
+                                    style: TextStyle(
+                                        color: isDarkMode(context)
+                                            ? Colors.white
+                                            : Colors.black.withOpacity(0.60),
+                                        letterSpacing: 0.8),
                                   ),
                                 ),
                                 Padding(
@@ -184,14 +225,24 @@ class _RentalReviewScreenState extends State<RentalReviewScreen> with TickerProv
                                   child: Text(
                                     'Rate for'.tr(),
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(color: isDarkMode(context) ? Colors.white : Colors.black.withOpacity(0.60), letterSpacing: 0.8),
+                                    style: TextStyle(
+                                        color: isDarkMode(context)
+                                            ? Colors.white
+                                            : Colors.black.withOpacity(0.60),
+                                        letterSpacing: 0.8),
                                   ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(top: 8),
                                   child: Text(
                                     "${widget.order.driver!.firstName} ${widget.order.driver!.lastName}",
-                                    style: TextStyle(fontSize: 18, color: isDarkMode(context) ? Colors.white : Colors.black, fontWeight: FontWeight.bold, letterSpacing: 2),
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        color: isDarkMode(context)
+                                            ? Colors.white
+                                            : Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 2),
                                   ),
                                 ),
                                 Padding(
@@ -202,7 +253,8 @@ class _RentalReviewScreenState extends State<RentalReviewScreen> with TickerProv
                                     direction: Axis.horizontal,
                                     allowHalfRating: true,
                                     itemCount: 5,
-                                    itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                    itemPadding: const EdgeInsets.symmetric(
+                                        horizontal: 4.0),
                                     itemBuilder: (context, _) => const Icon(
                                       Icons.star,
                                       color: Colors.amber,
@@ -213,34 +265,49 @@ class _RentalReviewScreenState extends State<RentalReviewScreen> with TickerProv
                                   ),
                                 ),
                                 Padding(
-                                    padding: const EdgeInsets.only(top: 30, left: 20, right: 20),
+                                    padding: const EdgeInsets.only(
+                                        top: 30, left: 20, right: 20),
                                     child: TextFormField(
                                       controller: comment,
                                       textInputAction: TextInputAction.send,
-                                      style: TextStyle(color: Colors.black.withOpacity(0.60)),
+                                      style: TextStyle(
+                                          color:
+                                              Colors.black.withOpacity(0.60)),
                                       decoration: InputDecoration(
                                           counterText: "",
-                                          contentPadding: const EdgeInsets.all(8),
+                                          contentPadding:
+                                              const EdgeInsets.all(8),
                                           fillColor: Colors.white,
                                           filled: true,
                                           focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(color: Color(COLOR_PRIMARY), width: 0.7),
+                                            borderSide: BorderSide(
+                                                color: Color(COLOR_PRIMARY),
+                                                width: 0.7),
                                           ),
                                           enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(color: Color(COLOR_PRIMARY), width: 0.7),
+                                            borderSide: BorderSide(
+                                                color: Color(COLOR_PRIMARY),
+                                                width: 0.7),
                                           ),
                                           errorBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(color: Color(COLOR_PRIMARY), width: 0.7),
+                                            borderSide: BorderSide(
+                                                color: Color(COLOR_PRIMARY),
+                                                width: 0.7),
                                           ),
                                           border: OutlineInputBorder(
-                                            borderSide: BorderSide(color: Color(COLOR_PRIMARY), width: 0.7),
+                                            borderSide: BorderSide(
+                                                color: Color(COLOR_PRIMARY),
+                                                width: 0.7),
                                           ),
                                           hintText: "Type comment....".tr(),
-                                          hintStyle: TextStyle(color: Colors.black.withOpacity(0.60))),
+                                          hintStyle: TextStyle(
+                                              color: Colors.black
+                                                  .withOpacity(0.60))),
                                       maxLines: 5,
                                     )),
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 20),
+                                  padding: const EdgeInsets.only(
+                                      top: 20, left: 20, right: 20, bottom: 20),
                                   child: MaterialButton(
                                     onPressed: () {
                                       savereview();
@@ -253,8 +320,14 @@ class _RentalReviewScreenState extends State<RentalReviewScreen> with TickerProv
                                     ),
                                     color: Color(COLOR_PRIMARY),
                                     child: Text(
-                                      ratingModel != null ? "Update Review".tr() : "Add Review".tr(),
-                                      style: TextStyle(color: isDarkMode(context) ? Colors.white : Colors.black, fontSize: 16),
+                                      ratingModel != null
+                                          ? "Update Review".tr()
+                                          : "Add Review".tr(),
+                                      style: TextStyle(
+                                          color: isDarkMode(context)
+                                              ? Colors.white
+                                              : Colors.black,
+                                          fontSize: 16),
                                     ),
                                   ),
                                 ),
@@ -286,10 +359,11 @@ class _RentalReviewScreenState extends State<RentalReviewScreen> with TickerProv
                               height: 110,
                               width: 110,
                               fit: BoxFit.cover,
-                              placeholder: (context, url) => const CircularProgressIndicator(),
+                              placeholder: (context, url) =>
+                                  const CircularProgressIndicator(),
                               errorWidget: (context, url, error) => ClipRRect(
                                   borderRadius: BorderRadius.circular(60),
-                                  child: Image.network(
+                                  child: Image.asset(
                                     placeholderImage,
                                     fit: BoxFit.cover,
                                     height: 110,
@@ -383,7 +457,8 @@ class _RentalReviewScreenState extends State<RentalReviewScreen> with TickerProv
         await showProgress(context, 'Updating data to database...'.tr(), false);
         //  if(_mediaFiles is File){
 
-        User? user = await FireStoreUtils.getCurrentUser(widget.order.driverID.toString());
+        User? user = await FireStoreUtils.getCurrentUser(
+            widget.order.driverID.toString());
         if (user != null) {
           user.reviewsCount = futureCount + 1;
           user.reviewsSum = futureSum + ratings;
@@ -399,22 +474,26 @@ class _RentalReviewScreenState extends State<RentalReviewScreen> with TickerProv
           vendorId: ratingModel!.vendorId,
           driverId: ratingModel!.driverId,
           createdAt: Timestamp.now(),
-          uname: MyAppState.currentUser!.firstName + MyAppState.currentUser!.lastName,
+          uname: MyAppState.currentUser!.firstName +
+              MyAppState.currentUser!.lastName,
           profile: MyAppState.currentUser!.profilePictureURL,
         );
-        await FireStoreUtils.updateReviewbyId(ratingproduct).then((value) async {
+        await FireStoreUtils.updateReviewbyId(ratingproduct)
+            .then((value) async {
           await hideProgress();
           Navigator.pop(context);
         });
         await FireStoreUtils.updateCurrentUser(user!);
       } else {
         await showProgress(context, 'Saving data to database...'.tr(), false);
-        User? user = await FireStoreUtils.getCurrentUser(widget.order.driverID.toString());
+        User? user = await FireStoreUtils.getCurrentUser(
+            widget.order.driverID.toString());
         if (user != null) {
           user.reviewsCount = futureCount + 1;
           user.reviewsSum = futureSum + ratings;
         }
-        DocumentReference documentReference = firestore.collection(Order_Rating).doc();
+        DocumentReference documentReference =
+            firestore.collection(Order_Rating).doc();
         RatingModel rate = RatingModel(
           id: documentReference.id,
           comment: comment.text,
@@ -423,7 +502,8 @@ class _RentalReviewScreenState extends State<RentalReviewScreen> with TickerProv
           orderId: widget.order.id,
           driverId: widget.order.driverID.toString(),
           customerId: MyAppState.currentUser!.userID,
-          uname: MyAppState.currentUser!.firstName + MyAppState.currentUser!.lastName,
+          uname: MyAppState.currentUser!.firstName +
+              MyAppState.currentUser!.lastName,
           profile: MyAppState.currentUser!.profilePictureURL,
           createdAt: Timestamp.now(),
         );
@@ -476,7 +556,8 @@ class _RentalReviewScreenState extends State<RentalReviewScreen> with TickerProv
   //   }
   // }
 
-  showAlertDialog(BuildContext context, String title, String content, bool addOkButton) {
+  showAlertDialog(
+      BuildContext context, String title, String content, bool addOkButton) {
     // set up the AlertDialog
     Widget? okButton;
     if (addOkButton) {
@@ -500,7 +581,10 @@ class _RentalReviewScreenState extends State<RentalReviewScreen> with TickerProv
             return alert;
           });
     } else {
-      AlertDialog alert = AlertDialog(title: Text(title), content: Text(content), actions: [if (okButton != null) okButton]);
+      AlertDialog alert = AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: [if (okButton != null) okButton]);
 
       showDialog(
         context: context,

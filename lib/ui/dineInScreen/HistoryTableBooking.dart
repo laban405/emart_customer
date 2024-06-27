@@ -22,7 +22,8 @@ class _HistoryTableBookingState extends State<HistoryTableBooking> {
   @override
   void initState() {
     super.initState();
-    bookedFuture = fireStoreUtils.getBookingOrders(MyAppState.currentUser!.userID, false);
+    bookedFuture =
+        fireStoreUtils.getBookingOrders(MyAppState.currentUser!.userID, false);
   }
 
   @override
@@ -68,7 +69,8 @@ class _HistoryTableBookingState extends State<HistoryTableBooking> {
                           ));
                     },
                     child: Container(
-                      margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 5),
+                      margin: const EdgeInsets.only(
+                          left: 10, right: 10, bottom: 10, top: 5),
                       decoration: const BoxDecoration(
                         color: Color(0xffFFFFFF),
                         borderRadius: BorderRadius.all(
@@ -95,23 +97,31 @@ class _HistoryTableBookingState extends State<HistoryTableBooking> {
                                   child: CachedNetworkImage(
                                     height: 70,
                                     width: 70,
-                                    imageUrl: getImageVAlidUrl(bookTableModel.vendor.photo),
-                                    imageBuilder: (context, imageProvider) => Container(
+                                    imageUrl: getImageVAlidUrl(
+                                        bookTableModel.vendor.photo),
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(15),
-                                        image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                                        image: DecorationImage(
+                                            image: imageProvider,
+                                            fit: BoxFit.cover),
                                       ),
                                     ),
                                     placeholder: (context, url) => Center(
-                                        child: CircularProgressIndicator.adaptive(
-                                      valueColor: AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
+                                        child:
+                                            CircularProgressIndicator.adaptive(
+                                      valueColor: AlwaysStoppedAnimation(
+                                          Color(COLOR_PRIMARY)),
                                     )),
-                                    errorWidget: (context, url, error) => ClipRRect(
-                                        borderRadius: BorderRadius.circular(15),
-                                        child: Image.network(
-                                          placeholderImage,
-                                          fit: BoxFit.cover,
-                                        )),
+                                    errorWidget: (context, url, error) =>
+                                        ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            child: Image.asset(
+                                              placeholderImage,
+                                              fit: BoxFit.cover,
+                                            )),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -120,7 +130,8 @@ class _HistoryTableBookingState extends State<HistoryTableBooking> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 10),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         bookTableModel.vendor.title,
@@ -149,7 +160,8 @@ class _HistoryTableBookingState extends State<HistoryTableBooking> {
                               'Name'.tr(),
                               style: const TextStyle(color: Colors.black),
                             ),
-                            leading: const Icon(Icons.person_outline, color: Colors.black),
+                            leading: const Icon(Icons.person_outline,
+                                color: Colors.black),
                             minLeadingWidth: 10,
                             subtitle: Text(
                               '${bookTableModel.guestFirstName} ${bookTableModel.guestLastName}',
@@ -161,10 +173,12 @@ class _HistoryTableBookingState extends State<HistoryTableBooking> {
                               'Date'.tr(),
                               style: const TextStyle(color: Colors.black),
                             ),
-                            leading: const Icon(Icons.date_range, color: Colors.black),
+                            leading: const Icon(Icons.date_range,
+                                color: Colors.black),
                             minLeadingWidth: 10,
                             subtitle: Text(
-                              DateFormat("MMM dd, yyyy 'at' hh:mm a").format(bookTableModel.date.toDate()),
+                              DateFormat("MMM dd, yyyy 'at' hh:mm a")
+                                  .format(bookTableModel.date.toDate()),
                               style: const TextStyle(color: Colors.grey),
                             ),
                           ),
@@ -173,16 +187,22 @@ class _HistoryTableBookingState extends State<HistoryTableBooking> {
                               'Guest'.tr(),
                               style: const TextStyle(color: Colors.black),
                             ),
-                            leading: const Icon(Icons.group, color: Colors.black87),
+                            leading:
+                                const Icon(Icons.group, color: Colors.black87),
                             minLeadingWidth: 10,
-                            subtitle: Text('${bookTableModel.totalGuest}', style: const TextStyle(color: Colors.grey)),
+                            subtitle: Text('${bookTableModel.totalGuest}',
+                                style: const TextStyle(color: Colors.grey)),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 20),
                             child: Center(
                                 child: Text(
                               bookStatus,
-                              style: const TextStyle(letterSpacing: 0.5, color: Colors.green, fontSize: 16, fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                  letterSpacing: 0.5,
+                                  color: Colors.green,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold),
                             )),
                           )
                         ],

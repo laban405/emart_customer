@@ -25,7 +25,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: isDarkMode(context) ? Colors.black : const Color(0xffFBFBFB),
+        backgroundColor:
+            isDarkMode(context) ? Colors.black : const Color(0xffFBFBFB),
         appBar: AppBar(
           automaticallyImplyLeading: true,
         ),
@@ -41,7 +42,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     Text(
                       "Explore services".tr(),
                       style: TextStyle(
-                        color: isDarkMode(context) ? Colors.white : Colors.black,
+                        color:
+                            isDarkMode(context) ? Colors.white : Colors.black,
                         fontSize: 18,
                         fontFamily: "Poppinsm",
                         fontWeight: FontWeight.w600,
@@ -50,9 +52,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Text(
-                        "Explore services tailored for you—quick, easy, and personalized.".tr(),
+                        "Explore services tailored for you—quick, easy, and personalized."
+                            .tr(),
                         style: TextStyle(
-                          color: isDarkMode(context) ? Colors.white : Colors.black,
+                          color:
+                              isDarkMode(context) ? Colors.white : Colors.black,
                           fontSize: 12,
                           fontFamily: "Poppinsm",
                           fontWeight: FontWeight.normal,
@@ -73,16 +77,20 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       return const Center(child: CircularProgressIndicator());
                     }
 
-                    if (snapshot.hasData || (snapshot.data?.isNotEmpty ?? false)) {
+                    if (snapshot.hasData ||
+                        (snapshot.data?.isNotEmpty ?? false)) {
                       return GridView.builder(
                         padding: const EdgeInsets.all(5),
                         itemCount: snapshot.data!.length,
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
-                          return snapshot.data != null ? categoriesCell(snapshot.data![index], index) : showEmptyState('No Categories'.tr(), context);
+                          return snapshot.data != null
+                              ? categoriesCell(snapshot.data![index], index)
+                              : showEmptyState('No Categories'.tr(), context);
                         },
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 3,
                         ),
                       );
@@ -124,7 +132,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     // color: Colors.black,
                     errorWidget: (context, url, error) => ClipRRect(
                       borderRadius: BorderRadius.circular(5),
-                      child: Image.network(
+                      child: Image.asset(
                         placeholderImage,
                         fit: BoxFit.cover,
                       ),

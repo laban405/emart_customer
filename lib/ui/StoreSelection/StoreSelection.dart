@@ -270,7 +270,7 @@ class StoreSelectionState extends State<StoreSelection> {
             COLOR_PRIMARY = int.parse(sectionModel.color!.replaceFirst("#", "0xff"));
 
             print("=========>");
-            print(sectionModel.adminCommision!.toJson());
+            // print(sectionModel.adminCommision!.toJson());
             if (auth.FirebaseAuth.instance.currentUser != null && MyAppState.currentUser != null) {
               User? user = await FireStoreUtils.getCurrentUser(MyAppState.currentUser!.userID);
 

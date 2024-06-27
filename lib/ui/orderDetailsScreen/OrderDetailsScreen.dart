@@ -106,7 +106,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       });
       setState(() {});
     }
-
   }
 
   calculate() {
@@ -174,10 +173,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       backgroundColor:
           isDarkMode(context) ? const Color(DARK_BG_COLOR) : Colors.white,
       appBar: AppGlobal.buildSimpleAppBar(context, 'Your Order'.tr()),
-      body:
-      orderModel != null
-          ?
-      StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+      body: orderModel != null
+          ? StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
               stream: fireStoreUtils.watchOrderStatus(orderModel!.id),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
@@ -436,8 +433,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   );
                 }
               })
-          : Container()
-      ,
+          : Container(),
     );
   }
 
@@ -709,7 +705,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                         ClipRRect(
                                             borderRadius:
                                                 BorderRadius.circular(15),
-                                            child: Image.network(
+                                            child: Image.asset(
                                               placeholderImage,
                                               fit: BoxFit.cover,
                                               width: MediaQuery.of(context)
@@ -882,7 +878,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                           .then((value) {
                                         productModel = value;
                                       });
-                                      if (productModel!.itemAttributes != null) {
+                                      if (productModel!.itemAttributes !=
+                                          null) {
                                         if (productModel!
                                             .itemAttributes!.variants!
                                             .where((element) =>
@@ -995,49 +992,103 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                           }
                                         }
                                       } else {
-                                        List<CartProduct> cartProducts = await cartDatabase.allCartProducts;
+                                        List<CartProduct> cartProducts =
+                                            await cartDatabase.allCartProducts;
 
-                                        if (productModel!.quantity >= orderModel.products[index].quantity || productModel!.quantity == -1) {
-                                          final bool _productIsInList = cartProducts
-                                              .any((product) => product.id == productModel!.id + "~" + (productModel!.variant_info != null ? productModel!.variant_info!.variant_id.toString() : ""));
+                                        if (productModel!.quantity >=
+                                                orderModel
+                                                    .products[index].quantity ||
+                                            productModel!.quantity == -1) {
+                                          final bool _productIsInList =
+                                              cartProducts.any((product) =>
+                                                  product.id ==
+                                                  productModel!.id +
+                                                      "~" +
+                                                      (productModel!
+                                                                  .variant_info !=
+                                                              null
+                                                          ? productModel!
+                                                              .variant_info!
+                                                              .variant_id
+                                                              .toString()
+                                                          : ""));
                                           if (_productIsInList) {
                                             CartProduct element = cartProducts
-                                                .firstWhere((product) => product.id == productModel!.id + "~" + (productModel!.variant_info != null ? productModel!.variant_info!.variant_id.toString() : ""));
+                                                .firstWhere((product) =>
+                                                    product.id ==
+                                                    productModel!.id +
+                                                        "~" +
+                                                        (productModel!
+                                                                    .variant_info !=
+                                                                null
+                                                            ? productModel!
+                                                                .variant_info!
+                                                                .variant_id
+                                                                .toString()
+                                                            : ""));
 
-                                            await cartDatabase.updateProduct(CartProduct(
-                                                id: element.id,
-                                                name: element.name,
-                                                photo: element.photo,
-                                                price: element.price,
-                                                vendorID: element.vendorID,
-                                                quantity: element.quantity + element.quantity,
-                                                category_id: element.category_id,
-                                                extras_price: element.extras_price,
-                                                extras: element.extras,
-                                                discountPrice: element.discountPrice));
+                                            await cartDatabase.updateProduct(
+                                                CartProduct(
+                                                    id: element.id,
+                                                    name: element.name,
+                                                    photo: element.photo,
+                                                    price: element.price,
+                                                    vendorID: element.vendorID,
+                                                    quantity: element.quantity +
+                                                        element.quantity,
+                                                    category_id:
+                                                        element.category_id,
+                                                    extras_price:
+                                                        element.extras_price,
+                                                    extras: element.extras,
+                                                    discountPrice:
+                                                        element.discountPrice));
                                           } else {
                                             cartDatabase.reAddProduct(CartProduct(
-                                                id: orderModel.products[index].id + "~" + (variantIno != null ? variantIno.variant_id.toString() : ""),
-                                                name: orderModel.products[index].name,
-                                                photo: orderModel.products[index].photo,
-                                                price: orderModel.products[index].price,
-                                                discountPrice: orderModel.products[index].discountPrice,
-                                                vendorID: orderModel.products[index].vendorID,
-                                                quantity: orderModel.products[index].quantity,
-                                                extras_price: orderModel.products[index].extras_price,
-                                                extras: orderModel.products[index].extras,
-                                                category_id: orderModel.products[index].category_id,
+                                                id: orderModel
+                                                        .products[index].id +
+                                                    "~" +
+                                                    (variantIno != null
+                                                        ? variantIno.variant_id
+                                                            .toString()
+                                                        : ""),
+                                                name: orderModel
+                                                    .products[index].name,
+                                                photo: orderModel
+                                                    .products[index].photo,
+                                                price: orderModel
+                                                    .products[index].price,
+                                                discountPrice: orderModel
+                                                    .products[index]
+                                                    .discountPrice,
+                                                vendorID: orderModel
+                                                    .products[index].vendorID,
+                                                quantity: orderModel
+                                                    .products[index].quantity,
+                                                extras_price: orderModel
+                                                    .products[index]
+                                                    .extras_price,
+                                                extras: orderModel
+                                                    .products[index].extras,
+                                                category_id: orderModel
+                                                    .products[index]
+                                                    .category_id,
                                                 variant_info: variantIno));
                                           }
 
                                           await hideProgress();
-                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                            content: Text("Product is added in cart".tr()),
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            content: Text(
+                                                "Product is added in cart"
+                                                    .tr()),
                                           ));
                                         } else {
                                           await hideProgress();
-                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                            content: Text("Product is out of Stock".tr()),
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            content: Text(
+                                                "Product is out of Stock".tr()),
                                           ));
                                         }
                                       }
@@ -1504,8 +1555,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     ]);
     bytes += generator.row([
       PosColumn(
-          text:
-              '${orderModel!.address!.getFullAddress}',
+          text: '${orderModel!.address!.getFullAddress}',
           width: 12,
           styles: const PosStyles(
               align: PosAlign.right,
@@ -1930,7 +1980,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                     itemBuilder: (context, index) {
                       return ListTile(
                         onTap: () {
-                          BluetoothInfo select = availableBluetoothDevices[index];
+                          BluetoothInfo select =
+                              availableBluetoothDevices[index];
                           // String name = list[0];
                           setConnect(select);
                           Navigator.pop(context);
@@ -1947,7 +1998,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   }
 
   Future<void> setConnect(BluetoothInfo mac) async {
-    final bool? result = await PrintBluetoothThermal.connect(macPrinterAddress: mac.macAdress);
+    final bool? result =
+        await PrintBluetoothThermal.connect(macPrinterAddress: mac.macAdress);
     print("state conneected $result");
     if (result == true) {
       printTicket();
@@ -2161,7 +2213,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
           GOOGLE_API_KEY,
           PointLatLng(_driverModel!.location.latitude,
               _driverModel!.location.longitude),
-          PointLatLng(currentOrder!.address!.location!.latitude, currentOrder!.address!.location!.longitude),
+          PointLatLng(currentOrder!.address!.location!.latitude,
+              currentOrder!.address!.location!.longitude),
           travelMode: TravelMode.driving,
         );
 
@@ -2187,7 +2240,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         _markers['Destination'] = Marker(
           markerId: const MarkerId('Destination'),
           infoWindow: const InfoWindow(title: "Destination"),
-          position: LatLng(currentOrder!.address!.location!.latitude, currentOrder!.address!.location!.longitude),
+          position: LatLng(currentOrder!.address!.location!.latitude,
+              currentOrder!.address!.location!.longitude),
           icon: destinationIcon!,
         );
         addPolyLine(polylineCoordinates);

@@ -112,7 +112,7 @@ const MINUTE_MILLIS = 60 * SECOND_MILLIS;
 const HOUR_MILLIS = 60 * MINUTE_MILLIS;
 String senderId = '';
 String jsonNotificationFileURL = '';
-String GOOGLE_API_KEY = '';
+String GOOGLE_API_KEY = 'AIzaSyDguptQvRbwyKNpm9Qn_SfqnSM0qHOTcBQ';
 
 const ORDER_STATUS_PLACED = 'Order Placed';
 const ORDER_STATUS_ACCEPTED = 'Order Accepted';
@@ -189,7 +189,7 @@ bool isRazorPaySandboxEnabled = false;
 String razorpayKey = "";
 String razorpaySecret = "";
 
-String placeholderImage = '';
+String placeholderImage = 'assets/images/img_placeholder.png';
 const tax = 'tax';
 List<TaxModel>? taxList = [];
 String? country = "";

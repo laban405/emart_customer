@@ -115,7 +115,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyB_DLIBa5zj1mBlyXyiGywwnertmSH_Efk" />
+            android:value="AIzaSyDguptQvRbwyKNpm9Qn_SfqnSM0qHOTcBQ" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

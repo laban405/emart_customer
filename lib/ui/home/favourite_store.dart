@@ -53,12 +53,15 @@ class _FavouriteStoreScreenState extends State<FavouriteStoreScreen> {
                     itemBuilder: (context, index) {
                       if (storeAllLst.isNotEmpty) {
                         for (int a = 0; a < storeAllLst.length; a++) {
-                          if (storeAllLst[a].id == lstFavourite[index].store_id) {
+                          if (storeAllLst[a].id ==
+                              lstFavourite[index].store_id) {
                             vendorModel = storeAllLst[a];
                           } else {}
                         }
                       }
-                      return vendorModel == null ? Container() : buildAllStoreData(vendorModel!, index);
+                      return vendorModel == null
+                          ? Container()
+                          : buildAllStoreData(vendorModel!, index);
                     }));
   }
 
@@ -73,8 +76,13 @@ class _FavouriteStoreScreenState extends State<FavouriteStoreScreen> {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: isDarkMode(context) ? const Color(DarkContainerBorderColor) : Colors.grey.shade100, width: 1),
-            color: isDarkMode(context) ? Color(DarkContainerColor) : Colors.white,
+            border: Border.all(
+                color: isDarkMode(context)
+                    ? const Color(DarkContainerBorderColor)
+                    : Colors.grey.shade100,
+                width: 1),
+            color:
+                isDarkMode(context) ? Color(DarkContainerColor) : Colors.white,
             boxShadow: [
               isDarkMode(context)
                   ? const BoxShadow()
@@ -97,7 +105,8 @@ class _FavouriteStoreScreenState extends State<FavouriteStoreScreen> {
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                      image: DecorationImage(
+                          image: imageProvider, fit: BoxFit.cover),
                     ),
                   ),
                   placeholder: (context, url) => Center(
@@ -106,7 +115,7 @@ class _FavouriteStoreScreenState extends State<FavouriteStoreScreen> {
                   )),
                   errorWidget: (context, url, error) => ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: Image.network(
+                      child: Image.asset(
                         placeholderImage,
                         fit: BoxFit.cover,
                       )),
@@ -132,9 +141,13 @@ class _FavouriteStoreScreenState extends State<FavouriteStoreScreen> {
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                              FavouriteModel favouriteModel = FavouriteModel(store_id: vendorModel.id, user_id: MyAppState.currentUser!.userID);
-                              lstFavourite.removeWhere((item) => item == vendorModel.id);
-                              fireStoreUtils.removeFavouriteStore(favouriteModel);
+                              FavouriteModel favouriteModel = FavouriteModel(
+                                  store_id: vendorModel.id,
+                                  user_id: MyAppState.currentUser!.userID);
+                              lstFavourite.removeWhere(
+                                  (item) => item == vendorModel.id);
+                              fireStoreUtils
+                                  .removeFavouriteStore(favouriteModel);
 
                               lstFavourite.removeAt(index);
                             });
@@ -166,12 +179,21 @@ class _FavouriteStoreScreenState extends State<FavouriteStoreScreen> {
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 5, vertical: 2),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(vendorModel.reviewsCount != 0 ? (vendorModel.reviewsSum / vendorModel.reviewsCount).toStringAsFixed(1) : 0.toString(),
-                                style: const TextStyle(letterSpacing: 0.5, fontSize: 12, color: Colors.white)),
+                            Text(
+                                vendorModel.reviewsCount != 0
+                                    ? (vendorModel.reviewsSum /
+                                            vendorModel.reviewsCount)
+                                        .toStringAsFixed(1)
+                                    : 0.toString(),
+                                style: const TextStyle(
+                                    letterSpacing: 0.5,
+                                    fontSize: 12,
+                                    color: Colors.white)),
                             const SizedBox(width: 3),
                             const Icon(
                               Icons.star,
@@ -193,7 +215,9 @@ class _FavouriteStoreScreenState extends State<FavouriteStoreScreen> {
   }
 
   void getData() {
-    fireStoreUtils.getFavouriteStore(MyAppState.currentUser!.userID).then((value) {
+    fireStoreUtils
+        .getFavouriteStore(MyAppState.currentUser!.userID)
+        .then((value) {
       setState(() {
         lstFavourite.clear();
         lstFavourite.addAll(value);

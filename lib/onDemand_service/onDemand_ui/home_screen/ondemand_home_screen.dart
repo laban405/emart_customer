@@ -39,7 +39,8 @@ class OnDemandHomeScreen extends StatefulWidget {
 class _OnDemandHomeScreenState extends State<OnDemandHomeScreen> {
   final fireStoreUtils = FireStoreUtils();
 
-  final PageController _controller = PageController(viewportFraction: 0.89, keepPage: true);
+  final PageController _controller =
+      PageController(viewportFraction: 0.89, keepPage: true);
 
   String? currentLocation = "";
 
@@ -89,9 +90,12 @@ class _OnDemandHomeScreenState extends State<OnDemandHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: isDarkMode(context) ? const Color(DARK_BG_COLOR) : const Color(0xffF9F9F9),
+        backgroundColor: isDarkMode(context)
+            ? const Color(DARK_BG_COLOR)
+            : const Color(0xffF9F9F9),
         appBar: AppBar(
-          backgroundColor: isDarkMode(context) ? const Color(DARK_BG_COLOR) : Colors.white,
+          backgroundColor:
+              isDarkMode(context) ? const Color(DARK_BG_COLOR) : Colors.white,
           centerTitle: false,
           titleSpacing: 0,
           leading: IconButton(
@@ -106,7 +110,10 @@ class _OnDemandHomeScreenState extends State<OnDemandHomeScreen> {
           title: InkWell(
             onTap: () async {
               if (MyAppState.currentUser != null) {
-                await Navigator.of(context).push(MaterialPageRoute(builder: (context) => DeliveryAddressScreen())).then((value) {
+                await Navigator.of(context)
+                    .push(MaterialPageRoute(
+                        builder: (context) => DeliveryAddressScreen()))
+                    .then((value) {
                   if (value != null) {
                     AddressModel addressModel = value;
                     MyAppState.selectedPosotion = addressModel;
@@ -130,8 +137,11 @@ class _OnDemandHomeScreenState extends State<OnDemandHomeScreen> {
                           onPlacePicked: (result) async {
                             await hideProgress();
                             AddressModel addressModel = AddressModel();
-                            addressModel.locality = result.formattedAddress!.toString();
-                            addressModel.location = UserLocation(latitude: result.geometry!.location.lat, longitude: result.geometry!.location.lng);
+                            addressModel.locality =
+                                result.formattedAddress!.toString();
+                            addressModel.location = UserLocation(
+                                latitude: result.geometry!.location.lat,
+                                longitude: result.geometry!.location.lng);
                             MyAppState.selectedPosotion = addressModel;
                             setState(() {});
                             getData();
@@ -145,15 +155,18 @@ class _OnDemandHomeScreenState extends State<OnDemandHomeScreen> {
                           zoomGesturesEnabled: true,
                           zoomControlsEnabled: true,
                           initialMapType: MapType.terrain,
-                          resizeToAvoidBottomInset: false, // only works in page mode, less flickery, remove if wrong offsets
+                          resizeToAvoidBottomInset:
+                              false, // only works in page mode, less flickery, remove if wrong offsets
                         ),
                       ),
                     );
                   } catch (e) {
-                    await placemarkFromCoordinates(19.228825, 72.854118).then((valuePlaceMaker) {
+                    await placemarkFromCoordinates(19.228825, 72.854118)
+                        .then((valuePlaceMaker) {
                       Placemark placeMark = valuePlaceMaker[0];
                       setState(() {
-                        addressModel.location = UserLocation(latitude: 19.228825, longitude: 72.854118);
+                        addressModel.location = UserLocation(
+                            latitude: 19.228825, longitude: 72.854118);
                         String currentLocation =
                             "${placeMark.name}, ${placeMark.subLocality}, ${placeMark.locality}, ${placeMark.administrativeArea}, ${placeMark.postalCode}, ${placeMark.country}";
                         addressModel.locality = currentLocation;
@@ -174,7 +187,9 @@ class _OnDemandHomeScreenState extends State<OnDemandHomeScreen> {
                   "Current Location".tr(),
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: isDarkMode(context) ? Colors.white : const Color(0xff636A75),
+                    color: isDarkMode(context)
+                        ? Colors.white
+                        : const Color(0xff636A75),
                     fontSize: 12,
                     fontFamily: "Poppinsm",
                     fontWeight: FontWeight.w600,
@@ -185,10 +200,14 @@ class _OnDemandHomeScreenState extends State<OnDemandHomeScreen> {
                     Container(
                       width: MediaQuery.of(context).size.width * 0.40,
                       child: Text(
-                        MyAppState.selectedPosotion.getFullAddress().toString().tr(),
+                        MyAppState.selectedPosotion
+                            .getFullAddress()
+                            .toString()
+                            .tr(),
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: isDarkMode(context) ? Colors.white : Colors.black,
+                          color:
+                              isDarkMode(context) ? Colors.white : Colors.black,
                           fontSize: 14,
                           fontFamily: "Poppinsm",
                           fontWeight: FontWeight.w600,
@@ -204,10 +223,14 @@ class _OnDemandHomeScreenState extends State<OnDemandHomeScreen> {
         ),
         body: isLoading == true
             ? Center(child: CircularProgressIndicator())
-            : (MyAppState.selectedPosotion.location!.latitude == 0 && MyAppState.selectedPosotion.location!.longitude == 0)
+            : (MyAppState.selectedPosotion.location!.latitude == 0 &&
+                    MyAppState.selectedPosotion.location!.longitude == 0)
                 ? Center(
-                    child: showEmptyState("We don't have your location.".tr(), context, description: "Set your location to started searching for restaurants in your area".tr(),
-                        action: () async {
+                    child: showEmptyState(
+                        "We don't have your location.".tr(), context,
+                        description:
+                            "Set your location to started searching for restaurants in your area"
+                                .tr(), action: () async {
                       await showProgress(context, "Please wait...".tr(), false);
 
                       await Geolocator.requestPermission();
@@ -220,8 +243,11 @@ class _OnDemandHomeScreenState extends State<OnDemandHomeScreen> {
                             onPlacePicked: (result) async {
                               await hideProgress();
                               AddressModel addressModel = AddressModel();
-                              addressModel.locality = result.formattedAddress!.toString();
-                              addressModel.location = UserLocation(latitude: result.geometry!.location.lat, longitude: result.geometry!.location.lng);
+                              addressModel.locality =
+                                  result.formattedAddress!.toString();
+                              addressModel.location = UserLocation(
+                                  latitude: result.geometry!.location.lat,
+                                  longitude: result.geometry!.location.lng);
                               MyAppState.selectedPosotion = addressModel;
                               setState(() {});
                               Navigator.of(context).pop();
@@ -234,7 +260,8 @@ class _OnDemandHomeScreenState extends State<OnDemandHomeScreen> {
                             zoomGesturesEnabled: true,
                             zoomControlsEnabled: true,
                             initialMapType: MapType.terrain,
-                            resizeToAvoidBottomInset: false, // only works in page mode, less flickery, remove if wrong offsets
+                            resizeToAvoidBottomInset:
+                                false, // only works in page mode, less flickery, remove if wrong offsets
                           ),
                         ),
                       );
@@ -251,23 +278,39 @@ class _OnDemandHomeScreenState extends State<OnDemandHomeScreen> {
                               bannerModel.isEmpty
                                   ? SizedBox()
                                   : Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 10),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 10),
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(10),
-                                          border: Border.all(color: isDarkMode(context) ? const Color(DarkContainerBorderColor) : Colors.grey.shade100, width: 1),
-                                          color: isDarkMode(context) ? const Color(DarkContainerColor) : Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border: Border.all(
+                                              color: isDarkMode(context)
+                                                  ? const Color(
+                                                      DarkContainerBorderColor)
+                                                  : Colors.grey.shade100,
+                                              width: 1),
+                                          color: isDarkMode(context)
+                                              ? const Color(DarkContainerColor)
+                                              : Colors.white,
                                         ),
                                         child: SizedBox(
-                                          height: MediaQuery.of(context).size.height * 0.23,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.23,
                                           child: Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 5, vertical: 10),
                                             child: PageView.builder(
                                                 padEnds: false,
                                                 itemCount: bannerModel.length,
-                                                scrollDirection: Axis.horizontal,
+                                                scrollDirection:
+                                                    Axis.horizontal,
                                                 controller: _controller,
-                                                itemBuilder: (context, index) => bannerWidget(bannerModel[index])),
+                                                itemBuilder: (context, index) =>
+                                                    bannerWidget(
+                                                        bannerModel[index])),
                                           ),
                                         ),
                                       ),
@@ -276,45 +319,72 @@ class _OnDemandHomeScreenState extends State<OnDemandHomeScreen> {
                                 height: 10,
                               ),
                               Container(
-                                height: MediaQuery.of(context).size.height * 0.12,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.12,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: isDarkMode(context) ? const Color(DarkContainerBorderColor) : Colors.grey.shade100, width: 1),
-                                  color: isDarkMode(context) ? const Color(DarkContainerColor) : Colors.white,
+                                  border: Border.all(
+                                      color: isDarkMode(context)
+                                          ? const Color(
+                                              DarkContainerBorderColor)
+                                          : Colors.grey.shade100,
+                                      width: 1),
+                                  color: isDarkMode(context)
+                                      ? const Color(DarkContainerColor)
+                                      : Colors.white,
                                 ),
                                 child: FutureBuilder<List<CategoryModel>>(
-                                  future: FireStoreUtils().getProviderCategory(),
+                                  future:
+                                      FireStoreUtils().getProviderCategory(),
                                   initialData: [],
                                   builder: (context, snapshot) {
-                                    if (snapshot.connectionState == ConnectionState.waiting) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
                                       return Center(
-                                        child: CircularProgressIndicator.adaptive(
-                                          valueColor: AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
+                                        child:
+                                            CircularProgressIndicator.adaptive(
+                                          valueColor: AlwaysStoppedAnimation(
+                                              Color(COLOR_PRIMARY)),
                                         ),
                                       );
                                     }
 
-                                    if ((snapshot.hasData || (snapshot.data?.isNotEmpty ?? false)) && mounted) {
+                                    if ((snapshot.hasData ||
+                                            (snapshot.data?.isNotEmpty ??
+                                                false)) &&
+                                        mounted) {
                                       return Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 10),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 10),
                                         child: Row(
                                           children: [
                                             Expanded(
                                               child: ListView.builder(
-                                                itemCount: snapshot.data!.length > 3 ? 3 : snapshot.data!.length,
-                                                scrollDirection: Axis.horizontal,
+                                                itemCount:
+                                                    snapshot.data!.length > 3
+                                                        ? 3
+                                                        : snapshot.data!.length,
+                                                scrollDirection:
+                                                    Axis.horizontal,
                                                 itemBuilder: (context, index) {
                                                   return InkWell(
                                                     onTap: () {
                                                       push(
                                                           context,
                                                           ViewCategoryServiceListScreen(
-                                                            categoryId: snapshot.data![index].id,
-                                                            categoryTitle: snapshot.data![index].title,
+                                                            categoryId: snapshot
+                                                                .data![index]
+                                                                .id,
+                                                            categoryTitle:
+                                                                snapshot
+                                                                    .data![
+                                                                        index]
+                                                                    .title,
                                                           ));
                                                     },
                                                     child: CategoryWidget(
-                                                      category: snapshot.data![index],
+                                                      category:
+                                                          snapshot.data![index],
                                                       index: index,
                                                     ),
                                                   );
@@ -322,23 +392,34 @@ class _OnDemandHomeScreenState extends State<OnDemandHomeScreen> {
                                               ),
                                             ),
                                             Visibility(
-                                              visible: snapshot.data!.length > 3,
+                                              visible:
+                                                  snapshot.data!.length > 3,
                                               child: Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 10),
                                                 child: Column(
-                                                  mainAxisSize: MainAxisSize.min,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
                                                   children: [
                                                     InkWell(
                                                       onTap: () {
-                                                        push(context, const CategoryScreen());
+                                                        push(context,
+                                                            const CategoryScreen());
                                                       },
                                                       child: ClipOval(
                                                         child: Container(
                                                           width: 50,
                                                           height: 50,
-                                                          color: isDarkMode(context) ? Colors.grey.shade900 : Colors.grey.shade100,
+                                                          color: isDarkMode(
+                                                                  context)
+                                                              ? Colors
+                                                                  .grey.shade900
+                                                              : Colors.grey
+                                                                  .shade100,
                                                           child: Center(
-                                                            child: Icon(Icons.chevron_right),
+                                                            child: Icon(Icons
+                                                                .chevron_right),
                                                           ),
                                                         ),
                                                       ),
@@ -351,13 +432,19 @@ class _OnDemandHomeScreenState extends State<OnDemandHomeScreen> {
                                                       child: Center(
                                                         child: Text(
                                                           "View All",
-                                                          textAlign: TextAlign.center,
+                                                          textAlign:
+                                                              TextAlign.center,
                                                           maxLines: 1,
                                                           style: TextStyle(
-                                                            color: isDarkMode(context) ? Colors.white : Colors.black,
-                                                            fontFamily: "Poppinsm",
+                                                            color: isDarkMode(
+                                                                    context)
+                                                                ? Colors.white
+                                                                : Colors.black,
+                                                            fontFamily:
+                                                                "Poppinsm",
                                                             fontSize: 12,
-                                                            fontWeight: FontWeight.w500,
+                                                            fontWeight:
+                                                                FontWeight.w500,
                                                           ),
                                                         ),
                                                       ),
@@ -370,24 +457,29 @@ class _OnDemandHomeScreenState extends State<OnDemandHomeScreen> {
                                         ),
                                       );
                                     } else {
-                                      return showEmptyState('No Categories'.tr(), context);
+                                      return showEmptyState(
+                                          'No Categories'.tr(), context);
                                     }
                                   },
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 20),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
                                 child: Row(
                                   children: [
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             "Most Popular services".tr(),
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
-                                              color: isDarkMode(context) ? Colors.white : Colors.black,
+                                              color: isDarkMode(context)
+                                                  ? Colors.white
+                                                  : Colors.black,
                                               fontSize: 18,
                                               fontFamily: "Poppinsm",
                                               fontWeight: FontWeight.w600,
@@ -398,7 +490,8 @@ class _OnDemandHomeScreenState extends State<OnDemandHomeScreen> {
                                     ),
                                     InkWell(
                                       onTap: () {
-                                        push(context, ViewAllPopularServiceScreen());
+                                        push(context,
+                                            ViewAllPopularServiceScreen());
                                       },
                                       child: Text(
                                         "View all".tr(),
@@ -415,14 +508,19 @@ class _OnDemandHomeScreenState extends State<OnDemandHomeScreen> {
                                 ),
                               ),
                               providerList.isEmpty
-                                  ? showEmptyState('No service Found'.tr(), context)
+                                  ? showEmptyState(
+                                      'No service Found'.tr(), context)
                                   : ListView.builder(
-                                      itemCount: providerList.length >= 6 ? 6 : providerList.length,
+                                      itemCount: providerList.length >= 6
+                                          ? 6
+                                          : providerList.length,
                                       shrinkWrap: true,
                                       padding: EdgeInsets.zero,
-                                      physics: const NeverScrollableScrollPhysics(),
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
                                       itemBuilder: (context, index) {
-                                        ProviderServiceModel data = providerList[index];
+                                        ProviderServiceModel data =
+                                            providerList[index];
                                         return ServiceWidget(
                                           providerList: data,
                                           lstFav: [],
@@ -453,7 +551,7 @@ class _OnDemandHomeScreenState extends State<OnDemandHomeScreen> {
         )),
         errorWidget: (context, url, error) => ClipRRect(
             borderRadius: BorderRadius.circular(20),
-            child: Image.network(
+            child: Image.asset(
               placeholderImage,
               width: MediaQuery.of(context).size.width * 0.80,
               fit: BoxFit.fitWidth,
@@ -469,7 +567,11 @@ class ServiceWidget extends StatefulWidget {
   final List<FavouriteOndemandServiceModel> lstFav;
   final bool fromListing;
 
-  ServiceWidget({super.key, required this.providerList, required this.lstFav, this.fromListing = false});
+  ServiceWidget(
+      {super.key,
+      required this.providerList,
+      required this.lstFav,
+      this.fromListing = false});
 
   @override
   State<ServiceWidget> createState() => _ServiceWidgetState();
@@ -486,7 +588,8 @@ class _ServiceWidgetState extends State<ServiceWidget> {
   }
 
   getCategory() async {
-    categoryModel = await FireStoreUtils().getCategoryById(widget.providerList.categoryId.toString());
+    categoryModel = await FireStoreUtils()
+        .getCategoryById(widget.providerList.categoryId.toString());
     setState(() {
       isLoading = false;
     });
@@ -499,7 +602,8 @@ class _ServiceWidgetState extends State<ServiceWidget> {
         : GestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () async {
-              push(context, OnDemandDetailsScreen(providerModel: widget.providerList));
+              push(context,
+                  OnDemandDetailsScreen(providerModel: widget.providerList));
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 5),
@@ -507,15 +611,26 @@ class _ServiceWidgetState extends State<ServiceWidget> {
                 height: MediaQuery.of(context).size.height * 0.16,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: isDarkMode(context) ? const Color(DarkContainerBorderColor) : Colors.grey.shade100, width: 1),
-                  color: isDarkMode(context) ? Color(DarkContainerColor) : Colors.white,
+                  border: Border.all(
+                      color: isDarkMode(context)
+                          ? const Color(DarkContainerBorderColor)
+                          : Colors.grey.shade100,
+                      width: 1),
+                  color: isDarkMode(context)
+                      ? Color(DarkContainerColor)
+                      : Colors.white,
                 ),
                 child: Row(
                   children: [
                     ClipRRect(
-                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), topLeft: Radius.circular(10)),
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(10),
+                          topLeft: Radius.circular(10)),
                       child: CachedNetworkImage(
-                        imageUrl: getImageVAlidUrl(widget.providerList.photos.isNotEmpty ? widget.providerList.photos[0].toString() : ''),
+                        imageUrl: getImageVAlidUrl(
+                            widget.providerList.photos.isNotEmpty
+                                ? widget.providerList.photos[0].toString()
+                                : ''),
                         height: MediaQuery.of(context).size.height * 0.16,
                         // height: 100,
                         width: 110,
@@ -523,12 +638,15 @@ class _ServiceWidgetState extends State<ServiceWidget> {
                         // memCacheWidth: 120,
                         placeholder: (context, url) => Center(
                           child: CircularProgressIndicator.adaptive(
-                            valueColor: AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
+                            valueColor:
+                                AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
                           ),
                         ),
                         errorWidget: (context, url, error) => ClipRRect(
-                          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), topLeft: Radius.circular(10)),
-                          child: Image.network(
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(10),
+                              topLeft: Radius.circular(10)),
+                          child: Image.asset(
                             placeholderImage,
                             fit: BoxFit.cover,
                             // cacheHeight: 100,
@@ -540,7 +658,8 @@ class _ServiceWidgetState extends State<ServiceWidget> {
                     ),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 10),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -557,7 +676,9 @@ class _ServiceWidgetState extends State<ServiceWidget> {
                                       fontFamily: "Poppinsm",
                                       fontWeight: FontWeight.bold,
                                       overflow: TextOverflow.ellipsis,
-                                      color: isDarkMode(context) ? Colors.white : Colors.black,
+                                      color: isDarkMode(context)
+                                          ? Colors.white
+                                          : Colors.black,
                                     ),
                                   ),
                                 ),
@@ -567,23 +688,50 @@ class _ServiceWidgetState extends State<ServiceWidget> {
                                       if (MyAppState.currentUser == null) {
                                         push(context, const AuthScreen());
                                       } else {
-                                        var contain = widget.lstFav.where((element) => element.service_id == widget.providerList.id);
+                                        var contain = widget.lstFav.where(
+                                            (element) =>
+                                                element.service_id ==
+                                                widget.providerList.id);
                                         setState(() {
                                           if (contain.isNotEmpty) {
-                                            FavouriteOndemandServiceModel favouriteModel = FavouriteOndemandServiceModel(
-                                                section_id: widget.providerList.sectionId, service_id: widget.providerList.id, user_id: MyAppState.currentUser!.userID);
-                                            FireStoreUtils().removeFavouriteOndemandService(favouriteModel);
-                                            widget.lstFav.removeWhere((item) => item.service_id == widget.providerList.id);
+                                            FavouriteOndemandServiceModel
+                                                favouriteModel =
+                                                FavouriteOndemandServiceModel(
+                                                    section_id: widget
+                                                        .providerList.sectionId,
+                                                    service_id:
+                                                        widget.providerList.id,
+                                                    user_id: MyAppState
+                                                        .currentUser!.userID);
+                                            FireStoreUtils()
+                                                .removeFavouriteOndemandService(
+                                                    favouriteModel);
+                                            widget.lstFav.removeWhere((item) =>
+                                                item.service_id ==
+                                                widget.providerList.id);
                                           } else {
-                                            FavouriteOndemandServiceModel favouriteModel = FavouriteOndemandServiceModel(
-                                                section_id: widget.providerList.sectionId, service_id: widget.providerList.id, user_id: MyAppState.currentUser!.userID);
-                                            FireStoreUtils().setFavouriteOndemandSection(favouriteModel);
+                                            FavouriteOndemandServiceModel
+                                                favouriteModel =
+                                                FavouriteOndemandServiceModel(
+                                                    section_id: widget
+                                                        .providerList.sectionId,
+                                                    service_id:
+                                                        widget.providerList.id,
+                                                    user_id: MyAppState
+                                                        .currentUser!.userID);
+                                            FireStoreUtils()
+                                                .setFavouriteOndemandSection(
+                                                    favouriteModel);
                                             widget.lstFav.add(favouriteModel);
                                           }
                                         });
                                       }
                                     },
-                                    child: widget.lstFav.where((element) => element.service_id == widget.providerList.id).isNotEmpty
+                                    child: widget.lstFav
+                                            .where((element) =>
+                                                element.service_id ==
+                                                widget.providerList.id)
+                                            .isNotEmpty
                                         ? Icon(
                                             Icons.favorite,
                                             size: 24,
@@ -592,7 +740,9 @@ class _ServiceWidgetState extends State<ServiceWidget> {
                                         : Icon(
                                             Icons.favorite_border,
                                             size: 24,
-                                            color: isDarkMode(context) ? Colors.white38 : Colors.black38,
+                                            color: isDarkMode(context)
+                                                ? Colors.white38
+                                                : Colors.black38,
                                           ),
                                   ),
                               ],
@@ -607,7 +757,9 @@ class _ServiceWidgetState extends State<ServiceWidget> {
                                       fontSize: 14,
                                       fontFamily: "Poppinsm",
                                       fontWeight: FontWeight.w400,
-                                      color: isDarkMode(context) ? Colors.white : Colors.black,
+                                      color: isDarkMode(context)
+                                          ? Colors.white
+                                          : Colors.black,
                                     ),
                                   )
                                 : Container(),
@@ -635,38 +787,55 @@ class _ServiceWidgetState extends State<ServiceWidget> {
                             SizedBox(
                               height: 5,
                             ),
-                            widget.providerList.disPrice == "" || widget.providerList.disPrice == "0"
+                            widget.providerList.disPrice == "" ||
+                                    widget.providerList.disPrice == "0"
                                 ? Text(
                                     widget.providerList.priceUnit == 'Fixed'
-                                        ? amountShow(amount: widget.providerList.price)
+                                        ? amountShow(
+                                            amount: widget.providerList.price)
                                         : '${amountShow(amount: widget.providerList.price)}/hr',
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontFamily: "Poppinsm",
                                       fontWeight: FontWeight.bold,
-                                      color: isDarkMode(context) ? Colors.white : Color(COLOR_PRIMARY),
+                                      color: isDarkMode(context)
+                                          ? Colors.white
+                                          : Color(COLOR_PRIMARY),
                                     ),
                                   )
                                 : Row(
                                     children: [
                                       Text(
                                         widget.providerList.priceUnit == 'Fixed'
-                                            ? amountShow(amount: widget.providerList.disPrice)
+                                            ? amountShow(
+                                                amount: widget
+                                                    .providerList.disPrice)
                                             : '${amountShow(amount: widget.providerList.disPrice)}/hr',
                                         style: TextStyle(
                                           fontSize: 14,
                                           fontFamily: "Poppinsm",
                                           fontWeight: FontWeight.bold,
-                                          color: isDarkMode(context) ? Colors.white : Color(COLOR_PRIMARY),
+                                          color: isDarkMode(context)
+                                              ? Colors.white
+                                              : Color(COLOR_PRIMARY),
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.only(left: 8.0),
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
                                         child: Text(
-                                          widget.providerList.priceUnit == 'Fixed'
-                                              ? amountShow(amount: widget.providerList.price)
+                                          widget.providerList.priceUnit ==
+                                                  'Fixed'
+                                              ? amountShow(
+                                                  amount:
+                                                      widget.providerList.price)
                                               : '${amountShow(amount: widget.providerList.price)}/hr',
-                                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.grey, decoration: TextDecoration.lineThrough),
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                              color: Colors.grey,
+                                              decoration:
+                                                  TextDecoration.lineThrough),
                                         ),
                                       ),
                                     ],
@@ -675,9 +844,13 @@ class _ServiceWidgetState extends State<ServiceWidget> {
                               height: 5,
                             ),
                             Container(
-                              decoration: BoxDecoration(color: Color(SemanticColorWarning06), borderRadius: BorderRadius.all(Radius.circular(16))),
+                              decoration: BoxDecoration(
+                                  color: Color(SemanticColorWarning06),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(16))),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -689,7 +862,12 @@ class _ServiceWidgetState extends State<ServiceWidget> {
                                     const SizedBox(width: 3),
                                     Text(
                                       widget.providerList.reviewsCount != 0
-                                          ? ((widget.providerList.reviewsSum ?? 0.0) / (widget.providerList.reviewsCount ?? 0.0)).toStringAsFixed(1)
+                                          ? ((widget.providerList.reviewsSum ??
+                                                      0.0) /
+                                                  (widget.providerList
+                                                          .reviewsCount ??
+                                                      0.0))
+                                              .toStringAsFixed(1)
                                           : 0.toString(),
                                       style: const TextStyle(
                                         letterSpacing: 0.5,
@@ -738,8 +916,10 @@ class _ServiceWidgetState extends State<ServiceWidget> {
     var date = DateFormat('dd-MM-yyyy').format(now);
     for (var element in providerModel.days) {
       if (day == element.toString()) {
-        var start = DateFormat("dd-MM-yyyy HH:mm").parse(date + " " + providerModel.startTime.toString());
-        var end = DateFormat("dd-MM-yyyy HH:mm").parse(date + " " + providerModel.endTime.toString());
+        var start = DateFormat("dd-MM-yyyy HH:mm")
+            .parse(date + " " + providerModel.startTime.toString());
+        var end = DateFormat("dd-MM-yyyy HH:mm")
+            .parse(date + " " + providerModel.endTime.toString());
         if (isCurrentDateInRange(start, end)) {
           isOpen = true;
         }
@@ -761,7 +941,8 @@ class CategoryWidget extends StatelessWidget {
   final CategoryModel category;
   final int index;
 
-  const CategoryWidget({super.key, required this.category, required this.index});
+  const CategoryWidget(
+      {super.key, required this.category, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -785,7 +966,7 @@ class CategoryWidget extends StatelessWidget {
                   // color: Colors.black,
                   errorWidget: (context, url, error) => ClipRRect(
                     borderRadius: BorderRadius.circular(5),
-                    child: Image.network(
+                    child: Image.asset(
                       placeholderImage,
                       fit: BoxFit.cover,
                     ),

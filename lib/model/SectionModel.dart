@@ -4,7 +4,7 @@ class SectionModel {
   String? referralAmount;
   String? serviceType;
   String? color;
-  String? name;
+  dynamic name;
   String? sectionImage;
   String? id;
   bool? isActive;
@@ -31,9 +31,9 @@ class SectionModel {
   SectionModel.fromJson(Map<String, dynamic> json) {
     referralAmount = json['referralAmount'] ?? '';
     serviceType = json['serviceType'] ?? '';
-    color = json['color'];
-    name = json['name'];
-    sectionImage = json['sectionImage'];
+    color = json['color'] ??'';
+    name = json['name']['en']??'';
+    sectionImage = json['sectionImage']??'';
     id = json['id'];
     adminCommision = json.containsKey('adminCommision') ? AdminCommissionModel.fromJson(json['adminCommision']) : null;
     isActive = json['isActive'];
@@ -48,7 +48,7 @@ class SectionModel {
     data['referralAmount'] = referralAmount;
     data['serviceType'] = serviceType;
     data['color'] = color;
-    data['name'] = name;
+    data['name'] = name['en'];
     data['sectionImage'] = sectionImage;
     if (adminCommision != null) {
       data['adminCommision'] = adminCommision!.toJson();

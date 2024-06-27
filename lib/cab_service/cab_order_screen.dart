@@ -125,7 +125,7 @@ class _CabOrderScreenState extends State<CabOrderScreen> {
                               )),
                               errorWidget: (context, url, error) => ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
-                                  child: Image.network(
+                                  child: Image.asset(
                                     height: 50,
                                     width: 50,
                                     placeholderImage,

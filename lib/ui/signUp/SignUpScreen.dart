@@ -133,7 +133,7 @@ class _SignUpState extends State<SignUpScreen> {
                     width: 170,
                     height: 170,
                     child: _image == null
-                        ? Image.network(
+                        ? Image.asset(
                             placeholderImage,
                             fit: BoxFit.cover,
                           )

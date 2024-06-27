@@ -25,7 +25,9 @@ class OnDemandBookingScreen extends StatefulWidget {
   final ProviderServiceModel providerModel;
   final String categoryTitle;
 
-  OnDemandBookingScreen({Key? key, required this.providerModel, required this.categoryTitle}) : super(key: key);
+  OnDemandBookingScreen(
+      {Key? key, required this.providerModel, required this.categoryTitle})
+      : super(key: key);
 
   @override
   _OnDemandBookingScreenState createState() => _OnDemandBookingScreenState();
@@ -65,8 +67,10 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
   List<OfferModel> couponList = [];
 
   getDetails() {
-    publiccoupon = FireStoreUtils().getProviderCoupon(provider.author.toString());
-    coupon = FireStoreUtils().getProviderCouponAfterExpire(provider.author.toString());
+    publiccoupon =
+        FireStoreUtils().getProviderCoupon(provider.author.toString());
+    coupon = FireStoreUtils()
+        .getProviderCouponAfterExpire(provider.author.toString());
     coupon.then((value) {
       setState(() {
         couponList = value;
@@ -77,10 +81,13 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: isDarkMode(context) ? const Color(DARK_BG_COLOR) : const Color(0xffF9F9F9),
+      backgroundColor: isDarkMode(context)
+          ? const Color(DARK_BG_COLOR)
+          : const Color(0xffF9F9F9),
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        backgroundColor: isDarkMode(context) ? const Color(DARK_BG_COLOR) : Colors.white,
+        backgroundColor:
+            isDarkMode(context) ? const Color(DARK_BG_COLOR) : Colors.white,
         elevation: 0,
         centerTitle: false,
         titleSpacing: 0.0,
@@ -101,13 +108,20 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
-                child: Text("Services", style: TextStyle(fontFamily: "Poppinsm", fontSize: 16)),
+                child: Text("Services",
+                    style: TextStyle(fontFamily: "Poppinsm", fontSize: 16)),
               ),
               Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: isDarkMode(context) ? const Color(DarkContainerBorderColor) : Colors.grey.shade100, width: 1),
-                    color: isDarkMode(context) ? Color(DarkContainerColor) : Colors.white,
+                    border: Border.all(
+                        color: isDarkMode(context)
+                            ? const Color(DarkContainerBorderColor)
+                            : Colors.grey.shade100,
+                        width: 1),
+                    color: isDarkMode(context)
+                        ? Color(DarkContainerColor)
+                        : Colors.white,
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -118,20 +132,28 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
                         children: [
                           Text(
                             widget.providerModel.title.toString(),
-                            style: TextStyle(fontFamily: "Poppinsm", fontSize: 16, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontFamily: "Poppinsm",
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
                           ),
                           SizedBox(
                             height: 5,
                           ),
                           Text(
                             widget.categoryTitle.toString(),
-                            style: TextStyle(fontFamily: "Poppinsm", fontSize: 14, fontWeight: FontWeight.w400),
+                            style: TextStyle(
+                                fontFamily: "Poppinsm",
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400),
                           ),
                           widget.providerModel.priceUnit == "Fixed"
                               ? Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 20),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 20),
                                   child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       GestureDetector(
                                         onTap: () {
@@ -141,7 +163,8 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
                                           setState(() {});
                                         },
                                         child: Image(
-                                          image: const AssetImage("assets/images/minus.png"),
+                                          image: const AssetImage(
+                                              "assets/images/minus.png"),
                                           color: Color(COLOR_PRIMARY),
                                           height: 30,
                                         ),
@@ -164,7 +187,8 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
                                           setState(() {});
                                         },
                                         child: Image(
-                                          image: const AssetImage("assets/images/plus.png"),
+                                          image: const AssetImage(
+                                              "assets/images/plus.png"),
                                           color: Color(COLOR_PRIMARY),
                                           height: 30,
                                         ),
@@ -178,7 +202,9 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(20),
                         child: CachedNetworkImage(
-                          imageUrl: getImageVAlidUrl(provider.photos.isNotEmpty ? provider.photos.first.toString() : ""),
+                          imageUrl: getImageVAlidUrl(provider.photos.isNotEmpty
+                              ? provider.photos.first.toString()
+                              : ""),
                           height: 100,
                           width: 100,
                           memCacheHeight: 100,
@@ -186,16 +212,18 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
                           imageBuilder: (context, imageProvider) => Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
-                              image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                              image: DecorationImage(
+                                  image: imageProvider, fit: BoxFit.cover),
                             ),
                           ),
                           placeholder: (context, url) => Center(
                               child: CircularProgressIndicator.adaptive(
-                            valueColor: AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
+                            valueColor:
+                                AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
                           )),
                           errorWidget: (context, url, error) => ClipRRect(
                               borderRadius: BorderRadius.circular(20),
-                              child: Image.network(
+                              child: Image.asset(
                                 placeholderImage,
                                 fit: BoxFit.cover,
                                 cacheHeight: 100,
@@ -213,8 +241,14 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: isDarkMode(context) ? const Color(DarkContainerBorderColor) : Colors.grey.shade100, width: 1),
-                    color: isDarkMode(context) ? const Color(DarkContainerColor) : Colors.white,
+                    border: Border.all(
+                        color: isDarkMode(context)
+                            ? const Color(DarkContainerBorderColor)
+                            : Colors.grey.shade100,
+                        width: 1),
+                    color: isDarkMode(context)
+                        ? const Color(DarkContainerColor)
+                        : Colors.white,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -225,7 +259,9 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
                           children: [
                             Text(
                               "Address".tr(),
-                              style: const TextStyle(fontFamily: "Poppinsm", fontWeight: FontWeight.w700),
+                              style: const TextStyle(
+                                  fontFamily: "Poppinsm",
+                                  fontWeight: FontWeight.w700),
                             ),
                             SizedBox(
                               height: 5,
@@ -244,14 +280,20 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          await Navigator.of(context).push(MaterialPageRoute(builder: (context) => DeliveryAddressScreen())).then((value) {
+                          await Navigator.of(context)
+                              .push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      DeliveryAddressScreen()))
+                              .then((value) {
                             addressModel = value;
                             setState(() {});
                           });
                         },
                         child: Text(
                           "Change",
-                          style: TextStyle(fontFamily: "Poppinsm", color: Color(COLOR_PRIMARY)),
+                          style: TextStyle(
+                              fontFamily: "Poppinsm",
+                              color: Color(COLOR_PRIMARY)),
                         ),
                       )
                     ],
@@ -259,12 +301,15 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
               SizedBox(
                 height: 15,
               ),
-              Text("Description", style: TextStyle(fontFamily: "Poppinsm", fontSize: 16)),
+              Text("Description",
+                  style: TextStyle(fontFamily: "Poppinsm", fontSize: 16)),
               SizedBox(
                 height: 10,
               ),
               Theme(
-                data: Theme.of(context).copyWith(textSelectionTheme: TextSelectionThemeData(selectionColor: Colors.grey.shade400)),
+                data: Theme.of(context).copyWith(
+                    textSelectionTheme: TextSelectionThemeData(
+                        selectionColor: Colors.grey.shade400)),
                 child: TextFormField(
                   controller: description,
                   maxLines: 5,
@@ -277,26 +322,41 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
                   decoration: InputDecoration(
                     hintText: 'Enter Description',
                     hintStyle: TextStyle(
-                      color: isDarkMode(context) ? Colors.white : const Color(0Xff333333),
+                      color: isDarkMode(context)
+                          ? Colors.white
+                          : const Color(0Xff333333),
                       fontSize: 14,
                       fontFamily: "Poppinsm",
                       fontWeight: FontWeight.w500,
                     ),
                     filled: true,
-                    fillColor: isDarkMode(context) ? const Color(DarkContainerColor) : Colors.white,
+                    fillColor: isDarkMode(context)
+                        ? const Color(DarkContainerColor)
+                        : Colors.white,
                     focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: isDarkMode(context) ? Colors.grey.shade900 : Color(COLOR_PRIMARY), width: 2.0)),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(
+                            color: isDarkMode(context)
+                                ? Colors.grey.shade900
+                                : Color(COLOR_PRIMARY),
+                            width: 2.0)),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 10),
                     errorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Theme.of(context).colorScheme.error),
+                      borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.error),
                       borderRadius: BorderRadius.circular(7.0),
                     ),
                     focusedErrorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Theme.of(context).colorScheme.error),
+                      borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.error),
                       borderRadius: BorderRadius.circular(7.0),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: isDarkMode(context) ? Colors.grey.shade900 : Colors.grey.shade200),
+                      borderSide: BorderSide(
+                          color: isDarkMode(context)
+                              ? Colors.grey.shade900
+                              : Colors.grey.shade200),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
@@ -306,7 +366,8 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
               SizedBox(
                 height: 10,
               ),
-              Text("Booking Date & Slot", style: TextStyle(fontFamily: "Poppinsm", fontSize: 16)),
+              Text("Booking Date & Slot",
+                  style: TextStyle(fontFamily: "Poppinsm", fontSize: 16)),
               SizedBox(
                 height: 10,
               ),
@@ -317,7 +378,8 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
                       setState(() {
                         DateTime dateAndTime = index;
                         selectedDateTime = dateAndTime;
-                        dateTimeController.text = DateFormat('dd-MM-yyyy HH:mm').format(dateAndTime);
+                        dateTimeController.text =
+                            DateFormat('dd-MM-yyyy HH:mm').format(dateAndTime);
                       });
                     },
                     minDateTime: DateTime.now(),
@@ -339,15 +401,23 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
                   validator: validateEmptyField,
                   cursorColor: Color(COLOR_PRIMARY),
                   enabled: false,
-                  style: TextStyle(color: isDarkMode(context) ? Colors.white : Colors.black),
+                  style: TextStyle(
+                      color: isDarkMode(context) ? Colors.white : Colors.black),
                   decoration: InputDecoration(
                     filled: true,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
                     errorStyle: const TextStyle(color: Colors.red),
-                    fillColor: isDarkMode(context) ? const Color(DarkContainerColor) : Colors.white,
+                    fillColor: isDarkMode(context)
+                        ? const Color(DarkContainerColor)
+                        : Colors.white,
                     hintText: "Choose Date and Time".tr(),
-                    hintStyle: TextStyle(color: isDarkMode(context) ? Colors.white : const Color(0Xff333333)),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
+                    hintStyle: TextStyle(
+                        color: isDarkMode(context)
+                            ? Colors.white
+                            : const Color(0Xff333333)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0)),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -361,13 +431,18 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        couponList.isNotEmpty ? buildListPromoCode() : Container(),
+                        couponList.isNotEmpty
+                            ? buildListPromoCode()
+                            : Container(),
                         buildPromoCode(),
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 10),
                           child: Text(
                             "Price Detail",
-                            style: TextStyle(fontFamily: "Poppinsm", fontWeight: FontWeight.bold, fontSize: 16),
+                            style: TextStyle(
+                                fontFamily: "Poppinsm",
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16),
                           ),
                         ),
                         priceTotalRow(),
@@ -425,8 +500,11 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
                     discount: discountAmount.toString(),
                     discountType: discountType.toString(),
                     discountLabel: discountLable.toString(),
-                    adminCommission: sectionConstantModel!.adminCommision!.commission.toString(),
-                    adminCommissionType: sectionConstantModel!.adminCommision!.type,
+                    adminCommission: sectionConstantModel!
+                        .adminCommision!.commission
+                        .toString(),
+                    adminCommissionType:
+                        sectionConstantModel!.adminCommision!.type,
                     otp: getReferralCode(),
                     couponCode: offerCode.toString());
 
@@ -453,21 +531,34 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
                     extraPaymentStatus: true,
                     scheduleDateTime: Timestamp.fromDate(selectedDateTime),
                     notes: description.text.toString(),
-                    adminCommission: sectionConstantModel!.adminCommision!.commission.toString(),
-                    adminCommissionType: sectionConstantModel!.adminCommision!.type,
+                    adminCommission: sectionConstantModel!
+                        .adminCommision!.commission
+                        .toString(),
+                    adminCommissionType:
+                        sectionConstantModel!.adminCommision!.type,
                     paymentStatus: true);
 
-                await FireStoreUtils().onDemandOrderPlace(_onDemandOrder, 0.0).then((value) async {});
-                await FireStoreUtils.sendOrderOnDemandServiceEmail(orderModel: _onDemandOrder);
-                print("============${_onDemandOrder.provider.author.toString()}");
-                User? providerUser = await FireStoreUtils.getCurrentUser(_onDemandOrder.provider.author.toString());
-                Map<String, dynamic> payLoad = <String, dynamic>{"type": 'provider_order', "orderId": _onDemandOrder.id};
+                await FireStoreUtils()
+                    .onDemandOrderPlace(_onDemandOrder, 0.0)
+                    .then((value) async {});
+                await FireStoreUtils.sendOrderOnDemandServiceEmail(
+                    orderModel: _onDemandOrder);
+                print(
+                    "============${_onDemandOrder.provider.author.toString()}");
+                User? providerUser = await FireStoreUtils.getCurrentUser(
+                    _onDemandOrder.provider.author.toString());
+                Map<String, dynamic> payLoad = <String, dynamic>{
+                  "type": 'provider_order',
+                  "orderId": _onDemandOrder.id
+                };
                 if (providerUser != null) {
-                  await SendNotification.sendFcmMessage(providerBookingPlaced, providerUser.fcmToken.toString(), payLoad);
+                  await SendNotification.sendFcmMessage(providerBookingPlaced,
+                      providerUser.fcmToken.toString(), payLoad);
                 }
 
                 await hideProgress();
-                ShowToastDialog.showToast("OnDemand Service successfully booked".tr());
+                ShowToastDialog.showToast(
+                    "OnDemand Service successfully booked".tr());
                 await push(
                     context,
                     OnDemandDahBoard(
@@ -502,8 +593,14 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
         margin: const EdgeInsets.only(top: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: isDarkMode(context) ? const Color(DarkContainerBorderColor) : Colors.grey.shade100, width: 1),
-          color: isDarkMode(context) ? const Color(DarkContainerColor) : Colors.white,
+          border: Border.all(
+              color: isDarkMode(context)
+                  ? const Color(DarkContainerBorderColor)
+                  : Colors.grey.shade100,
+              width: 1),
+          color: isDarkMode(context)
+              ? const Color(DarkContainerColor)
+              : Colors.white,
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
@@ -515,14 +612,23 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                      if (couponList[index].discountTypeOffer.toString() == 'Percentage' || couponList[index].discountTypeOffer.toString() == 'Percent') {
-                        discountAmount = price * double.parse(couponList[index].discountOffer.toString()) / 100;
+                      if (couponList[index].discountTypeOffer.toString() ==
+                              'Percentage' ||
+                          couponList[index].discountTypeOffer.toString() ==
+                              'Percent') {
+                        discountAmount = price *
+                            double.parse(
+                                couponList[index].discountOffer.toString()) /
+                            100;
                       } else {
-                        discountAmount = double.parse(couponList[index].discountOffer.toString());
+                        discountAmount = double.parse(
+                            couponList[index].discountOffer.toString());
                       }
                       if (subTotal > discountAmount) {
-                        discountType = couponList[index].discountTypeOffer.toString();
-                        discountLable = couponList[index].discountOffer.toString();
+                        discountType =
+                            couponList[index].discountTypeOffer.toString();
+                        discountLable =
+                            couponList[index].discountOffer.toString();
                         offerCode = couponList[index].offerCode.toString();
                       } else {
                         ShowToastDialog.showToast("Coupon not applied");
@@ -579,13 +685,18 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
     totalAmount = subTotal;
     if (taxList != null) {
       for (var element in taxList!) {
-        totalAmount = totalAmount + getTaxValue(amount: (subTotal).toString(), taxModel: element);
+        totalAmount = totalAmount +
+            getTaxValue(amount: (subTotal).toString(), taxModel: element);
       }
     }
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: isDarkMode(context) ? const Color(DarkContainerBorderColor) : Colors.grey.shade100, width: 1),
+        border: Border.all(
+            color: isDarkMode(context)
+                ? const Color(DarkContainerBorderColor)
+                : Colors.grey.shade100,
+            width: 1),
         color: isDarkMode(context) ? Color(DarkContainerColor) : Colors.white,
       ),
       child: Column(
@@ -634,9 +745,12 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Discount".tr() + " ${discountType == 'Percentage' || discountType == 'Percent' ? "(${discountLable}%)" : "(${amountShow(amount: discountLable)})"}",
+                              "Discount".tr() +
+                                  " ${discountType == 'Percentage' || discountType == 'Percent' ? "(${discountLable}%)" : "(${amountShow(amount: discountLable)})"}",
                               style: TextStyle(
-                                color: isDarkMode(context) ? Colors.white : Colors.black,
+                                color: isDarkMode(context)
+                                    ? Colors.white
+                                    : Colors.black,
                                 //fontSize: 16,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -644,7 +758,9 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
                             Text(
                               offerCode.toString(),
                               style: TextStyle(
-                                color: isDarkMode(context) ? Colors.white : Colors.black,
+                                color: isDarkMode(context)
+                                    ? Colors.white
+                                    : Colors.black,
                                 //fontSize: 16,
                                 fontWeight: FontWeight.w400,
                               ),
@@ -653,7 +769,9 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
                         ),
                       ),
                       Text(
-                        "(-" + amountShow(amount: discountAmount.toString()) + ")",
+                        "(-" +
+                            amountShow(amount: discountAmount.toString()) +
+                            ")",
                         style: const TextStyle(
                           color: Colors.red,
                           fontFamily: "Poppinsm",
@@ -703,18 +821,36 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
               return Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     child: Row(
                       children: [
                         Expanded(
                           child: Text(
                             "${taxModel.title.toString()} (${taxModel.type == "fix" ? amountShow(amount: taxModel.tax) : "${taxModel.tax}%"})",
-                            style: TextStyle(fontFamily: "Poppinsm", fontWeight: FontWeight.w500, color: isDarkMode(context) ? Colors.white : Colors.black),
+                            style: TextStyle(
+                                fontFamily: "Poppinsm",
+                                fontWeight: FontWeight.w500,
+                                color: isDarkMode(context)
+                                    ? Colors.white
+                                    : Colors.black),
                           ),
                         ),
                         Text(
-                          amountShow(amount: getTaxValue(amount: (double.parse(subTotal.toString())).toString(), taxModel: taxModel).toString()),
-                          style: TextStyle(fontFamily: "Poppinsm", fontWeight: FontWeight.w500, color: isDarkMode(context) ? Colors.white : Colors.black, fontSize: 12),
+                          amountShow(
+                              amount: getTaxValue(
+                                      amount:
+                                          (double.parse(subTotal.toString()))
+                                              .toString(),
+                                      taxModel: taxModel)
+                                  .toString()),
+                          style: TextStyle(
+                              fontFamily: "Poppinsm",
+                              fontWeight: FontWeight.w500,
+                              color: isDarkMode(context)
+                                  ? Colors.white
+                                  : Colors.black,
+                              fontSize: 12),
                         ),
                       ],
                     ),
@@ -780,8 +916,14 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
         margin: const EdgeInsets.only(top: 10, bottom: 13),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: isDarkMode(context) ? const Color(DarkContainerBorderColor) : Colors.grey.shade100, width: 1),
-          color: isDarkMode(context) ? const Color(DarkContainerColor) : Colors.white,
+          border: Border.all(
+              color: isDarkMode(context)
+                  ? const Color(DarkContainerBorderColor)
+                  : Colors.grey.shade100,
+              width: 1),
+          color: isDarkMode(context)
+              ? const Color(DarkContainerColor)
+              : Colors.white,
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
@@ -797,11 +939,13 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Promo Code".tr(), style: const TextStyle(fontSize: 18)),
+                        Text("Promo Code".tr(),
+                            style: const TextStyle(fontSize: 18)),
                         const SizedBox(
                           height: 5,
                         ),
-                        Text("Apply promo code".tr(), style: const TextStyle(fontSize: 15)),
+                        Text("Apply promo code".tr(),
+                            style: const TextStyle(fontSize: 15)),
                       ],
                     ),
                   ),
@@ -866,9 +1010,14 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
                     child: Text(
                       //"${snapshot[index].discountTypeOffer == "Fix Price" ? currencyData!.symbol : ""}${snapshot[index].discountOffer}${snapshot[index].discountTypeOffer == "Percentage" ? "% OFF" : " OFF"}",
                       snapshot[index].discountTypeOffer == "Fix Price"
-                          ? amountShow(amount: snapshot[index].discountOffer.toString()) + " OFF"
+                          ? amountShow(
+                                  amount: snapshot[index]
+                                      .discountOffer
+                                      .toString()) +
+                              " OFF"
                           : "${snapshot[index].discountOffer} % Off",
-                      style: const TextStyle(fontWeight: FontWeight.bold, letterSpacing: 0.7),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, letterSpacing: 0.7),
                     ),
                   ),
                 ],
@@ -883,14 +1032,23 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
                   Text(
                     snapshot[index].offerCode!,
                     textAlign: TextAlign.left,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.normal, letterSpacing: 0.5),
+                    style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.normal,
+                        letterSpacing: 0.5),
                   ),
                   Container(
                     margin: const EdgeInsets.only(left: 15, right: 15, top: 3),
                     width: 1,
                     color: const Color(COUPON_DASH_COLOR),
                   ),
-                  Text("valid till ".tr() + getDate(snapshot[index].expireOfferDate!.toDate().toString())!, style: const TextStyle(letterSpacing: 0.5))
+                  Text(
+                      "valid till ".tr() +
+                          getDate(snapshot[index]
+                              .expireOfferDate!
+                              .toDate()
+                              .toString())!,
+                      style: const TextStyle(letterSpacing: 0.5))
                 ],
               ),
             ],
@@ -906,19 +1064,26 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
     return formattedDate;
   }
 
-  TextEditingController couponTextFieldController = TextEditingController(text: '');
+  TextEditingController couponTextFieldController =
+      TextEditingController(text: '');
 
   sheet() {
     return Container(
-        padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.height / 4.3, left: 25, right: 25),
+        padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).size.height / 4.3,
+            left: 25,
+            right: 25),
         height: MediaQuery.of(context).size.height * 0.88,
-        decoration: BoxDecoration(color: Colors.transparent, border: Border.all(style: BorderStyle.none)),
+        decoration: BoxDecoration(
+            color: Colors.transparent,
+            border: Border.all(style: BorderStyle.none)),
         child: FutureBuilder<List<OfferModel>>(
             future: publiccoupon,
             initialData: const [],
             builder: (context, snapshot) {
               snapshot = snapshot;
-              print(snapshot.data!.length.toString() + "[][]][][][][][][][][]][][====");
+              print(snapshot.data!.length.toString() +
+                  "[][]][][][][][][][][]][][====");
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(
                   child: CircularProgressIndicator.adaptive(
@@ -933,7 +1098,10 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
                     onTap: () => Navigator.pop(context),
                     child: Container(
                       height: 45,
-                      decoration: BoxDecoration(border: Border.all(color: Colors.white, width: 0.3), color: Colors.transparent, shape: BoxShape.circle),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white, width: 0.3),
+                          color: Colors.transparent,
+                          shape: BoxShape.circle),
 
                       // radius: 20,
                       child: const Center(
@@ -949,7 +1117,9 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
                 ),
                 Expanded(
                     child: Container(
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.white),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white),
                   alignment: Alignment.center,
                   child: SingleChildScrollView(
                     child: Column(
@@ -957,25 +1127,32 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
                         Container(
                             padding: const EdgeInsets.only(top: 30),
                             child: const Image(
-                              image: AssetImage('assets/images/redeem_coupon.png'),
+                              image:
+                                  AssetImage('assets/images/redeem_coupon.png'),
                               width: 100,
                             )),
                         Container(
                             padding: const EdgeInsets.only(top: 20),
                             child: Text(
                               'Redeem Your Coupons'.tr(),
-                              style: const TextStyle(color: Color(0XFF2A2A2A), fontSize: 16),
+                              style: const TextStyle(
+                                  color: Color(0XFF2A2A2A), fontSize: 16),
                             )),
                         Center(
                           child: Container(
-                              padding: const EdgeInsets.only(top: 10, left: 22, right: 22),
+                              padding: const EdgeInsets.only(
+                                  top: 10, left: 22, right: 22),
                               child: const Text(
                                 "Voucher or Coupon code",
-                                style: TextStyle(color: Color(0XFF9091A4), letterSpacing: 0.5, height: 2),
+                                style: TextStyle(
+                                    color: Color(0XFF9091A4),
+                                    letterSpacing: 0.5,
+                                    height: 2),
                               ).tr()),
                         ),
                         Container(
-                            padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                            padding: const EdgeInsets.only(
+                                left: 20, right: 20, top: 20),
                             // height: 120,
                             child: DottedBorder(
                                 borderType: BorderType.RRect,
@@ -983,9 +1160,14 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
                                 dashPattern: const [4, 2],
                                 color: const Color(0XFFB7B7B7),
                                 child: ClipRRect(
-                                    borderRadius: const BorderRadius.all(Radius.circular(12)),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(12)),
                                     child: Container(
-                                        padding: const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
+                                        padding: const EdgeInsets.only(
+                                            left: 20,
+                                            right: 20,
+                                            top: 20,
+                                            bottom: 20),
                                         color: const Color(0XFFF1F4F7),
                                         // height: 120,
 
@@ -997,15 +1179,18 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
                                           decoration: InputDecoration(
                                             border: InputBorder.none,
                                             hintText: "Write Coupon Code".tr(),
-                                            hintStyle: const TextStyle(color: Color(0XFF9091A4)),
-                                            labelStyle: const TextStyle(color: Color(0XFF333333)),
+                                            hintStyle: const TextStyle(
+                                                color: Color(0XFF9091A4)),
+                                            labelStyle: const TextStyle(
+                                                color: Color(0XFF333333)),
                                           ),
                                         ))))),
                         Padding(
                           padding: const EdgeInsets.only(top: 30, bottom: 30),
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 15),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 100, vertical: 15),
                               backgroundColor: Color(COLOR_PRIMARY),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
@@ -1013,27 +1198,49 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
                             ),
                             onPressed: () {
                               setState(() {
-                                for (int a = 0; a < snapshot.data!.length; a++) {
+                                for (int a = 0;
+                                    a < snapshot.data!.length;
+                                    a++) {
                                   OfferModel couponModel = snapshot.data![a];
 
-                                  if (couponTextFieldController.text.toLowerCase().toString() == couponModel.offerCode!.toLowerCase().toString()) {
-                                    if (couponModel.discountTypeOffer.toString() == 'Percentage' || couponModel.discountTypeOffer.toString() == 'Percent') {
-                                      discountAmount = price * double.parse(couponModel.discountOffer.toString()) / 100;
+                                  if (couponTextFieldController.text
+                                          .toLowerCase()
+                                          .toString() ==
+                                      couponModel.offerCode!
+                                          .toLowerCase()
+                                          .toString()) {
+                                    if (couponModel.discountTypeOffer
+                                                .toString() ==
+                                            'Percentage' ||
+                                        couponModel.discountTypeOffer
+                                                .toString() ==
+                                            'Percent') {
+                                      discountAmount = price *
+                                          double.parse(couponModel.discountOffer
+                                              .toString()) /
+                                          100;
                                     } else {
-                                      discountAmount = double.parse(couponModel.discountOffer.toString());
+                                      discountAmount = double.parse(
+                                          couponModel.discountOffer.toString());
                                     }
 
                                     if (subTotal > discountAmount) {
-                                      discountType = couponModel.discountTypeOffer.toString();
-                                      discountLable = couponModel.discountOffer.toString();
-                                      offerCode = couponModel.offerCode.toString();
+                                      discountType = couponModel
+                                          .discountTypeOffer
+                                          .toString();
+                                      discountLable =
+                                          couponModel.discountOffer.toString();
+                                      offerCode =
+                                          couponModel.offerCode.toString();
                                     } else {
-                                      ShowToastDialog.showToast("Coupon not applied");
+                                      ShowToastDialog.showToast(
+                                          "Coupon not applied");
                                     }
                                     setState(() {});
                                     break;
                                   } else {
-                                    ShowToastDialog.showToast("Applied coupon not valid.");
+                                    ShowToastDialog.showToast(
+                                        "Applied coupon not valid.");
                                   }
 
                                   // if (txt.text.toString() == couponModel.offerCode!.toString()) {
@@ -1054,7 +1261,11 @@ class _OnDemandBookingScreenState extends State<OnDemandBookingScreen> {
                             },
                             child: Text(
                               "REDEEM NOW".tr(),
-                              style: TextStyle(color: isDarkMode(context) ? Colors.black : Colors.white, fontSize: 16),
+                              style: TextStyle(
+                                  color: isDarkMode(context)
+                                      ? Colors.black
+                                      : Colors.white,
+                                  fontSize: 16),
                             ),
                           ),
                         ),

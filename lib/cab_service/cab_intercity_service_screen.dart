@@ -409,7 +409,7 @@ class _CabInterCityServiceScreenState extends State<CabInterCityServiceScreen> {
                                                                     )),
                                                                     errorWidget: (context, url, error) => ClipRRect(
                                                                         borderRadius: BorderRadius.circular(10),
-                                                                        child: Image.network(
+                                                                        child: Image.asset(
                                                                           placeholderImage,
                                                                           fit: BoxFit.cover,
                                                                           cacheHeight: 80,
@@ -544,7 +544,7 @@ class _CabInterCityServiceScreenState extends State<CabInterCityServiceScreen> {
                                 width: 60,
                                 errorWidget: (context, url, error) => ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
-                                    child: Image.network(
+                                    child: Image.asset(
                                       placeholderImage,
                                       fit: BoxFit.cover,
                                       height: 60,
@@ -1033,7 +1033,7 @@ class _CabInterCityServiceScreenState extends State<CabInterCityServiceScreen> {
                                     )),
                                     errorWidget: (context, url, error) => ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
-                                        child: Image.network(
+                                        child: Image.asset(
                                           height: 80.0,
                                           width: 80.0,
                                           placeholderImage,
@@ -1288,7 +1288,7 @@ class _CabInterCityServiceScreenState extends State<CabInterCityServiceScreen> {
                 )),
                 errorWidget: (context, url, error) => ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: Image.network(
+                    child: Image.asset(
                       placeholderImage,
                       fit: BoxFit.cover,
                       cacheHeight: 50,

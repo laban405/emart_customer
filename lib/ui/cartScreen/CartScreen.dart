@@ -30,7 +30,8 @@ import '../payment/PaymentScreen.dart';
 class CartScreen extends StatefulWidget {
   final bool fromStoreSelection;
 
-  const CartScreen({Key? key, this.fromStoreSelection = false}) : super(key: key);
+  const CartScreen({Key? key, this.fromStoreSelection = false})
+      : super(key: key);
 
   @override
   _CartScreenState createState() => _CartScreenState();
@@ -61,7 +62,10 @@ class _CartScreenState extends State<CartScreen> {
   String? selctedOrderTypeValue = "Delivery".tr();
   bool isDeliverFound = false;
   var tipValue = 0.0;
-  bool isTipSelected = false, isTipSelected1 = false, isTipSelected2 = false, isTipSelected3 = false;
+  bool isTipSelected = false,
+      isTipSelected1 = false,
+      isTipSelected2 = false,
+      isTipSelected3 = false;
   final TextEditingController _textFieldController = TextEditingController();
 
   double specialDiscount = 0.0;
@@ -84,20 +88,33 @@ class _CartScreenState extends State<CartScreen> {
   getFoodType() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     setState(() {
-      selctedOrderTypeValue = sp.getString("foodType") == "" || sp.getString("foodType") == null ? "Delivery" : sp.getString("foodType");
+      selctedOrderTypeValue =
+          sp.getString("foodType") == "" || sp.getString("foodType") == null
+              ? "Delivery"
+              : sp.getString("foodType");
     });
-    await FirebaseFirestore.instance.collection(Setting).doc('specialDiscountOffer').get().then((value) {
+    await FirebaseFirestore.instance
+        .collection(Setting)
+        .doc('specialDiscountOffer')
+        .get()
+        .then((value) {
       specialDiscountEnable = value.data()!['isEnable'];
     });
   }
 
   Future<void> getDeliveyData() async {
     isDeliverFound = true;
-    await _fireStoreUtils.getVendorByVendorID(cartProducts.first.vendorID).then((value) {
+    await _fireStoreUtils
+        .getVendorByVendorID(cartProducts.first.vendorID)
+        .then((value) {
       vendorModel = value;
     });
     if (selctedOrderTypeValue == "Delivery") {
-      num km = num.parse(getKm(addressModel.location!, UserLocation(latitude: vendorModel!.latitude, longitude: vendorModel!.longitude)));
+      num km = num.parse(getKm(
+          addressModel.location!,
+          UserLocation(
+              latitude: vendorModel!.latitude,
+              longitude: vendorModel!.longitude)));
 
       getDeliveryCharges(km);
     }
@@ -115,27 +132,43 @@ class _CartScreenState extends State<CartScreen> {
 
           if (!deliveryChargeModel.vendorCanModify) {
             if (km > deliveryChargeModel.minimumDeliveryChargesWithinKm) {
-              deliveryCharges = (km * deliveryChargeModel.deliveryChargesPerKm).toDouble().toStringAsFixed(currencyData!.decimal);
+              deliveryCharges = (km * deliveryChargeModel.deliveryChargesPerKm)
+                  .toDouble()
+                  .toStringAsFixed(currencyData!.decimal);
               setState(() {});
             } else {
-              deliveryCharges = deliveryChargeModel.minimumDeliveryCharges.toDouble().toStringAsFixed(currencyData!.decimal);
+              deliveryCharges = deliveryChargeModel.minimumDeliveryCharges
+                  .toDouble()
+                  .toStringAsFixed(currencyData!.decimal);
               setState(() {});
             }
           } else {
             if (vendorModel != null && vendorModel!.deliveryCharge != null) {
-              if (km > vendorModel!.deliveryCharge!.minimumDeliveryChargesWithinKm) {
-                deliveryCharges = (km * vendorModel!.deliveryCharge!.deliveryChargesPerKm).toDouble().toStringAsFixed(currencyData!.decimal);
+              if (km >
+                  vendorModel!.deliveryCharge!.minimumDeliveryChargesWithinKm) {
+                deliveryCharges =
+                    (km * vendorModel!.deliveryCharge!.deliveryChargesPerKm)
+                        .toDouble()
+                        .toStringAsFixed(currencyData!.decimal);
                 setState(() {});
               } else {
-                deliveryCharges = vendorModel!.deliveryCharge!.minimumDeliveryCharges.toDouble().toStringAsFixed(currencyData!.decimal);
+                deliveryCharges = vendorModel!
+                    .deliveryCharge!.minimumDeliveryCharges
+                    .toDouble()
+                    .toStringAsFixed(currencyData!.decimal);
                 setState(() {});
               }
             } else {
               if (km > deliveryChargeModel.minimumDeliveryChargesWithinKm) {
-                deliveryCharges = (km * deliveryChargeModel.deliveryChargesPerKm).toDouble().toStringAsFixed(currencyData!.decimal);
+                deliveryCharges =
+                    (km * deliveryChargeModel.deliveryChargesPerKm)
+                        .toDouble()
+                        .toStringAsFixed(currencyData!.decimal);
                 setState(() {});
               } else {
-                deliveryCharges = deliveryChargeModel.minimumDeliveryCharges.toDouble().toStringAsFixed(currencyData!.decimal);
+                deliveryCharges = deliveryChargeModel.minimumDeliveryCharges
+                    .toDouble()
+                    .toStringAsFixed(currencyData!.decimal);
                 setState(() {});
               }
             }
@@ -159,7 +192,8 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     cartDatabase = Provider.of<CartDatabase>(context, listen: true);
     return Scaffold(
-      backgroundColor: isDarkMode(context) ? Colors.black : const Color(0xffFFFFFF),
+      backgroundColor:
+          isDarkMode(context) ? Colors.black : const Color(0xffFFFFFF),
       body: StreamBuilder<List<CartProduct>>(
         stream: cartDatabase.watchProducts,
         initialData: const [],
@@ -197,11 +231,18 @@ class _CartScreenState extends State<CartScreen> {
                           itemBuilder: (context, index) {
                             vendorID = cartProducts[index].vendorID;
                             return Container(
-                              margin: const EdgeInsets.only(left: 13, top: 13, right: 13, bottom: 13),
+                              margin: const EdgeInsets.only(
+                                  left: 13, top: 13, right: 13, bottom: 13),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: isDarkMode(context) ? const Color(DarkContainerBorderColor) : Colors.grey.shade100, width: 1),
-                                color: isDarkMode(context) ? Color(DarkContainerColor) : Colors.white,
+                                border: Border.all(
+                                    color: isDarkMode(context)
+                                        ? const Color(DarkContainerBorderColor)
+                                        : Colors.grey.shade100,
+                                    width: 1),
+                                color: isDarkMode(context)
+                                    ? Color(DarkContainerColor)
+                                    : Colors.white,
                                 boxShadow: [
                                   isDarkMode(context)
                                       ? const BoxShadow()
@@ -230,7 +271,11 @@ class _CartScreenState extends State<CartScreen> {
                       txt.text = "";
                     }
 
-                    Map<String, dynamic> specialDiscountMap = {'special_discount': specialDiscountAmount, 'special_discount_label': specialDiscount, 'specialType': specialType};
+                    Map<String, dynamic> specialDiscountMap = {
+                      'special_discount': specialDiscountAmount,
+                      'special_discount_label': specialDiscount,
+                      'specialType': specialType
+                    };
 
                     if (selctedOrderTypeValue == "Delivery") {
                       // push(
@@ -262,7 +307,9 @@ class _CartScreenState extends State<CartScreen> {
                           notes: noteController.text,
                           extra_addons: commaSepratedAddOns,
                           tipValue: tipValue.toString(),
-                          take_away: selctedOrderTypeValue == "Delivery" ? false : true,
+                          take_away: selctedOrderTypeValue == "Delivery"
+                              ? false
+                              : true,
                           deliveryCharge: deliveryCharges,
                           taxModel: taxList,
                           specialDiscountMap: specialDiscountMap,
@@ -298,7 +345,8 @@ class _CartScreenState extends State<CartScreen> {
                     height: MediaQuery.of(context).size.height * 0.080,
                     child: Container(
                       color: Color(COLOR_PRIMARY),
-                      padding: const EdgeInsets.only(left: 15, right: 10, bottom: 8, top: 8),
+                      padding: const EdgeInsets.only(
+                          left: 15, right: 10, bottom: 8, top: 8),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -345,13 +393,16 @@ class _CartScreenState extends State<CartScreen> {
     }
 
     ProductModel? productModel;
-    FireStoreUtils().getProductByID(cartProduct.id.split('~').first).then((value) {
+    FireStoreUtils()
+        .getProductByID(cartProduct.id.split('~').first)
+        .then((value) {
       productModel = value;
     });
 
     VariantInfo? variantInfo;
     if (cartProduct.variant_info != null) {
-      variantInfo = VariantInfo.fromJson(jsonDecode(cartProduct.variant_info.toString()));
+      variantInfo =
+          VariantInfo.fromJson(jsonDecode(cartProduct.variant_info.toString()));
     }
     if (cartProduct.extras == null) {
       addOnVal.clear();
@@ -360,7 +411,11 @@ class _CartScreenState extends State<CartScreen> {
         if (cartProduct.extras == '[]') {
           addOnVal.clear();
         } else {
-          String extraDecode = cartProduct.extras.toString().replaceAll("[", "").replaceAll("]", "").replaceAll("\"", "");
+          String extraDecode = cartProduct.extras
+              .toString()
+              .replaceAll("[", "")
+              .replaceAll("]", "")
+              .replaceAll("\"", "");
           if (extraDecode.contains(",")) {
             addOnVal = extraDecode.split(",");
           } else {
@@ -376,8 +431,11 @@ class _CartScreenState extends State<CartScreen> {
       }
     }
 
-    if (cartProduct.extras_price != null && cartProduct.extras_price != "" && double.parse(cartProduct.extras_price!) != 0.0) {
-      priceTotalValue += double.parse(cartProduct.extras_price!) * cartProduct.quantity;
+    if (cartProduct.extras_price != null &&
+        cartProduct.extras_price != "" &&
+        double.parse(cartProduct.extras_price!) != 0.0) {
+      priceTotalValue +=
+          double.parse(cartProduct.extras_price!) * cartProduct.quantity;
     }
     priceTotalValue += double.parse(cartProduct.price) * cartProduct.quantity;
 
@@ -415,7 +473,7 @@ class _CartScreenState extends State<CartScreen> {
                           ),
                       errorWidget: (context, url, error) => ClipRRect(
                           borderRadius: BorderRadius.circular(5),
-                          child: Image.network(
+                          child: Image.asset(
                             placeholderImage,
                             fit: BoxFit.cover,
                           ))),
@@ -433,7 +491,8 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                       Text(
                         amountShow(amount: priceTotalValue.toString()),
-                        style: TextStyle(fontSize: 20, color: Color(COLOR_PRIMARY)),
+                        style: TextStyle(
+                            fontSize: 20, color: Color(COLOR_PRIMARY)),
                       ),
                     ],
                   ),
@@ -469,15 +528,25 @@ class _CartScreenState extends State<CartScreen> {
                         print(productModel!.quantity);
                         print(quen);
                         if (productModel!.itemAttributes != null) {
-                          if (productModel!.itemAttributes!.variants!.where((element) => element.variant_sku == variantInfo!.variant_sku).isNotEmpty) {
-                            if (int.parse(productModel!.itemAttributes!.variants!
-                                        .where((element) => element.variant_sku == variantInfo!.variant_sku)
+                          if (productModel!.itemAttributes!.variants!
+                              .where((element) =>
+                                  element.variant_sku ==
+                                  variantInfo!.variant_sku)
+                              .isNotEmpty) {
+                            if (int.parse(productModel!
+                                        .itemAttributes!.variants!
+                                        .where((element) =>
+                                            element.variant_sku ==
+                                            variantInfo!.variant_sku)
                                         .first
                                         .variant_quantity
                                         .toString()) >
                                     quen ||
-                                int.parse(productModel!.itemAttributes!.variants!
-                                        .where((element) => element.variant_sku == variantInfo!.variant_sku)
+                                int.parse(productModel!
+                                        .itemAttributes!.variants!
+                                        .where((element) =>
+                                            element.variant_sku ==
+                                            variantInfo!.variant_sku)
                                         .first
                                         .variant_quantity
                                         .toString()) ==
@@ -485,22 +554,26 @@ class _CartScreenState extends State<CartScreen> {
                               quen++;
                               addtocard(cartProduct, quen);
                             } else {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
                                 content: Text("Product is out of Stock".tr()),
                               ));
                             }
                           } else {
-                            if (productModel!.quantity > quen || productModel!.quantity == -1) {
+                            if (productModel!.quantity > quen ||
+                                productModel!.quantity == -1) {
                               quen++;
                               addtocard(cartProduct, quen);
                             } else {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
                                 content: Text("Product is out of Stock".tr()),
                               ));
                             }
                           }
                         } else {
-                          if (productModel!.quantity > quen || productModel!.quantity == -1) {
+                          if (productModel!.quantity > quen ||
+                              productModel!.quantity == -1) {
                             quen++;
                             addtocard(cartProduct, quen);
                           } else {
@@ -523,7 +596,8 @@ class _CartScreenState extends State<CartScreen> {
             variantInfo == null || variantInfo.variant_options!.isEmpty
                 ? Container()
                 : Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                     child: Wrap(
                       spacing: 6.0,
                       runSpacing: 6.0,
@@ -531,7 +605,8 @@ class _CartScreenState extends State<CartScreen> {
                         variantInfo.variant_options!.length,
                         (i) {
                           return _buildChip(
-                              "${variantInfo!.variant_options!.keys.elementAt(i)} : ${variantInfo.variant_options![variantInfo.variant_options!.keys.elementAt(i)]}", i);
+                              "${variantInfo!.variant_options!.keys.elementAt(i)} : ${variantInfo.variant_options![variantInfo.variant_options!.keys.elementAt(i)]}",
+                              i);
                         },
                       ).toList(),
                     ),
@@ -580,7 +655,8 @@ class _CartScreenState extends State<CartScreen> {
     return currentDate.isAfter(startDate) && currentDate.isBefore(endDate);
   }
 
-  Widget buildTotalRow(List<CartProduct> data, List<AddAddonsDemo> lstExtras, String vendorID) {
+  Widget buildTotalRow(
+      List<CartProduct> data, List<AddAddonsDemo> lstExtras, String vendorID) {
     var _font = 16.00;
     subTotal = 0.00;
     grandtotal = 0;
@@ -597,7 +673,9 @@ class _CartScreenState extends State<CartScreen> {
           AddOnVal = AddOnVal + double.parse(addAddonsDemo.price!);
         }
       }
-      if (e.extras_price != null && e.extras_price != "" && double.parse(e.extras_price!) != 0.0) {
+      if (e.extras_price != null &&
+          e.extras_price != "" &&
+          double.parse(e.extras_price!) != 0.0) {
         subTotal += double.parse(e.extras_price!) * e.quantity;
       }
       subTotal += double.parse(e.price) * e.quantity;
@@ -630,8 +708,10 @@ class _CartScreenState extends State<CartScreen> {
             if (element.timeslot!.isNotEmpty) {
               element.timeslot!.forEach((element) {
                 if (element.discount_type == "delivery") {
-                  var start = DateFormat("dd-MM-yyyy HH:mm").parse(date + " " + element.from.toString());
-                  var end = DateFormat("dd-MM-yyyy HH:mm").parse(date + " " + element.to.toString());
+                  var start = DateFormat("dd-MM-yyyy HH:mm")
+                      .parse(date + " " + element.from.toString());
+                  var end = DateFormat("dd-MM-yyyy HH:mm")
+                      .parse(date + " " + element.to.toString());
                   if (isCurrentDateInRange(start, end)) {
                     specialDiscount = double.parse(element.discount.toString());
                     specialType = element.type.toString();
@@ -655,7 +735,11 @@ class _CartScreenState extends State<CartScreen> {
     //  grandtotal += getTaxValue(taxModel, subTotal - discountVal - specialDiscountAmount);
     if (taxList != null) {
       for (var element in taxList!) {
-        grandtotal = grandtotal + getTaxValue(amount: (subTotal - discountVal - specialDiscountAmount).toString(), taxModel: element);
+        grandtotal = grandtotal +
+            getTaxValue(
+                amount:
+                    (subTotal - discountVal - specialDiscountAmount).toString(),
+                taxModel: element);
       }
     }
 
@@ -667,11 +751,18 @@ class _CartScreenState extends State<CartScreen> {
       children: [
         Container(
             padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-            margin: const EdgeInsets.only(left: 13, top: 13, right: 13, bottom: 13),
+            margin:
+                const EdgeInsets.only(left: 13, top: 13, right: 13, bottom: 13),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: isDarkMode(context) ? const Color(DarkContainerBorderColor) : Colors.grey.shade100, width: 1),
-              color: isDarkMode(context) ? Color(DarkContainerColor) : Colors.white,
+              border: Border.all(
+                  color: isDarkMode(context)
+                      ? const Color(DarkContainerBorderColor)
+                      : Colors.grey.shade100,
+                  width: 1),
+              color: isDarkMode(context)
+                  ? Color(DarkContainerColor)
+                  : Colors.white,
               boxShadow: [
                 isDarkMode(context)
                     ? const BoxShadow()
@@ -712,18 +803,27 @@ class _CartScreenState extends State<CartScreen> {
                         enableDrag: true,
                         builder: (BuildContext context) => sheet());
                   },
-                  child: const Image(image: AssetImage("assets/images/add.png"), width: 40),
+                  child: const Image(
+                      image: AssetImage("assets/images/add.png"), width: 40),
                 )
               ],
             )),
         selctedOrderTypeValue == "Delivery"
             ? Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                margin: const EdgeInsets.only(left: 13, top: 13, right: 13, bottom: 5),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                margin: const EdgeInsets.only(
+                    left: 13, top: 13, right: 13, bottom: 5),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: isDarkMode(context) ? const Color(DarkContainerBorderColor) : Colors.grey.shade100, width: 1),
-                  color: isDarkMode(context) ? const Color(DarkContainerColor) : Colors.white,
+                  border: Border.all(
+                      color: isDarkMode(context)
+                          ? const Color(DarkContainerBorderColor)
+                          : Colors.grey.shade100,
+                      width: 1),
+                  color: isDarkMode(context)
+                      ? const Color(DarkContainerColor)
+                      : Colors.white,
                   boxShadow: [
                     isDarkMode(context)
                         ? const BoxShadow()
@@ -742,7 +842,9 @@ class _CartScreenState extends State<CartScreen> {
                         children: [
                           Text(
                             "Address".tr(),
-                            style: const TextStyle(fontFamily: "Poppinsm", fontWeight: FontWeight.w700),
+                            style: const TextStyle(
+                                fontFamily: "Poppinsm",
+                                fontWeight: FontWeight.w700),
                           ),
                           SizedBox(
                             height: 5,
@@ -761,7 +863,10 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                     GestureDetector(
                       onTap: () async {
-                        await Navigator.of(context).push(MaterialPageRoute(builder: (context) => DeliveryAddressScreen())).then((value) {
+                        await Navigator.of(context)
+                            .push(MaterialPageRoute(
+                                builder: (context) => DeliveryAddressScreen()))
+                            .then((value) {
                           addressModel = value;
                           getDeliveyData();
                           setState(() {});
@@ -769,7 +874,9 @@ class _CartScreenState extends State<CartScreen> {
                       },
                       child: Text(
                         "Change",
-                        style: TextStyle(fontFamily: "Poppinsm", color: Color(COLOR_PRIMARY)),
+                        style: TextStyle(
+                            fontFamily: "Poppinsm",
+                            color: Color(COLOR_PRIMARY)),
                       ),
                     )
                   ],
@@ -781,8 +888,14 @@ class _CartScreenState extends State<CartScreen> {
               margin: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: isDarkMode(context) ? const Color(DarkContainerBorderColor) : Colors.grey.shade100, width: 1),
-                color: isDarkMode(context) ? const Color(DarkContainerColor) : Colors.white,
+                border: Border.all(
+                    color: isDarkMode(context)
+                        ? const Color(DarkContainerBorderColor)
+                        : Colors.grey.shade100,
+                    width: 1),
+                color: isDarkMode(context)
+                    ? const Color(DarkContainerColor)
+                    : Colors.white,
                 boxShadow: [
                   isDarkMode(context)
                       ? const BoxShadow()
@@ -823,18 +936,28 @@ class _CartScreenState extends State<CartScreen> {
                       ).show(context);
                     },
                     child: Text(
-                      scheduleTime == null ? "Select".tr() : DateFormat("EEE dd MMMM , HH:mm aa").format(scheduleTime!.toDate()),
-                      style: TextStyle(fontFamily: "Poppinsm", color: Color(COLOR_PRIMARY)),
+                      scheduleTime == null
+                          ? "Select".tr()
+                          : DateFormat("EEE dd MMMM , HH:mm aa")
+                              .format(scheduleTime!.toDate()),
+                      style: TextStyle(
+                          fontFamily: "Poppinsm", color: Color(COLOR_PRIMARY)),
                     ),
                   )
                 ],
               )),
         Container(
-          margin: const EdgeInsets.only(left: 13, top: 10, right: 13, bottom: 13),
+          margin:
+              const EdgeInsets.only(left: 13, top: 10, right: 13, bottom: 13),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: isDarkMode(context) ? const Color(DarkContainerBorderColor) : Colors.grey.shade100, width: 1),
-            color: isDarkMode(context) ? Color(DarkContainerColor) : Colors.white,
+            border: Border.all(
+                color: isDarkMode(context)
+                    ? const Color(DarkContainerBorderColor)
+                    : Colors.grey.shade100,
+                width: 1),
+            color:
+                isDarkMode(context) ? Color(DarkContainerColor) : Colors.white,
             boxShadow: [
               isDarkMode(context)
                   ? const BoxShadow()
@@ -847,7 +970,8 @@ class _CartScreenState extends State<CartScreen> {
           child: Column(
             children: [
               Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -856,10 +980,17 @@ class _CartScreenState extends State<CartScreen> {
                         style: TextStyle(fontSize: _font),
                       ),
                       Text(
-                        selctedOrderTypeValue == "Delivery" ? "Delivery (${amountShow(amount: deliveryCharges.toString())})" : selctedOrderTypeValue! + " (Free)",
+                        selctedOrderTypeValue == "Delivery"
+                            ? "Delivery (${amountShow(amount: deliveryCharges.toString())})"
+                            : selctedOrderTypeValue! + " (Free)",
                         //selctedOrderTypeValue == "Delivery" ? "Delivery (${symbol + double.parse(deliveryCharges).toStringAsFixed(decimal)})" : selctedOrderTypeValue! + " (Free)",
-                        style:
-                            TextStyle(color: isDarkMode(context) ? const Color(0xffFFFFFF) : const Color(0xff333333), fontSize: selctedOrderTypeValue == "Delivery" ? _font : 15),
+                        style: TextStyle(
+                            color: isDarkMode(context)
+                                ? const Color(0xffFFFFFF)
+                                : const Color(0xff333333),
+                            fontSize: selctedOrderTypeValue == "Delivery"
+                                ? _font
+                                : 15),
                       ),
                     ],
                   )),
@@ -867,7 +998,8 @@ class _CartScreenState extends State<CartScreen> {
                 thickness: 1,
               ),
               Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -877,7 +1009,11 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                       Text(
                         amountShow(amount: subTotal.toString()),
-                        style: TextStyle(color: isDarkMode(context) ? const Color(0xffFFFFFF) : const Color(0xff333333), fontSize: _font),
+                        style: TextStyle(
+                            color: isDarkMode(context)
+                                ? const Color(0xffFFFFFF)
+                                : const Color(0xff333333),
+                            fontSize: _font),
                       ),
                     ],
                   )),
@@ -885,7 +1021,8 @@ class _CartScreenState extends State<CartScreen> {
                 thickness: 1,
               ),
               Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -904,13 +1041,22 @@ class _CartScreenState extends State<CartScreen> {
 
                         percentage != 0.0
                             ? percentage != null
-                                ? "(-" + amountShow(amount: (per.toDouble()).toString()) + ")"
+                                ? "(-" +
+                                    amountShow(
+                                        amount: (per.toDouble()).toString()) +
+                                    ")"
                                 : "(-" + amountShow(amount: "0.0") + ")"
                             : type != null
-                                ? "(-" + amountShow(amount: (type.toDouble()).toString()) + ")"
+                                ? "(-" +
+                                    amountShow(
+                                        amount: (type.toDouble()).toString()) +
+                                    ")"
                                 : "(-" + amountShow(amount: "0.0") + ")",
 
-                        style: TextStyle(fontFamily: "Poppinsm", color: Colors.red, fontSize: _font),
+                        style: TextStyle(
+                            fontFamily: "Poppinsm",
+                            color: Colors.red,
+                            fontSize: _font),
                       ),
                     ],
                   )),
@@ -918,22 +1064,29 @@ class _CartScreenState extends State<CartScreen> {
                 thickness: 1,
               ),
               Visibility(
-                visible: vendorModel != null && specialDiscountEnable ? vendorModel!.specialDiscountEnable : false,
+                visible: vendorModel != null && specialDiscountEnable
+                    ? vendorModel!.specialDiscountEnable
+                    : false,
                 child: Column(
                   children: [
                     Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 5),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Special Discount".tr() + "($specialDiscount ${specialType == "amount" ? currencyData!.symbol : "%"})",
+                              "Special Discount".tr() +
+                                  "($specialDiscount ${specialType == "amount" ? currencyData!.symbol : "%"})",
                               style: TextStyle(fontSize: _font),
                             ),
                             Text(
                               "(-${amountShow(amount: specialDiscountAmount.toString())})",
                               //symbol + specialDiscountAmount.toStringAsFixed(decimal),
-                              style: TextStyle(fontFamily: "Poppinsm", color: Colors.red, fontSize: _font),
+                              style: TextStyle(
+                                  fontFamily: "Poppinsm",
+                                  color: Colors.red,
+                                  fontSize: _font),
                             ),
                           ],
                         )),
@@ -945,25 +1098,39 @@ class _CartScreenState extends State<CartScreen> {
               ),
 
               selctedOrderTypeValue == "Delivery"
-                  ? (widget.fromStoreSelection && !deliverExec! && MyAppState.selectedPosotion.location!.latitude == 0.0 && MyAppState.selectedPosotion.location!.longitude == 0)
+                  ? (widget.fromStoreSelection &&
+                          !deliverExec! &&
+                          MyAppState.selectedPosotion.location!.latitude ==
+                              0.0 &&
+                          MyAppState.selectedPosotion.location!.longitude == 0)
                       ? Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                          child: Text("Delivery Charge Will Applied Next Step.".tr(), style: TextStyle(fontSize: _font)),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 5),
+                          child: Text(
+                              "Delivery Charge Will Applied Next Step.".tr(),
+                              style: TextStyle(fontSize: _font)),
                         )
                       : Column(
                           children: [
                             Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 5),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       "Delivery Charges".tr(),
                                       style: TextStyle(fontSize: _font),
                                     ),
                                     Text(
-                                      amountShow(amount: deliveryCharges.toString()),
-                                      style: TextStyle(color: isDarkMode(context) ? const Color(0xffFFFFFF) : const Color(0xff333333), fontSize: _font),
+                                      amountShow(
+                                          amount: deliveryCharges.toString()),
+                                      style: TextStyle(
+                                          color: isDarkMode(context)
+                                              ? const Color(0xffFFFFFF)
+                                              : const Color(0xff333333),
+                                          fontSize: _font),
                                     ),
                                   ],
                                 )),
@@ -982,19 +1149,33 @@ class _CartScreenState extends State<CartScreen> {
                   return Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 5),
                         child: Row(
                           children: [
                             Expanded(
                               child: Text(
                                 "${taxModel.title.toString()} (${taxModel.type == "fix" ? amountShow(amount: taxModel.tax) : "${taxModel.tax}%"})",
-                                style: TextStyle(fontFamily: "Poppinsm", fontSize: _font),
+                                style: TextStyle(
+                                    fontFamily: "Poppinsm", fontSize: _font),
                               ),
                             ),
                             Text(
                               amountShow(
-                                  amount: getTaxValue(amount: (double.parse(subTotal.toString()) - discountVal - specialDiscountAmount).toString(), taxModel: taxModel).toString()),
-                              style: TextStyle(fontFamily: "Poppinsm", color: isDarkMode(context) ? const Color(0xffFFFFFF) : const Color(0xff333333), fontSize: _font),
+                                  amount: getTaxValue(
+                                          amount: (double.parse(
+                                                      subTotal.toString()) -
+                                                  discountVal -
+                                                  specialDiscountAmount)
+                                              .toString(),
+                                          taxModel: taxModel)
+                                      .toString()),
+                              style: TextStyle(
+                                  fontFamily: "Poppinsm",
+                                  color: isDarkMode(context)
+                                      ? const Color(0xffFFFFFF)
+                                      : const Color(0xff333333),
+                                  fontSize: _font),
                             ),
                           ],
                         ),
@@ -1044,17 +1225,26 @@ class _CartScreenState extends State<CartScreen> {
                   child: Column(
                     children: [
                       Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 5),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 "Tip amount".tr(),
-                                style: TextStyle(color: isDarkMode(context) ? const Color(0xffFFFFFF) : const Color(0xff333333), fontSize: _font),
+                                style: TextStyle(
+                                    color: isDarkMode(context)
+                                        ? const Color(0xffFFFFFF)
+                                        : const Color(0xff333333),
+                                    fontSize: _font),
                               ),
                               Text(
                                 '${amountShow(amount: tipValue.toString())}',
-                                style: TextStyle(color: isDarkMode(context) ? const Color(0xffFFFFFF) : const Color(0xff333333), fontSize: _font),
+                                style: TextStyle(
+                                    color: isDarkMode(context)
+                                        ? const Color(0xffFFFFFF)
+                                        : const Color(0xff333333),
+                                    fontSize: _font),
                               ),
                             ],
                           )),
@@ -1065,17 +1255,26 @@ class _CartScreenState extends State<CartScreen> {
                   )),
 
               Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         "Order Total".tr(),
-                        style: TextStyle(color: isDarkMode(context) ? const Color(0xffFFFFFF) : const Color(0xff333333), fontSize: _font),
+                        style: TextStyle(
+                            color: isDarkMode(context)
+                                ? const Color(0xffFFFFFF)
+                                : const Color(0xff333333),
+                            fontSize: _font),
                       ),
                       Text(
                         amountShow(amount: grandtotal.toString()),
-                        style: TextStyle(color: isDarkMode(context) ? const Color(0xffFFFFFF) : const Color(0xff333333), fontSize: _font),
+                        style: TextStyle(
+                            color: isDarkMode(context)
+                                ? const Color(0xffFFFFFF)
+                                : const Color(0xff333333),
+                            fontSize: _font),
                       ),
                     ],
                   )),
@@ -1087,8 +1286,14 @@ class _CartScreenState extends State<CartScreen> {
             margin: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: isDarkMode(context) ? const Color(DarkContainerBorderColor) : Colors.grey.shade100, width: 1),
-              color: isDarkMode(context) ? Color(DarkContainerColor) : Colors.white,
+              border: Border.all(
+                  color: isDarkMode(context)
+                      ? const Color(DarkContainerBorderColor)
+                      : Colors.grey.shade100,
+                  width: 1),
+              color: isDarkMode(context)
+                  ? Color(DarkContainerColor)
+                  : Colors.white,
               boxShadow: [
                 isDarkMode(context)
                     ? const BoxShadow()
@@ -1121,24 +1326,32 @@ class _CartScreenState extends State<CartScreen> {
                         enableDrag: true,
                         builder: (BuildContext context) => Notesheet());
                   },
-                  child: const Image(image: AssetImage("assets/images/add.png"), width: 40),
+                  child: const Image(
+                      image: AssetImage("assets/images/add.png"), width: 40),
                 )
               ],
             )),
         selctedOrderTypeValue == "Delivery"
             ? Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       "Tip your delivery partner".tr(),
                       textAlign: TextAlign.start,
-                      style: TextStyle(fontWeight: FontWeight.bold, color: isDarkMode(context) ? const Color(0xffFFFFFF) : const Color(0xff333333), fontSize: 15),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: isDarkMode(context)
+                              ? const Color(0xffFFFFFF)
+                              : const Color(0xff333333),
+                          fontSize: 15),
                     ),
                     Text(
                       "tip-to-driver".tr(),
-                      style: const TextStyle(color: Color(0xff9091A4), fontSize: 14),
+                      style: const TextStyle(
+                          color: Color(0xff9091A4), fontSize: 14),
                     ),
                     const SizedBox(
                       height: 15,
@@ -1171,12 +1384,17 @@ class _CartScreenState extends State<CartScreen> {
                                       ? Colors.black
                                       : const Color(0xffFFFFFF),
                               borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: const Color(0xff9091A4), width: 1),
+                              border: Border.all(
+                                  color: const Color(0xff9091A4), width: 1),
                             ),
                             child: Center(
                                 child: Text(
                               amountShow(amount: "10"),
-                              style: TextStyle(color: isDarkMode(context) ? const Color(0xffFFFFFF) : const Color(0xff333333), fontSize: 14),
+                              style: TextStyle(
+                                  color: isDarkMode(context)
+                                      ? const Color(0xffFFFFFF)
+                                      : const Color(0xff333333),
+                                  fontSize: 14),
                             )),
                           ),
                         ),
@@ -1205,12 +1423,17 @@ class _CartScreenState extends State<CartScreen> {
                                       ? Colors.black
                                       : const Color(0xffFFFFFF),
                               borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: const Color(0xff9091A4), width: 1),
+                              border: Border.all(
+                                  color: const Color(0xff9091A4), width: 1),
                             ),
                             child: Center(
                                 child: Text(
                               amountShow(amount: "20"),
-                              style: TextStyle(color: isDarkMode(context) ? const Color(0xffFFFFFF) : const Color(0xff333333), fontSize: 14),
+                              style: TextStyle(
+                                  color: isDarkMode(context)
+                                      ? const Color(0xffFFFFFF)
+                                      : const Color(0xff333333),
+                                  fontSize: 14),
                             )),
                           ),
                         ),
@@ -1241,12 +1464,17 @@ class _CartScreenState extends State<CartScreen> {
                                       ? Colors.black
                                       : const Color(0xffFFFFFF),
                               borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: const Color(0xff9091A4), width: 1),
+                              border: Border.all(
+                                  color: const Color(0xff9091A4), width: 1),
                             ),
                             child: Center(
                                 child: Text(
                               amountShow(amount: "30"),
-                              style: TextStyle(color: isDarkMode(context) ? const Color(0xffFFFFFF) : const Color(0xff333333), fontSize: 14),
+                              style: TextStyle(
+                                  color: isDarkMode(context)
+                                      ? const Color(0xffFFFFFF)
+                                      : const Color(0xff333333),
+                                  fontSize: 14),
                             )),
                           ),
                         ),
@@ -1269,7 +1497,8 @@ class _CartScreenState extends State<CartScreen> {
                               }
                             },
                             child: Container(
-                              padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+                              padding:
+                                  const EdgeInsets.fromLTRB(15, 10, 15, 10),
                               decoration: BoxDecoration(
                                 color: isTipSelected3
                                     ? Color(COLOR_PRIMARY)
@@ -1277,12 +1506,17 @@ class _CartScreenState extends State<CartScreen> {
                                         ? Colors.black
                                         : const Color(0xffFFFFFF),
                                 borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: const Color(0xff9091A4), width: 1),
+                                border: Border.all(
+                                    color: const Color(0xff9091A4), width: 1),
                               ),
                               child: Center(
                                   child: Text(
                                 "Other".tr(),
-                                style: TextStyle(color: isDarkMode(context) ? const Color(0xffFFFFFF) : const Color(0xff333333), fontSize: 14),
+                                style: TextStyle(
+                                    color: isDarkMode(context)
+                                        ? const Color(0xffFFFFFF)
+                                        : const Color(0xff333333),
+                                    fontSize: 14),
                               )),
                             ),
                           ),
@@ -1327,9 +1561,14 @@ class _CartScreenState extends State<CartScreen> {
 
   sheet() {
     return Container(
-        padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.height / 4.3, left: 25, right: 25),
+        padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).size.height / 4.3,
+            left: 25,
+            right: 25),
         height: MediaQuery.of(context).size.height * 0.88,
-        decoration: BoxDecoration(color: Colors.transparent, border: Border.all(style: BorderStyle.none)),
+        decoration: BoxDecoration(
+            color: Colors.transparent,
+            border: Border.all(style: BorderStyle.none)),
         child: FutureBuilder<List<OfferModel>>(
             future: coupon,
             initialData: const [],
@@ -1349,7 +1588,10 @@ class _CartScreenState extends State<CartScreen> {
                     onTap: () => Navigator.pop(context),
                     child: Container(
                       height: 45,
-                      decoration: BoxDecoration(border: Border.all(color: Colors.white, width: 0.3), color: Colors.transparent, shape: BoxShape.circle),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white, width: 0.3),
+                          color: Colors.transparent,
+                          shape: BoxShape.circle),
 
                       // radius: 20,
                       child: const Center(
@@ -1365,7 +1607,9 @@ class _CartScreenState extends State<CartScreen> {
                 ),
                 Expanded(
                     child: Container(
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.white),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white),
                   alignment: Alignment.center,
                   child: SingleChildScrollView(
                     child: Column(
@@ -1373,23 +1617,29 @@ class _CartScreenState extends State<CartScreen> {
                         Container(
                             padding: const EdgeInsets.only(top: 30),
                             child: const Image(
-                              image: AssetImage('assets/images/redeem_coupon.png'),
+                              image:
+                                  AssetImage('assets/images/redeem_coupon.png'),
                               width: 100,
                             )),
                         Container(
                             padding: const EdgeInsets.only(top: 20),
                             child: Text(
                               'Redeem Your Coupons'.tr(),
-                              style: const TextStyle(color: Color(0XFF2A2A2A), fontSize: 16),
+                              style: const TextStyle(
+                                  color: Color(0XFF2A2A2A), fontSize: 16),
                             )),
                         Container(
                             padding: const EdgeInsets.only(top: 10),
                             child: Text(
                               "Voucher or Coupon code".tr(),
-                              style: const TextStyle(color: Color(0XFF9091A4), letterSpacing: 0.5, height: 2),
+                              style: const TextStyle(
+                                  color: Color(0XFF9091A4),
+                                  letterSpacing: 0.5,
+                                  height: 2),
                             ).tr()),
                         Container(
-                            padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                            padding: const EdgeInsets.only(
+                                left: 20, right: 20, top: 20),
                             // height: 120,
                             child: DottedBorder(
                                 borderType: BorderType.RRect,
@@ -1397,9 +1647,14 @@ class _CartScreenState extends State<CartScreen> {
                                 dashPattern: const [4, 2],
                                 color: const Color(0XFFB7B7B7),
                                 child: ClipRRect(
-                                    borderRadius: const BorderRadius.all(Radius.circular(12)),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(12)),
                                     child: Container(
-                                        padding: const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
+                                        padding: const EdgeInsets.only(
+                                            left: 20,
+                                            right: 20,
+                                            top: 20,
+                                            bottom: 20),
                                         color: const Color(0XFFF1F4F7),
                                         // height: 120,
                                         alignment: Alignment.center,
@@ -1412,8 +1667,10 @@ class _CartScreenState extends State<CartScreen> {
                                           decoration: InputDecoration(
                                             border: InputBorder.none,
                                             hintText: "Write Coupon Code".tr(),
-                                            hintStyle: const TextStyle(color: Color(0XFF9091A4)),
-                                            labelStyle: const TextStyle(color: Color(0XFF333333)),
+                                            hintStyle: const TextStyle(
+                                                color: Color(0XFF9091A4)),
+                                            labelStyle: const TextStyle(
+                                                color: Color(0XFF333333)),
                                             //  hintTextDirection: TextDecoration.lineThrough
                                             // contentPadding: EdgeInsets.only(left: 80,right: 30),
                                           ),
@@ -1422,7 +1679,8 @@ class _CartScreenState extends State<CartScreen> {
                           padding: const EdgeInsets.only(top: 30, bottom: 30),
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 15),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 100, vertical: 15),
                               backgroundColor: Color(COLOR_PRIMARY),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
@@ -1433,17 +1691,26 @@ class _CartScreenState extends State<CartScreen> {
                               type = 0.0;
                               couponId = "";
                               setState(() {
-                                for (int a = 0; a < snapshot.data!.length; a++) {
+                                for (int a = 0;
+                                    a < snapshot.data!.length;
+                                    a++) {
                                   OfferModel couponModel = snapshot.data![a];
 
-                                  if (vendorID == couponModel.storeId || couponModel.storeId == "") {
-                                    if (txt.text.toString() == couponModel.offerCode!.toString()) {
-                                      if (couponModel.discountTypeOffer == 'Percentage' || couponModel.discountTypeOffer == 'Percent') {
-                                        percentage = double.parse(couponModel.discountOffer!);
+                                  if (vendorID == couponModel.storeId ||
+                                      couponModel.storeId == "") {
+                                    if (txt.text.toString() ==
+                                        couponModel.offerCode!.toString()) {
+                                      if (couponModel.discountTypeOffer ==
+                                              'Percentage' ||
+                                          couponModel.discountTypeOffer ==
+                                              'Percent') {
+                                        percentage = double.parse(
+                                            couponModel.discountOffer!);
                                         couponId = couponModel.offerId!;
                                         break;
                                       } else {
-                                        type = double.parse(couponModel.discountOffer!);
+                                        type = double.parse(
+                                            couponModel.discountOffer!);
                                         couponId = couponModel.offerId!;
                                       }
                                     }
@@ -1455,7 +1722,11 @@ class _CartScreenState extends State<CartScreen> {
                             },
                             child: Text(
                               "REDEEM NOW".tr(),
-                              style: TextStyle(color: isDarkMode(context) ? Colors.white : Colors.black, fontSize: 16),
+                              style: TextStyle(
+                                  color: isDarkMode(context)
+                                      ? Colors.white
+                                      : Colors.black,
+                                  fontSize: 16),
                             ),
                           ),
                         ),
@@ -1471,15 +1742,23 @@ class _CartScreenState extends State<CartScreen> {
 
   Notesheet() {
     return Container(
-        padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.height / 4.3, left: 25, right: 25),
+        padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).size.height / 4.3,
+            left: 25,
+            right: 25),
         height: MediaQuery.of(context).size.height * 0.88,
-        decoration: BoxDecoration(color: Colors.transparent, border: Border.all(style: BorderStyle.none)),
+        decoration: BoxDecoration(
+            color: Colors.transparent,
+            border: Border.all(style: BorderStyle.none)),
         child: Column(children: [
           InkWell(
               onTap: () => Navigator.pop(context),
               child: Container(
                 height: 45,
-                decoration: BoxDecoration(border: Border.all(color: Colors.white, width: 0.3), color: Colors.transparent, shape: BoxShape.circle),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white, width: 0.3),
+                    color: Colors.transparent,
+                    shape: BoxShape.circle),
 
                 // radius: 20,
                 child: const Center(
@@ -1495,7 +1774,10 @@ class _CartScreenState extends State<CartScreen> {
           ),
           Expanded(
               child: Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: isDarkMode(context) ? Colors.grey.shade700 : Colors.white),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color:
+                    isDarkMode(context) ? Colors.grey.shade700 : Colors.white),
             alignment: Alignment.center,
             child: SingleChildScrollView(
               child: Column(
@@ -1504,27 +1786,43 @@ class _CartScreenState extends State<CartScreen> {
                       padding: const EdgeInsets.only(top: 20),
                       child: Text(
                         'Remarks'.tr(),
-                        style: TextStyle(color: isDarkMode(context) ? const Color(0XFFD5D5D5) : const Color(0XFF2A2A2A), fontSize: 16),
+                        style: TextStyle(
+                            color: isDarkMode(context)
+                                ? const Color(0XFFD5D5D5)
+                                : const Color(0XFF2A2A2A),
+                            fontSize: 16),
                       )),
                   Container(
                       padding: const EdgeInsets.only(top: 10),
                       child: Text(
                         'Write remarks for Store'.tr(),
-                        style: TextStyle(color: isDarkMode(context) ? Colors.white70 : const Color(0XFF9091A4), letterSpacing: 0.5, height: 2),
+                        style: TextStyle(
+                            color: isDarkMode(context)
+                                ? Colors.white70
+                                : const Color(0XFF9091A4),
+                            letterSpacing: 0.5,
+                            height: 2),
                       ).tr()),
                   Container(
-                      padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                      padding:
+                          const EdgeInsets.only(left: 20, right: 20, top: 20),
                       // height: 120,
                       child: DottedBorder(
                           borderType: BorderType.RRect,
                           radius: const Radius.circular(12),
                           dashPattern: const [4, 2],
-                          color: isDarkMode(context) ? const Color(0XFF484848) : const Color(0XFFB7B7B7),
+                          color: isDarkMode(context)
+                              ? const Color(0XFF484848)
+                              : const Color(0XFFB7B7B7),
                           child: ClipRRect(
-                              borderRadius: const BorderRadius.all(Radius.circular(12)),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(12)),
                               child: Container(
-                                  padding: const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
-                                  color: isDarkMode(context) ? const Color(0XFF0e0b08) : const Color(0XFFF1F4F7),
+                                  padding: const EdgeInsets.only(
+                                      left: 20, right: 20, top: 20, bottom: 20),
+                                  color: isDarkMode(context)
+                                      ? const Color(0XFF0e0b08)
+                                      : const Color(0XFFF1F4F7),
                                   // height: 120,
                                   alignment: Alignment.center,
                                   child: TextFormField(
@@ -1533,15 +1831,18 @@ class _CartScreenState extends State<CartScreen> {
                                     decoration: InputDecoration(
                                       border: InputBorder.none,
                                       hintText: 'Write Remarks'.tr(),
-                                      hintStyle: const TextStyle(color: Color(0XFF9091A4)),
-                                      labelStyle: const TextStyle(color: Color(0XFF333333)),
+                                      hintStyle: const TextStyle(
+                                          color: Color(0XFF9091A4)),
+                                      labelStyle: const TextStyle(
+                                          color: Color(0XFF333333)),
                                     ),
                                   ))))),
                   Padding(
                     padding: const EdgeInsets.only(top: 30, bottom: 30),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 15),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 100, vertical: 15),
                         backgroundColor: Color(COLOR_PRIMARY),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
@@ -1552,7 +1853,11 @@ class _CartScreenState extends State<CartScreen> {
                       },
                       child: Text(
                         'SUBMIT'.tr(),
-                        style: TextStyle(color: isDarkMode(context) ? Colors.black : Colors.white, fontSize: 16),
+                        style: TextStyle(
+                            color: isDarkMode(context)
+                                ? Colors.black
+                                : Colors.white,
+                            fontSize: 16),
                       ),
                     ),
                   ),
@@ -1578,14 +1883,20 @@ class _CartScreenState extends State<CartScreen> {
             ),
             actions: <Widget>[
               ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Color(COLOR_PRIMARY), textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.normal)),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(COLOR_PRIMARY),
+                    textStyle: const TextStyle(
+                        fontSize: 15, fontWeight: FontWeight.normal)),
                 child: const Text('cancel').tr(),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
               ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Color(COLOR_PRIMARY), textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.normal)),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(COLOR_PRIMARY),
+                    textStyle: const TextStyle(
+                        fontSize: 15, fontWeight: FontWeight.normal)),
                 child: const Text('Submit').tr(),
                 onPressed: () {
                   setState(() {
@@ -1707,7 +2018,9 @@ class _CartScreenState extends State<CartScreen> {
           amountShow(amount: amount!),
           //symbol + amount!,
           style: TextStyle(
-            color: isDarkMode(context) ? const Color(0xffFFFFFF) : const Color(0xff333333),
+            color: isDarkMode(context)
+                ? const Color(0xffFFFFFF)
+                : const Color(0xff333333),
           ),
         )),
       ),
@@ -1717,7 +2030,8 @@ class _CartScreenState extends State<CartScreen> {
 
 Widget _buildChip(String label, int attributesOptionIndex) {
   return Container(
-    decoration: BoxDecoration(color: const Color(0xffEEEDED), borderRadius: BorderRadius.circular(4)),
+    decoration: BoxDecoration(
+        color: const Color(0xffEEEDED), borderRadius: BorderRadius.circular(4)),
     child: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: Text(

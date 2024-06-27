@@ -286,7 +286,7 @@ class _CabReviewScreenState extends State<CabReviewScreen> with TickerProviderSt
                               placeholder: (context, url) => const CircularProgressIndicator(),
                               errorWidget: (context, url, error) => ClipRRect(
                                   borderRadius: BorderRadius.circular(60),
-                                  child: Image.network(
+                                  child: Image.asset(
                                     placeholderImage,
                                     fit: BoxFit.cover,
                                     height: 110,

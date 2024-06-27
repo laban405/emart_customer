@@ -24,7 +24,8 @@ class _UpComingTableBookingState extends State<UpComingTableBooking> {
   void initState() {
     super.initState();
     // _tabController = TabController(length:list.length, vsync: this);// initialise it
-    upcomingFuture = fireStoreUtils.getBookingOrders(MyAppState.currentUser!.userID, true);
+    upcomingFuture =
+        fireStoreUtils.getBookingOrders(MyAppState.currentUser!.userID, true);
   }
 
   @override
@@ -51,7 +52,6 @@ class _UpComingTableBookingState extends State<UpComingTableBooking> {
                 itemBuilder: (context, index) {
                   BookTableModel bookTableModel = snapshot.data![index];
 
-
                   String bookStatus = '';
                   if (bookTableModel.status == ORDER_STATUS_PLACED) {
                     bookStatus = 'Processing request'.tr();
@@ -70,7 +70,8 @@ class _UpComingTableBookingState extends State<UpComingTableBooking> {
                           ));
                     },
                     child: Container(
-                      margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 5),
+                      margin: const EdgeInsets.only(
+                          left: 10, right: 10, bottom: 10, top: 5),
                       decoration: const BoxDecoration(
                         color: Color(0xffFFFFFF),
                         borderRadius: BorderRadius.all(
@@ -97,23 +98,31 @@ class _UpComingTableBookingState extends State<UpComingTableBooking> {
                                   child: CachedNetworkImage(
                                     height: 70,
                                     width: 70,
-                                    imageUrl: getImageVAlidUrl(bookTableModel.vendor.photo),
-                                    imageBuilder: (context, imageProvider) => Container(
+                                    imageUrl: getImageVAlidUrl(
+                                        bookTableModel.vendor.photo),
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(15),
-                                        image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                                        image: DecorationImage(
+                                            image: imageProvider,
+                                            fit: BoxFit.cover),
                                       ),
                                     ),
                                     placeholder: (context, url) => Center(
-                                        child: CircularProgressIndicator.adaptive(
-                                      valueColor: AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
+                                        child:
+                                            CircularProgressIndicator.adaptive(
+                                      valueColor: AlwaysStoppedAnimation(
+                                          Color(COLOR_PRIMARY)),
                                     )),
-                                    errorWidget: (context, url, error) => ClipRRect(
-                                        borderRadius: BorderRadius.circular(15),
-                                        child: Image.network(
-                                          placeholderImage,
-                                          fit: BoxFit.cover,
-                                        )),
+                                    errorWidget: (context, url, error) =>
+                                        ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            child: Image.asset(
+                                              placeholderImage,
+                                              fit: BoxFit.cover,
+                                            )),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -122,7 +131,8 @@ class _UpComingTableBookingState extends State<UpComingTableBooking> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 10),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         bookTableModel.vendor.title,
@@ -151,7 +161,8 @@ class _UpComingTableBookingState extends State<UpComingTableBooking> {
                               'Name'.tr(),
                               style: const TextStyle(color: Colors.black),
                             ),
-                            leading: const Icon(Icons.person_outline, color: Colors.black),
+                            leading: const Icon(Icons.person_outline,
+                                color: Colors.black),
                             minLeadingWidth: 10,
                             subtitle: Text(
                               '${bookTableModel.guestFirstName} ${bookTableModel.guestLastName}',
@@ -163,10 +174,12 @@ class _UpComingTableBookingState extends State<UpComingTableBooking> {
                               'Date'.tr(),
                               style: const TextStyle(color: Colors.black),
                             ),
-                            leading: const Icon(Icons.date_range, color: Colors.black),
+                            leading: const Icon(Icons.date_range,
+                                color: Colors.black),
                             minLeadingWidth: 10,
                             subtitle: Text(
-                              DateFormat("MMM dd, yyyy 'at' hh:mm a").format(bookTableModel.date.toDate()),
+                              DateFormat("MMM dd, yyyy 'at' hh:mm a")
+                                  .format(bookTableModel.date.toDate()),
                               style: const TextStyle(color: Colors.grey),
                             ),
                           ),
@@ -175,16 +188,22 @@ class _UpComingTableBookingState extends State<UpComingTableBooking> {
                               'Guest'.tr(),
                               style: const TextStyle(color: Colors.black),
                             ),
-                            leading: const Icon(Icons.group, color: Colors.black87),
+                            leading:
+                                const Icon(Icons.group, color: Colors.black87),
                             minLeadingWidth: 10,
-                            subtitle: Text('${bookTableModel.totalGuest}', style: const TextStyle(color: Colors.grey)),
+                            subtitle: Text('${bookTableModel.totalGuest}',
+                                style: const TextStyle(color: Colors.grey)),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 20),
                             child: Center(
                                 child: Text(
                               bookStatus,
-                              style: const TextStyle(letterSpacing: 0.5, color: Colors.green, fontSize: 16, fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                  letterSpacing: 0.5,
+                                  color: Colors.green,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold),
                             )),
                           )
                         ],

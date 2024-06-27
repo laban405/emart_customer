@@ -40,7 +40,8 @@ class _StorePhotosState extends State<StorePhotos> {
                 future: photofuture,
                 // initialData: [],
                 builder: (context, snapshot) {
-                  if (snapshot.connectionState != ConnectionState.waiting && snapshot.data!.photos.isEmpty) {
+                  if (snapshot.connectionState != ConnectionState.waiting &&
+                      snapshot.data!.photos.isEmpty) {
                     if (snapshot.data!.photo.isNotEmpty) {
                       snapshot.data!.photos.add(snapshot.data!.photo);
                     }
@@ -49,11 +50,14 @@ class _StorePhotosState extends State<StorePhotos> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
                       child: CircularProgressIndicator.adaptive(
-                        valueColor: AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
+                        valueColor:
+                            AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
                       ),
                     );
                   } else if (snapshot.data!.photos.isEmpty) {
-                    return Center(child: showEmptyState("No images are available.".tr(), context));
+                    return Center(
+                        child: showEmptyState(
+                            "No images are available.".tr(), context));
                   }
                   return GridView.count(
                       shrinkWrap: true,
@@ -62,33 +66,52 @@ class _StorePhotosState extends State<StorePhotos> {
                       mainAxisSpacing: 10.0,
                       childAspectRatio: 5 / 4,
                       padding: const EdgeInsets.all(10.0),
-                      children: List.generate(snapshot.data!.photos.length, (index) {
+                      children:
+                          List.generate(snapshot.data!.photos.length, (index) {
                         if (snapshot.data!.hidephotos == false) {
                           return InkWell(
                             onTap: () {
-                              push(context, FullScreenImageViewer(imageUrl: snapshot.data!.photos[index]));
+                              push(
+                                  context,
+                                  FullScreenImageViewer(
+                                      imageUrl: snapshot.data!.photos[index]));
                             },
                             child: Card(
                                 color: const Color(0xffE7EAED),
                                 elevation: 0.5,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0), side: const BorderSide(color: Color(0xffDEE3ED))),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    side: const BorderSide(
+                                        color: Color(0xffDEE3ED))),
                                 child: CachedNetworkImage(
                                     height: 70,
                                     width: 100,
                                     imageUrl: snapshot.data!.photos[index],
-                                    imageBuilder: (context, imageProvider) => Container(
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
                                           width: 70,
                                           height: 100,
-                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), image: DecorationImage(image: imageProvider, fit: BoxFit.cover)),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              image: DecorationImage(
+                                                  image: imageProvider,
+                                                  fit: BoxFit.cover)),
                                         ),
-                                    errorWidget: (context, url, error) => ClipRRect(
-                                        borderRadius: BorderRadius.circular(15),
-                                        child: Image.network(
-                                          placeholderImage,
-                                          fit: BoxFit.cover,
-                                          width: MediaQuery.of(context).size.width,
-                                          height: MediaQuery.of(context).size.height,
-                                        )))),
+                                    errorWidget: (context, url, error) =>
+                                        ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            child: Image.asset(
+                                              placeholderImage,
+                                              fit: BoxFit.cover,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              height: MediaQuery.of(context)
+                                                  .size
+                                                  .height,
+                                            )))),
                           );
                         } else {
                           return Container();
@@ -103,7 +126,8 @@ class _StorePhotosState extends State<StorePhotos> {
 class StoreMenuPhoto extends StatefulWidget {
   final List<dynamic> vendorMenuPhotos;
 
-  const StoreMenuPhoto({Key? key, required this.vendorMenuPhotos}) : super(key: key);
+  const StoreMenuPhoto({Key? key, required this.vendorMenuPhotos})
+      : super(key: key);
 
   @override
   State<StoreMenuPhoto> createState() => _StoreMenuPhotoState();
@@ -125,31 +149,46 @@ class _StoreMenuPhotoState extends State<StoreMenuPhoto> {
                     mainAxisSpacing: 10.0,
                     childAspectRatio: 5 / 4,
                     padding: const EdgeInsets.all(10.0),
-                    children: List.generate(widget.vendorMenuPhotos.length, (index) {
+                    children:
+                        List.generate(widget.vendorMenuPhotos.length, (index) {
                       return InkWell(
                         onTap: () {
-                          push(context, FullScreenImageViewer(imageUrl: widget.vendorMenuPhotos[index]));
+                          push(
+                              context,
+                              FullScreenImageViewer(
+                                  imageUrl: widget.vendorMenuPhotos[index]));
                         },
                         child: Card(
                             color: const Color(0xffE7EAED),
                             elevation: 0.5,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0), side: const BorderSide(color: const Color(0xffDEE3ED))),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                                side: const BorderSide(
+                                    color: const Color(0xffDEE3ED))),
                             child: CachedNetworkImage(
                                 height: 70,
                                 width: 100,
-                                imageUrl: getImageVAlidUrl(widget.vendorMenuPhotos[index]),
-                                imageBuilder: (context, imageProvider) => Container(
+                                imageUrl: getImageVAlidUrl(
+                                    widget.vendorMenuPhotos[index]),
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
                                       width: 70,
                                       height: 100,
-                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), image: DecorationImage(image: imageProvider, fit: BoxFit.cover)),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          image: DecorationImage(
+                                              image: imageProvider,
+                                              fit: BoxFit.cover)),
                                     ),
                                 errorWidget: (context, url, error) => ClipRRect(
                                     borderRadius: BorderRadius.circular(15),
-                                    child: Image.network(
+                                    child: Image.asset(
                                       placeholderImage,
                                       fit: BoxFit.cover,
                                       width: MediaQuery.of(context).size.width,
-                                      height: MediaQuery.of(context).size.height,
+                                      height:
+                                          MediaQuery.of(context).size.height,
                                     )))),
                       );
                     })))));

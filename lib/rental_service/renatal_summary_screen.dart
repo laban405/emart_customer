@@ -15,7 +15,8 @@ class RenatalSummaryScreen extends StatefulWidget {
   final RentalOrderModel? rentalOrderModel;
   final String? orderId;
 
-  RenatalSummaryScreen({Key? key, this.rentalOrderModel, this.orderId}) : super(key: key);
+  RenatalSummaryScreen({Key? key, this.rentalOrderModel, this.orderId})
+      : super(key: key);
 
   @override
   State<RenatalSummaryScreen> createState() => _RenatalSummaryScreenState();
@@ -63,7 +64,10 @@ class _RenatalSummaryScreenState extends State<RenatalSummaryScreen> {
     discountAmount = double.parse(orderModel!.discount.toString());
     if (orderModel!.taxModel != null) {
       for (var element in orderModel!.taxModel!) {
-        taxAmount = taxAmount + getTaxValue(amount: ((subTotal + driverRate) - discountAmount).toString(), taxModel: element);
+        taxAmount = taxAmount +
+            getTaxValue(
+                amount: ((subTotal + driverRate) - discountAmount).toString(),
+                taxModel: element);
       }
     }
     setState(() {});
@@ -86,7 +90,10 @@ class _RenatalSummaryScreenState extends State<RenatalSummaryScreen> {
             push(
                 context,
                 RentalServiceDashBoard(
-                    user: MyAppState.currentUser, drawerSelection: DrawerSelection.Orders, appBarTitle: 'Booking'.tr(), currentWidget: const RentalBookingScreen()));
+                    user: MyAppState.currentUser,
+                    drawerSelection: DrawerSelection.Orders,
+                    appBarTitle: 'Booking'.tr(),
+                    currentWidget: const RentalBookingScreen()));
           },
           child: Icon(
             Icons.arrow_back_ios,
@@ -103,17 +110,22 @@ class _RenatalSummaryScreenState extends State<RenatalSummaryScreen> {
         ? SingleChildScrollView(
             child: GestureDetector(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
                 child: Container(
                   decoration: BoxDecoration(
                     color: Color(COLOR_PRIMARY),
-                    borderRadius:
-                        const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20), bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                        bottomLeft: Radius.circular(15),
+                        bottomRight: Radius.circular(15)),
                   ),
                   child: Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5.0, horizontal: 10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -122,53 +134,80 @@ class _RenatalSummaryScreenState extends State<RenatalSummaryScreen> {
                                 CachedNetworkImage(
                                   height: 50,
                                   width: 50,
-                                  imageUrl: orderModel!.driver!.carInfo!.carImage!.isEmpty ? "" : orderModel!.driver!.carInfo!.carImage!.first,
-                                  imageBuilder: (context, imageProvider) => Container(
+                                  imageUrl: orderModel!
+                                          .driver!.carInfo!.carImage!.isEmpty
+                                      ? ""
+                                      : orderModel!
+                                          .driver!.carInfo!.carImage!.first,
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
-                                      image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                                      image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: BoxFit.cover),
                                     ),
                                   ),
                                   placeholder: (context, url) => Center(
                                       child: CircularProgressIndicator.adaptive(
-                                    valueColor: AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
+                                    valueColor: AlwaysStoppedAnimation(
+                                        Color(COLOR_PRIMARY)),
                                   )),
-                                  errorWidget: (context, url, error) => ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Image.network(
-                                        placeholderImage,
-                                        fit: BoxFit.cover,
-                                      )),
+                                  errorWidget: (context, url, error) =>
+                                      ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: Image.asset(
+                                            placeholderImage,
+                                            fit: BoxFit.cover,
+                                          )),
                                   fit: BoxFit.cover,
                                 ),
                                 const SizedBox(
                                   width: 10,
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 4.0, vertical: 4),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        orderModel!.driver!.carName + " " + orderModel!.driver!.carMakes,
-                                        style: const TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w600),
+                                        orderModel!.driver!.carName +
+                                            " " +
+                                            orderModel!.driver!.carMakes,
+                                        style: const TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600),
                                       ),
                                       const SizedBox(
                                         height: 4,
                                       ),
                                       Visibility(
-                                        visible: orderModel!.bookWithDriver == true ? true : false,
+                                        visible:
+                                            orderModel!.bookWithDriver == true
+                                                ? true
+                                                : false,
                                         child: const Text(
                                           "With driver trip",
-                                          style: TextStyle(fontSize: 14, color: Colors.white),
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.white),
                                         ).tr(),
                                       ),
                                       const SizedBox(
                                         height: 4,
                                       ),
                                       Text(
-                                        amountShow(amount: orderModel!.subTotal.toString()),
-                                        style: const TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w800),
+                                        amountShow(
+                                            amount: orderModel!.subTotal
+                                                .toString()),
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w800),
                                       ),
                                     ],
                                   ),
@@ -181,8 +220,11 @@ class _RenatalSummaryScreenState extends State<RenatalSummaryScreen> {
                       Container(
                         decoration: const BoxDecoration(
                           color: Colors.white,
-                          borderRadius:
-                              BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20), bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              topRight: Radius.circular(20),
+                              bottomLeft: Radius.circular(15),
+                              bottomRight: Radius.circular(15)),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -191,38 +233,54 @@ class _RenatalSummaryScreenState extends State<RenatalSummaryScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
                                 child: Column(
                                   children: [
                                     buildUsersDetails(context,
-                                        address: orderModel!.pickupAddress.toString(), time: DateFormat('yyyy-MM-dd hh:mm a').format(orderModel!.pickupDateTime!.toDate())),
+                                        address: orderModel!.pickupAddress
+                                            .toString(),
+                                        time: DateFormat('yyyy-MM-dd hh:mm a')
+                                            .format(orderModel!.pickupDateTime!
+                                                .toDate())),
                                     const SizedBox(
                                       height: 10,
                                     ),
                                     buildUsersDetails(context,
                                         isSender: false,
-                                        address: orderModel!.dropAddress.toString(),
-                                        time: DateFormat('yyyy-MM-dd hh:mm a').format(orderModel!.dropDateTime!.toDate())),
+                                        address:
+                                            orderModel!.dropAddress.toString(),
+                                        time: DateFormat('yyyy-MM-dd hh:mm a')
+                                            .format(orderModel!.dropDateTime!
+                                                .toDate())),
                                   ],
                                 ),
                               ),
-                              orderModel!.driver != null ? buildRequestSection() : Container(),
+                              orderModel!.driver != null
+                                  ? buildRequestSection()
+                                  : Container(),
                               const SizedBox(
                                 height: 5,
                               ),
                               Visibility(
                                 visible: orderModel!.companyID!.isNotEmpty,
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8.0, horizontal: 10),
                                   child: Row(
                                     children: [
                                       ClipOval(
                                         child: CachedNetworkImage(
                                           width: 46,
                                           height: 46,
-                                          imageUrl: orderModel!.company!.profilePictureURL,
-                                          placeholder: (context, url) => Image.asset('assets/images/img_placeholder.png'),
-                                          errorWidget: (context, url, error) => Image.network(placeholderImage, fit: BoxFit.cover),
+                                          imageUrl: orderModel!
+                                              .company!.profilePictureURL,
+                                          placeholder: (context, url) =>
+                                              Image.asset(
+                                                  'assets/images/img_placeholder.png'),
+                                          errorWidget: (context, url, error) =>
+                                              Image.asset(placeholderImage,
+                                                  fit: BoxFit.cover),
                                         ),
                                       ),
                                       const SizedBox(
@@ -231,10 +289,18 @@ class _RenatalSummaryScreenState extends State<RenatalSummaryScreen> {
                                       Row(
                                         children: [
                                           Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              Text(orderModel!.company!.firstName,
-                                                  style: const TextStyle(fontSize: 16, color: Colors.black, letterSpacing: 1, fontWeight: FontWeight.w600)),
+                                              Text(
+                                                  orderModel!
+                                                      .company!.firstName,
+                                                  style: const TextStyle(
+                                                      fontSize: 16,
+                                                      color: Colors.black,
+                                                      letterSpacing: 1,
+                                                      fontWeight:
+                                                          FontWeight.w600)),
                                               const SizedBox(
                                                 height: 4,
                                               ),
@@ -245,8 +311,15 @@ class _RenatalSummaryScreenState extends State<RenatalSummaryScreen> {
                                                     color: Colors.grey,
                                                     size: 18,
                                                   ),
-                                                  Text(orderModel!.company!.companyAddress,
-                                                      style: const TextStyle(fontSize: 12, color: Colors.grey, letterSpacing: 1, fontWeight: FontWeight.w600)),
+                                                  Text(
+                                                      orderModel!.company!
+                                                          .companyAddress,
+                                                      style: const TextStyle(
+                                                          fontSize: 12,
+                                                          color: Colors.grey,
+                                                          letterSpacing: 1,
+                                                          fontWeight:
+                                                              FontWeight.w600)),
                                                 ],
                                               )
                                             ],
@@ -315,7 +388,12 @@ class _RenatalSummaryScreenState extends State<RenatalSummaryScreen> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          child: Text("Booking summary".tr(), style: const TextStyle(fontSize: 16, color: Colors.black, letterSpacing: 1, fontWeight: FontWeight.w600)),
+          child: Text("Booking summary".tr(),
+              style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                  letterSpacing: 1,
+                  fontWeight: FontWeight.w600)),
         ),
         const Divider(
           thickness: 1,
@@ -334,7 +412,8 @@ class _RenatalSummaryScreenState extends State<RenatalSummaryScreen> {
                 ),
                 Text(
                   amountShow(amount: orderModel!.subTotal.toString()),
-                  style: TextStyle(color: const Color(0xff333333), fontSize: 16),
+                  style:
+                      TextStyle(color: const Color(0xff333333), fontSize: 16),
                 ),
               ],
             )),
@@ -355,7 +434,8 @@ class _RenatalSummaryScreenState extends State<RenatalSummaryScreen> {
                 ),
                 Text(
                   amountShow(amount: orderModel!.driverRate.toString()),
-                  style: TextStyle(color: const Color(0xff333333), fontSize: 16),
+                  style:
+                      TextStyle(color: const Color(0xff333333), fontSize: 16),
                 ),
               ],
             )),
@@ -375,7 +455,9 @@ class _RenatalSummaryScreenState extends State<RenatalSummaryScreen> {
                   ),
                 ),
                 Text(
-                  "(-" + amountShow(amount: orderModel!.discount.toString()) + ")",
+                  "(-" +
+                      amountShow(amount: orderModel!.discount.toString()) +
+                      ")",
                   style: TextStyle(color: Colors.red, fontSize: 16),
                 ),
               ],
@@ -410,7 +492,8 @@ class _RenatalSummaryScreenState extends State<RenatalSummaryScreen> {
                   return Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
                         child: Row(
                           children: [
                             Expanded(
@@ -423,8 +506,15 @@ class _RenatalSummaryScreenState extends State<RenatalSummaryScreen> {
                               ),
                             ),
                             Text(
-                              amountShow(amount: getTaxValue(amount: ((subTotal + driverRate) - discountAmount).toString(), taxModel: taxModel).toString()),
-                              style: TextStyle(color: const Color(0xff333333), fontSize: 16),
+                              amountShow(
+                                  amount: getTaxValue(
+                                          amount: ((subTotal + driverRate) -
+                                                  discountAmount)
+                                              .toString(),
+                                          taxModel: taxModel)
+                                      .toString()),
+                              style: TextStyle(
+                                  color: const Color(0xff333333), fontSize: 16),
                             ),
                           ],
                         ),
@@ -473,8 +563,10 @@ class _RenatalSummaryScreenState extends State<RenatalSummaryScreen> {
               width: 46,
               height: 46,
               imageUrl: orderModel!.driver!.profilePictureURL,
-              placeholder: (context, url) => Image.asset('assets/images/img_placeholder.png'),
-              errorWidget: (context, url, error) => Image.network(placeholderImage, fit: BoxFit.cover),
+              placeholder: (context, url) =>
+                  Image.asset('assets/images/img_placeholder.png'),
+              errorWidget: (context, url, error) =>
+                  Image.asset(placeholderImage, fit: BoxFit.cover),
             ),
           ),
           const SizedBox(
@@ -492,7 +584,9 @@ class _RenatalSummaryScreenState extends State<RenatalSummaryScreen> {
                   height: 4,
                 ),
                 Text(
-                  orderModel!.driver!.firstName + " " + orderModel!.driver!.lastName,
+                  orderModel!.driver!.firstName +
+                      " " +
+                      orderModel!.driver!.lastName,
                   style: const TextStyle(fontSize: 17, color: Colors.black),
                 ),
               ],
@@ -526,7 +620,9 @@ class _RenatalSummaryScreenState extends State<RenatalSummaryScreen> {
     required String address,
   }) {
     return Container(
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(15.0), border: Border.all(color: Colors.grey.withOpacity(0.30), width: 2.0)),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15.0),
+          border: Border.all(color: Colors.grey.withOpacity(0.30), width: 2.0)),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
         child: Column(

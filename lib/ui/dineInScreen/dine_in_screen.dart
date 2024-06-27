@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:emartconsumer/constants.dart';
@@ -60,7 +59,8 @@ class _DineInScreenState extends State<DineInScreen> {
     await getCurrentLocation().then((value) {
       setState(() {
         AddressModel addressModel = AddressModel();
-        addressModel.location = UserLocation(latitude: value.latitude, longitude: value.longitude);
+        addressModel.location =
+            UserLocation(latitude: value.latitude, longitude: value.longitude);
         MyAppState.selectedPosotion = addressModel;
       });
       getData();
@@ -68,11 +68,15 @@ class _DineInScreenState extends State<DineInScreen> {
       getPermission();
     });
 
-    await placemarkFromCoordinates(MyAppState.selectedPosotion.location!.latitude, MyAppState.selectedPosotion.location!.longitude).then((value) {
+    await placemarkFromCoordinates(
+            MyAppState.selectedPosotion.location!.latitude,
+            MyAppState.selectedPosotion.location!.longitude)
+        .then((value) {
       Placemark placeMark = value[0];
 
       setState(() {
-        currentLocation = "${placeMark.name}, ${placeMark.subLocality}, ${placeMark.locality}, ${placeMark.administrativeArea}, ${placeMark.postalCode}, ${placeMark.country}";
+        currentLocation =
+            "${placeMark.name}, ${placeMark.subLocality}, ${placeMark.locality}, ${placeMark.administrativeArea}, ${placeMark.postalCode}, ${placeMark.country}";
       });
     }).catchError((error) {
       debugPrint("------>${error.toString()}");
@@ -111,12 +115,18 @@ class _DineInScreenState extends State<DineInScreen> {
   }
 
   void getData() {
-    lstVendor = fireStoreUtils.getVendors1(path: "isDineIn").asBroadcastStream();
-    lstAllRestaurant = fireStoreUtils.getAllDineInRestaurants().asBroadcastStream();
-    lstNewArrivalRestaurant = fireStoreUtils.getVendorsForNewArrival(path: "isDineIn").asBroadcastStream();
-    lstPopularRestaurant = fireStoreUtils.getPopularsVendors(path: "isDineIn").asBroadcastStream();
+    lstVendor =
+        fireStoreUtils.getVendors1(path: "isDineIn").asBroadcastStream();
+    lstAllRestaurant =
+        fireStoreUtils.getAllDineInRestaurants().asBroadcastStream();
+    lstNewArrivalRestaurant = fireStoreUtils
+        .getVendorsForNewArrival(path: "isDineIn")
+        .asBroadcastStream();
+    lstPopularRestaurant =
+        fireStoreUtils.getPopularsVendors(path: "isDineIn").asBroadcastStream();
     if (MyAppState.currentUser != null) {
-      lstFavourites = fireStoreUtils.getFavouriteStore(MyAppState.currentUser!.userID);
+      lstFavourites =
+          fireStoreUtils.getFavouriteStore(MyAppState.currentUser!.userID);
       lstFavourites.then((event) {
         lstFav.clear();
         for (int a = 0; a < event.length; a++) {
@@ -132,7 +142,9 @@ class _DineInScreenState extends State<DineInScreen> {
       restaurantAllLst.clear();
       restaurantAllLst.addAll(event);
       for (int a = 0; a < restaurantAllLst.length; a++) {
-        if ((restaurantAllLst[a].reviewsSum / restaurantAllLst[a].reviewsCount) >= 4.0) {
+        if ((restaurantAllLst[a].reviewsSum /
+                restaurantAllLst[a].reviewsCount) >=
+            4.0) {
           popularRestaurantLst.add(restaurantAllLst[a]);
         }
       }
@@ -142,12 +154,18 @@ class _DineInScreenState extends State<DineInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: isDarkMode(context) ? Colors.black : const Color(0xffFFFFFF),
+      backgroundColor:
+          isDarkMode(context) ? Colors.black : const Color(0xffFFFFFF),
       body: isLoading == true
           ? Center(child: CircularProgressIndicator())
-          : (MyAppState.selectedPosotion.location!.latitude == 0 && MyAppState.selectedPosotion.location!.longitude == 0)
+          : (MyAppState.selectedPosotion.location!.latitude == 0 &&
+                  MyAppState.selectedPosotion.location!.longitude == 0)
               ? Center(
-                  child: showEmptyState("We don't have your location.".tr(), context, description: "Set your location to started searching for restaurants in your area".tr(), action: () async {
+                  child: showEmptyState(
+                      "We don't have your location.".tr(), context,
+                      description:
+                          "Set your location to started searching for restaurants in your area"
+                              .tr(), action: () async {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -156,7 +174,9 @@ class _DineInScreenState extends State<DineInScreen> {
                           onPlacePicked: (result) {
                             setState(() {
                               AddressModel addressModel = AddressModel();
-                              addressModel.location = UserLocation(latitude: result.geometry!.location.lat, longitude: result.geometry!.location.lng);
+                              addressModel.location = UserLocation(
+                                  latitude: result.geometry!.location.lat,
+                                  longitude: result.geometry!.location.lng);
                               MyAppState.selectedPosotion = addressModel;
 
                               currentLocation = result.formattedAddress;
@@ -172,8 +192,9 @@ class _DineInScreenState extends State<DineInScreen> {
                           usePlaceDetailSearch: true,
                           zoomGesturesEnabled: true,
                           zoomControlsEnabled: true,
-                           initialMapType: MapType.terrain,
-                          resizeToAvoidBottomInset: false, // only works in page mode, less flickery, remove if wrong offsets
+                          initialMapType: MapType.terrain,
+                          resizeToAvoidBottomInset:
+                              false, // only works in page mode, less flickery, remove if wrong offsets
                         ),
                       ),
                     );
@@ -196,14 +217,24 @@ class _DineInScreenState extends State<DineInScreen> {
                               width: 20,
                             ),
                             Expanded(
-                              child: Text(currentLocation.toString(), maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(color: Color(COLOR_PRIMARY))).tr(),
+                              child: Text(currentLocation.toString(),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: Color(COLOR_PRIMARY)))
+                                  .tr(),
                             ),
                             InkWell(
                               onTap: () async {
-                                await Navigator.of(context).push(MaterialPageRoute(builder: (context) => DeliveryAddressScreen())).then((value) {
+                                await Navigator.of(context)
+                                    .push(MaterialPageRoute(
+                                        builder: (context) =>
+                                            DeliveryAddressScreen()))
+                                    .then((value) {
                                   AddressModel addressModel = value;
                                   MyAppState.selectedPosotion = addressModel;
-                                  currentLocation = addressModel.getFullAddress();
+                                  currentLocation =
+                                      addressModel.getFullAddress();
                                   setState(() {});
                                   getData();
                                 });
@@ -225,15 +256,23 @@ class _DineInScreenState extends State<DineInScreen> {
                               },
                               child: Container(
                                 padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.black12, boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.5),
-                                    spreadRadius: 5,
-                                    blurRadius: 7,
-                                    offset: const Offset(0, 3), // changes position of shadow
-                                  ),
-                                ]),
-                                child: Text("Change".tr(), style: TextStyle(fontSize: 14, color: Color(COLOR_PRIMARY))).tr(),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.black12,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        spreadRadius: 5,
+                                        blurRadius: 7,
+                                        offset: const Offset(
+                                            0, 3), // changes position of shadow
+                                      ),
+                                    ]),
+                                child: Text("Change".tr(),
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: Color(COLOR_PRIMARY)))
+                                    .tr(),
                               ),
                             ),
                           ],
@@ -241,7 +280,13 @@ class _DineInScreenState extends State<DineInScreen> {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 5, left: 10),
-                        child: Text("Find your store".tr(), style: TextStyle(fontSize: 24, color: isDarkMode(context) ? Colors.white : const Color(0xFF333333))).tr(),
+                        child: Text("Find your store".tr(),
+                                style: TextStyle(
+                                    fontSize: 24,
+                                    color: isDarkMode(context)
+                                        ? Colors.white
+                                        : const Color(0xFF333333)))
+                            .tr(),
                       ),
                       buildDineInTitleRow(
                         titleValue: "Categories".tr(),
@@ -256,31 +301,40 @@ class _DineInScreenState extends State<DineInScreen> {
                         },
                       ),
                       Container(
-                        color: isDarkMode(context) ? Colors.black : const Color(0xffFFFFFF),
+                        color: isDarkMode(context)
+                            ? Colors.black
+                            : const Color(0xffFFFFFF),
                         child: FutureBuilder<List<VendorCategoryModel>>(
                             future: cuisinesFuture,
                             initialData: const [],
                             builder: (context, snapshot) {
-                              if (snapshot.connectionState == ConnectionState.waiting) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
                                 return Center(
                                   child: CircularProgressIndicator.adaptive(
-                                    valueColor: AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
+                                    valueColor: AlwaysStoppedAnimation(
+                                        Color(COLOR_PRIMARY)),
                                   ),
                                 );
                               }
 
-                              if (snapshot.hasData || (snapshot.data?.isNotEmpty ?? false)) {
+                              if (snapshot.hasData ||
+                                  (snapshot.data?.isNotEmpty ?? false)) {
                                 return SizedBox(
                                     height: 150,
                                     child: ListView.builder(
                                       scrollDirection: Axis.horizontal,
-                                      itemCount: snapshot.data!.length >= 15 ? 15 : snapshot.data!.length,
+                                      itemCount: snapshot.data!.length >= 15
+                                          ? 15
+                                          : snapshot.data!.length,
                                       itemBuilder: (context, index) {
-                                        return buildCategoryItem(snapshot.data![index]);
+                                        return buildCategoryItem(
+                                            snapshot.data![index]);
                                       },
                                     ));
                               } else {
-                                return showEmptyState('No Categories'.tr(), context);
+                                return showEmptyState(
+                                    'No Categories'.tr(), context);
                               }
                             }),
                       ),
@@ -298,26 +352,35 @@ class _DineInScreenState extends State<DineInScreen> {
                           stream: lstNewArrivalRestaurant,
                           initialData: const [],
                           builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
                               return Center(
                                 child: CircularProgressIndicator.adaptive(
-                                  valueColor: AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
+                                  valueColor: AlwaysStoppedAnimation(
+                                      Color(COLOR_PRIMARY)),
                                 ),
                               );
                             }
 
-                            if (snapshot.hasData || (snapshot.data?.isNotEmpty ?? false)) {
+                            if (snapshot.hasData ||
+                                (snapshot.data?.isNotEmpty ?? false)) {
                               newArrivalLst = snapshot.data!;
 
                               return Container(
-                                  height: MediaQuery.of(context).size.height * 0.32,
-                                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.32,
+                                  margin:
+                                      const EdgeInsets.fromLTRB(0, 10, 0, 0),
                                   child: ListView.builder(
                                       shrinkWrap: true,
                                       scrollDirection: Axis.horizontal,
                                       physics: const BouncingScrollPhysics(),
-                                      itemCount: newArrivalLst.length >= 15 ? 15 : newArrivalLst.length,
-                                      itemBuilder: (context, index) => buildNewArrivalItem(newArrivalLst[index])));
+                                      itemCount: newArrivalLst.length >= 15
+                                          ? 15
+                                          : newArrivalLst.length,
+                                      itemBuilder: (context, index) =>
+                                          buildNewArrivalItem(
+                                              newArrivalLst[index])));
                             } else {
                               return showEmptyState('No Vendors'.tr(), context);
                             }
@@ -340,26 +403,35 @@ class _DineInScreenState extends State<DineInScreen> {
                           stream: lstPopularRestaurant,
                           initialData: const [],
                           builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
                               return Center(
                                 child: CircularProgressIndicator.adaptive(
-                                  valueColor: AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
+                                  valueColor: AlwaysStoppedAnimation(
+                                      Color(COLOR_PRIMARY)),
                                 ),
                               );
                             }
 
-                            if (snapshot.hasData || (snapshot.data?.isNotEmpty ?? false)) {
+                            if (snapshot.hasData ||
+                                (snapshot.data?.isNotEmpty ?? false)) {
                               lstNearByFood = snapshot.data!;
 
                               return Container(
-                                  height: MediaQuery.of(context).size.height * 0.32,
-                                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.32,
+                                  margin:
+                                      const EdgeInsets.fromLTRB(0, 10, 0, 0),
                                   child: ListView.builder(
                                       shrinkWrap: true,
                                       scrollDirection: Axis.horizontal,
                                       physics: const BouncingScrollPhysics(),
-                                      itemCount: lstNearByFood.length >= 15 ? 15 : lstNearByFood.length,
-                                      itemBuilder: (context, index) => buildNewArrivalItem(lstNearByFood[index])));
+                                      itemCount: lstNearByFood.length >= 15
+                                          ? 15
+                                          : lstNearByFood.length,
+                                      itemBuilder: (context, index) =>
+                                          buildNewArrivalItem(
+                                              lstNearByFood[index])));
                             } else {
                               return showEmptyState('No Vendors'.tr(), context);
                             }
@@ -377,29 +449,36 @@ class _DineInScreenState extends State<DineInScreen> {
                             stream: lstAllRestaurant,
                             initialData: const [],
                             builder: (context, snapshot) {
-                              if (snapshot.connectionState == ConnectionState.waiting) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
                                 return Center(
                                   child: CircularProgressIndicator.adaptive(
-                                    valueColor: AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
+                                    valueColor: AlwaysStoppedAnimation(
+                                        Color(COLOR_PRIMARY)),
                                   ),
                                 );
                               }
 
-                              if (snapshot.hasData || (snapshot.data?.isNotEmpty ?? false)) {
+                              if (snapshot.hasData ||
+                                  (snapshot.data?.isNotEmpty ?? false)) {
                                 vendors.clear();
                                 vendors.addAll(snapshot.data!);
                                 return Container(
                                   width: MediaQuery.of(context).size.width,
-                                  margin: const EdgeInsets.fromLTRB(10, 0, 0, 10),
+                                  margin:
+                                      const EdgeInsets.fromLTRB(10, 0, 0, 10),
                                   child: ListView.builder(
                                       shrinkWrap: true,
                                       scrollDirection: Axis.vertical,
                                       physics: const BouncingScrollPhysics(),
                                       itemCount: vendors.length,
-                                      itemBuilder: (context, index) => buildAllRestaurantsData(vendors[index])),
+                                      itemBuilder: (context, index) =>
+                                          buildAllRestaurantsData(
+                                              vendors[index])),
                                 );
                               } else {
-                                return showEmptyState('No Vendors'.tr(), context);
+                                return showEmptyState(
+                                    'No Vendors'.tr(), context);
                               }
                             });
                       }),
@@ -408,7 +487,6 @@ class _DineInScreenState extends State<DineInScreen> {
                 ),
     );
   }
-
 
   buildCategoryItem(VendorCategoryModel cuisineModel) {
     return Padding(
@@ -432,12 +510,16 @@ class _DineInScreenState extends State<DineInScreen> {
                 imageBuilder: (context, imageProvider) => Container(
                   height: MediaQuery.of(context).size.height * 0.11,
                   width: MediaQuery.of(context).size.width * 0.22,
-                  decoration: BoxDecoration(border: Border.all(width: 4, color: Color(COLOR_PRIMARY)), borderRadius: BorderRadius.circular(25)),
+                  decoration: BoxDecoration(
+                      border: Border.all(width: 4, color: Color(COLOR_PRIMARY)),
+                      borderRadius: BorderRadius.circular(25)),
                   child: Container(
                     decoration: BoxDecoration(
                         border: Border.all(
                           width: 4,
-                          color: isDarkMode(context) ? Colors.black : const Color(0xffE0E2EA),
+                          color: isDarkMode(context)
+                              ? Colors.black
+                              : const Color(0xffE0E2EA),
                         ),
                         borderRadius: BorderRadius.circular(30)),
                     child: Container(
@@ -454,7 +536,7 @@ class _DineInScreenState extends State<DineInScreen> {
                 ),
                 errorWidget: (context, url, error) => ClipRRect(
                     borderRadius: BorderRadius.circular(15),
-                    child: Image.network(
+                    child: Image.asset(
                       placeholderImage,
                       fit: BoxFit.cover,
                       width: MediaQuery.of(context).size.width,
@@ -464,7 +546,8 @@ class _DineInScreenState extends State<DineInScreen> {
                   child: Container(
                     // padding: EdgeInsets.only(top: 10),
                     decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(75 / 1)),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(75 / 1)),
                       border: Border.all(
                         color: Color(COLOR_PRIMARY),
                         style: BorderStyle.solid,
@@ -487,7 +570,9 @@ class _DineInScreenState extends State<DineInScreen> {
                     maxLines: 2,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: isDarkMode(context) ? Colors.white : const Color(0xFF000000),
+                      color: isDarkMode(context)
+                          ? Colors.white
+                          : const Color(0xFF000000),
                     )).tr(),
               )
             ],
@@ -533,7 +618,8 @@ class _DineInScreenState extends State<DineInScreen> {
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                      image: DecorationImage(
+                          image: imageProvider, fit: BoxFit.cover),
                     ),
                   ),
                   placeholder: (context, url) => Center(
@@ -542,7 +628,7 @@ class _DineInScreenState extends State<DineInScreen> {
                   )),
                   errorWidget: (context, url, error) => ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: Image.network(
+                      child: Image.asset(
                         placeholderImage,
                         width: MediaQuery.of(context).size.width * 0.75,
                         fit: BoxFit.fitWidth,
@@ -599,7 +685,10 @@ class _DineInScreenState extends State<DineInScreen> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(left: 10.0),
-                                  child: Text(getKm(vendorModel.latitude, vendorModel.longitude)! + " km".tr(),
+                                  child: Text(
+                                      getKm(vendorModel.latitude,
+                                              vendorModel.longitude)! +
+                                          " km".tr(),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
@@ -624,13 +713,19 @@ class _DineInScreenState extends State<DineInScreen> {
                                   color: Color(COLOR_PRIMARY),
                                 ),
                                 const SizedBox(width: 3),
-                                Text(vendorModel.reviewsCount != 0 ? (vendorModel.reviewsSum / vendorModel.reviewsCount).toStringAsFixed(1) : 0.toString(),
+                                Text(
+                                    vendorModel.reviewsCount != 0
+                                        ? (vendorModel.reviewsSum /
+                                                vendorModel.reviewsCount)
+                                            .toStringAsFixed(1)
+                                        : 0.toString(),
                                     style: const TextStyle(
                                       letterSpacing: 0.5,
                                       color: Color(0xff000000),
                                     )),
                                 const SizedBox(width: 3),
-                                Text('(${vendorModel.reviewsCount.toStringAsFixed(1)})',
+                                Text(
+                                    '(${vendorModel.reviewsCount.toStringAsFixed(1)})',
                                     style: const TextStyle(
                                       letterSpacing: 0.5,
                                       color: Color(0xff666666),
@@ -652,7 +747,11 @@ class _DineInScreenState extends State<DineInScreen> {
   }
 
   String? getKm(double latitude, double longitude) {
-    double distanceInMeters = Geolocator.distanceBetween(latitude, longitude, MyAppState.selectedPosotion.location!.latitude, MyAppState.selectedPosotion.location!.longitude);
+    double distanceInMeters = Geolocator.distanceBetween(
+        latitude,
+        longitude,
+        MyAppState.selectedPosotion.location!.latitude,
+        MyAppState.selectedPosotion.location!.longitude);
     double kilometer = distanceInMeters / 1000;
 
     double minutes = 1.2;
@@ -685,7 +784,8 @@ class _DineInScreenState extends State<DineInScreen> {
                 imageBuilder: (context, imageProvider) => Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                    image: DecorationImage(
+                        image: imageProvider, fit: BoxFit.cover),
                   ),
                 ),
                 placeholder: (context, url) => Center(
@@ -694,7 +794,7 @@ class _DineInScreenState extends State<DineInScreen> {
                 )),
                 errorWidget: (context, url, error) => ClipRRect(
                     borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
+                    child: Image.asset(
                       vendor.photo,
                       fit: BoxFit.cover,
                     )),
@@ -724,11 +824,17 @@ class _DineInScreenState extends State<DineInScreen> {
                         onTap: () {
                           setState(() {
                             if (lstFav.contains(vendor.id) == true) {
-                              FavouriteModel favouriteModel = FavouriteModel(store_id: vendor.id, user_id: MyAppState.currentUser!.userID, section_id: sectionConstantModel!.id);
+                              FavouriteModel favouriteModel = FavouriteModel(
+                                  store_id: vendor.id,
+                                  user_id: MyAppState.currentUser!.userID,
+                                  section_id: sectionConstantModel!.id);
                               lstFav.removeWhere((item) => item == vendor.id);
-                              fireStoreUtils.removeFavouriteStore(favouriteModel);
+                              fireStoreUtils
+                                  .removeFavouriteStore(favouriteModel);
                             } else {
-                              FavouriteModel favouriteModel = FavouriteModel(store_id: vendor.id, user_id: MyAppState.currentUser!.userID);
+                              FavouriteModel favouriteModel = FavouriteModel(
+                                  store_id: vendor.id,
+                                  user_id: MyAppState.currentUser!.userID);
                               fireStoreUtils.setFavouriteStore(favouriteModel);
                               lstFav.add(vendor.id);
                             }
@@ -775,7 +881,9 @@ class _DineInScreenState extends State<DineInScreen> {
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(getKm(vendor.latitude, vendor.longitude)! + " km".tr(),
+                              child: Text(
+                                  getKm(vendor.latitude, vendor.longitude)! +
+                                      " km".tr(),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
@@ -799,7 +907,11 @@ class _DineInScreenState extends State<DineInScreen> {
                         color: Color(COLOR_PRIMARY),
                       ),
                       const SizedBox(width: 3),
-                      Text(vendor.reviewsCount != 0 ? (vendor.reviewsSum / vendor.reviewsCount).toStringAsFixed(1) : 0.toString(),
+                      Text(
+                          vendor.reviewsCount != 0
+                              ? (vendor.reviewsSum / vendor.reviewsCount)
+                                  .toStringAsFixed(1)
+                              : 0.toString(),
                           style: const TextStyle(
                             letterSpacing: 0.5,
                             color: Color(0xff000000),
@@ -846,14 +958,20 @@ class buildDineInTitleRow extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(titleValue.tr(), style: TextStyle(color: isDarkMode(context) ? Colors.white : const Color(0xFF000000), fontSize: 16)),
+              Text(titleValue.tr(),
+                  style: TextStyle(
+                      color: isDarkMode(context)
+                          ? Colors.white
+                          : const Color(0xFF000000),
+                      fontSize: 16)),
               isViewAll!
                   ? Container()
                   : GestureDetector(
                       onTap: () {
                         onClick!.call();
                       },
-                      child: Text('View All'.tr(), style: TextStyle(color: Color(COLOR_PRIMARY))),
+                      child: Text('View All'.tr(),
+                          style: TextStyle(color: Color(COLOR_PRIMARY))),
                     ),
             ],
           ),

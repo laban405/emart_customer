@@ -28,7 +28,11 @@ class _LanguageChooceScreenState extends State<LanguageChooseScreen> {
 
   void loadData() async {
     languageList.clear();
-    await FireStoreUtils.firestore.collection(Setting).doc("languages").get().then((value) {
+    await FireStoreUtils.firestore
+        .collection(Setting)
+        .doc("languages")
+        .get()
+        .then((value) {
       List list = value.data()!["list"];
       for (int i = 0; i < list.length; i++) {
         if (list[i]['isActive'] == true) {
@@ -65,7 +69,8 @@ class _LanguageChooceScreenState extends State<LanguageChooseScreen> {
                   decoration: languageList[index].slug == selectedLanguage
                       ? BoxDecoration(
                           border: Border.all(color: Color(COLOR_PRIMARY)),
-                          borderRadius: const BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
+                          borderRadius: const BorderRadius.all(Radius.circular(
+                                  5.0) //                 <--- border radius here
                               ),
                         )
                       : null,
@@ -79,14 +84,15 @@ class _LanguageChooceScreenState extends State<LanguageChooseScreen> {
                                 height: 60,
                                 width: 60,
                               )
-                            : Image.network(
-                                 placeholderImage,
+                            : Image.asset(
+                                placeholderImage,
                                 height: 60,
                                 width: 60,
                               ),
                         Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
-                          child: Text(languageList[index].title.toString(), style: const TextStyle(fontSize: 16)),
+                          child: Text(languageList[index].title.toString(),
+                              style: const TextStyle(fontSize: 16)),
                         )
                       ],
                     ),

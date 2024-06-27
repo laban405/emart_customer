@@ -44,7 +44,8 @@ String? validatePassword(String? value) {
 }
 
 String? validateEmail(String? value) {
-  String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+  String pattern =
+      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
   RegExp regex = RegExp(pattern);
   if (!regex.hasMatch(value ?? '')) {
     return 'Enter valid e-mail'.tr();
@@ -63,20 +64,23 @@ String? validateConfirmPassword(String? password, String? confirmPassword) {
   }
 }
 
-String? validateEmptyField(String? text) => text == null || text.isEmpty ? 'This field can\'t be empty.'.tr() : null;
+String? validateEmptyField(String? text) =>
+    text == null || text.isEmpty ? 'This field can\'t be empty.'.tr() : null;
 
 //helper method to show progress
 ProgressDialog? pd;
 
 showProgress(BuildContext context, String message, bool isDismissible) async {
-  pd = ProgressDialog(context, type: ProgressDialogType.normal, isDismissible: isDismissible);
+  pd = ProgressDialog(context,
+      type: ProgressDialogType.normal, isDismissible: isDismissible);
   pd!.style(
       message: message,
       borderRadius: 10.0,
       backgroundColor: Color(COLOR_PRIMARY),
       elevation: 10.0,
       insetAnimCurve: Curves.easeInOut,
-      messageTextStyle: const TextStyle(color: Colors.white, fontSize: 19.0, fontWeight: FontWeight.w600));
+      messageTextStyle: const TextStyle(
+          color: Colors.white, fontSize: 19.0, fontWeight: FontWeight.w600));
   await pd!.show();
 }
 
@@ -90,7 +94,8 @@ hideProgress() {
 }
 
 //helper method to show alert dialog
-showAlertDialog(BuildContext context, String title, String content, bool addOkButton) {
+showAlertDialog(
+    BuildContext context, String title, String content, bool addOkButton) {
   // set up the AlertDialog
   Widget? okButton;
   if (addOkButton) {
@@ -113,7 +118,10 @@ showAlertDialog(BuildContext context, String title, String content, bool addOkBu
           return alert;
         });
   } else {
-    AlertDialog alert = AlertDialog(title: Text(title), content: Text(content), actions: [if (okButton != null) okButton]);
+    AlertDialog alert = AlertDialog(
+        title: Text(title),
+        content: Text(content),
+        actions: [if (okButton != null) okButton]);
 
     showDialog(
       context: context,
@@ -125,15 +133,20 @@ showAlertDialog(BuildContext context, String title, String content, bool addOkBu
 }
 
 pushReplacement(BuildContext context, Widget destination) {
-  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => destination));
+  Navigator.of(context)
+      .pushReplacement(MaterialPageRoute(builder: (context) => destination));
 }
 
 push(BuildContext context, Widget destination) {
-  Navigator.of(context).push(MaterialPageRoute(builder: (context) => destination));
+  Navigator.of(context)
+      .push(MaterialPageRoute(builder: (context) => destination));
 }
 
 pushAndRemoveUntil(BuildContext context, Widget destination, bool predict) {
-  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => destination), (Route<dynamic> route) => predict);
+  Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => destination),
+      (Route<dynamic> route) => predict);
 }
 
 String setLastSeen(int seconds) {
@@ -151,10 +164,12 @@ String setLastSeen(int seconds) {
 }
 
 Widget displayImage(String picUrl) => CachedNetworkImage(
-    imageBuilder: (context, imageProvider) => _getFlatImageProvider(imageProvider),
+    imageBuilder: (context, imageProvider) =>
+        _getFlatImageProvider(imageProvider),
     imageUrl: getImageVAlidUrl(picUrl),
     placeholder: (context, url) => _getFlatPlaceholderOrErrorImage(true),
-    errorWidget: (context, url, error) => _getFlatPlaceholderOrErrorImage(false));
+    errorWidget: (context, url, error) =>
+        _getFlatPlaceholderOrErrorImage(false));
 
 Widget _getFlatPlaceholderOrErrorImage(bool placeholder) => Container(
       child: placeholder
@@ -170,26 +185,32 @@ Widget _getFlatPlaceholderOrErrorImage(bool placeholder) => Container(
 
 Widget _getFlatImageProvider(ImageProvider provider) {
   return Container(
-    decoration: BoxDecoration(image: DecorationImage(image: provider, fit: BoxFit.cover)),
+    decoration: BoxDecoration(
+        image: DecorationImage(image: provider, fit: BoxFit.cover)),
   );
 }
 
-Widget displayCircleImage(String picUrl, double size, hasBorder) => CachedNetworkImage(
-    height: size,
-    width: size,
-    imageBuilder: (context, imageProvider) => _getCircularImageProvider(imageProvider, size, hasBorder),
-    imageUrl: getImageVAlidUrl(picUrl),
-    placeholder: (context, url) => _getPlaceholderOrErrorImage(size, hasBorder),
-    errorWidget: (context, url, error) => _getPlaceholderOrErrorImage(size, hasBorder));
+Widget displayCircleImage(String picUrl, double size, hasBorder) =>
+    CachedNetworkImage(
+        height: size,
+        width: size,
+        imageBuilder: (context, imageProvider) =>
+            _getCircularImageProvider(imageProvider, size, hasBorder),
+        imageUrl: getImageVAlidUrl(picUrl),
+        placeholder: (context, url) =>
+            _getPlaceholderOrErrorImage(size, hasBorder),
+        errorWidget: (context, url, error) =>
+            _getPlaceholderOrErrorImage(size, hasBorder));
 
 Widget _getPlaceholderOrErrorImage(double size, hasBorder) => ClipOval(
-      child: Image.network(
+      child: Image.asset(
         placeholderImage,
         fit: BoxFit.cover,
       ),
     );
 
-Widget _getCircularImageProvider(ImageProvider provider, double size, bool hasBorder) {
+Widget _getCircularImageProvider(
+    ImageProvider provider, double size, bool hasBorder) {
   return ClipOval(
       child: Container(
     width: size,
@@ -248,7 +269,8 @@ Future<Position> getCurrentLocation() async {
 
   if (permission == LocationPermission.deniedForever) {
     // Permissions are denied forever, handle appropriately.
-    return Future.error('Location permissions are permanently denied, we cannot request permissions.');
+    return Future.error(
+        'Location permissions are permanently denied, we cannot request permissions.');
   }
 
   // When we reach here, permissions are granted and we can
@@ -291,42 +313,59 @@ String updateTime(Timer timer) {
   return '${twoDigitsHours(callDuration.inHours)}$twoDigitMinutes:$twoDigitSeconds';
 }
 
-Widget showEmptyState(String title, BuildContext context, {String? description, String? buttonTitle, VoidCallback? action}) {
+Widget showEmptyState(String title, BuildContext context,
+    {String? description, String? buttonTitle, VoidCallback? action}) {
   return Center(
-    child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-      const SizedBox(height: 30),
-      Text(title, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: isDarkMode(context) ? Colors.white : Colors.black)),
-      const SizedBox(height: 15),
-      Text(
-        description == null ? "" : description.toString(),
-        textAlign: TextAlign.center,
-        style: TextStyle(color: isDarkMode(context) ? Colors.white : Colors.black, fontSize: 16),
-      ),
-      const SizedBox(height: 25),
-      if (action != null)
-        Padding(
-          padding: const EdgeInsets.only(left: 24.0, right: 24),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(minWidth: double.infinity),
-            child: ElevatedButton(
-                child: Text(
-                  buttonTitle!,
-                  style: TextStyle(color: isDarkMode(context) ? Colors.white : Colors.black, fontSize: 18),
-                ),
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  backgroundColor: Color(COLOR_PRIMARY),
-                ),
-                onPressed: action),
+    child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(height: 30),
+          Text(title,
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: isDarkMode(context) ? Colors.white : Colors.black)),
+          const SizedBox(height: 15),
+          Text(
+            description == null ? "" : description.toString(),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: isDarkMode(context) ? Colors.white : Colors.black,
+                fontSize: 16),
           ),
-        )
-    ]),
+          const SizedBox(height: 25),
+          if (action != null)
+            Padding(
+              padding: const EdgeInsets.only(left: 24.0, right: 24),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(minWidth: double.infinity),
+                child: ElevatedButton(
+                    child: Text(
+                      buttonTitle!,
+                      style: TextStyle(
+                          color:
+                              isDarkMode(context) ? Colors.white : Colors.black,
+                          fontSize: 18),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      backgroundColor: Color(COLOR_PRIMARY),
+                    ),
+                    onPressed: action),
+              ),
+            )
+        ]),
   );
 }
 
 String orderDate(Timestamp? timestamp) {
-  return timestamp == null ? "" : DateFormat('dd MMM, yyyy').format(DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch));
+  return timestamp == null
+      ? ""
+      : DateFormat('dd MMM, yyyy').format(DateTime.fromMillisecondsSinceEpoch(
+          timestamp.millisecondsSinceEpoch));
 }
 
 class ShowDialogToDismiss extends StatelessWidget {
@@ -336,7 +375,12 @@ class ShowDialogToDismiss extends StatelessWidget {
   final String? secondaryButtonText;
   final VoidCallback? action;
 
-  ShowDialogToDismiss({required this.title, required this.buttonText, required this.content, this.secondaryButtonText, this.action});
+  ShowDialogToDismiss(
+      {required this.title,
+      required this.buttonText,
+      required this.content,
+      this.secondaryButtonText,
+      this.action});
 
   @override
   Widget build(BuildContext context) {
@@ -379,7 +423,8 @@ class ShowDialogToDismiss extends StatelessWidget {
           CupertinoDialogAction(
             isDefaultAction: true,
             child: Text(
-              buttonText[0].toUpperCase() + buttonText.substring(1).toLowerCase(),
+              buttonText[0].toUpperCase() +
+                  buttonText.substring(1).toLowerCase(),
             ),
             onPressed: () {
               Navigator.of(context).pop();
@@ -390,7 +435,8 @@ class ShowDialogToDismiss extends StatelessWidget {
               isDefaultAction: true,
               isDestructiveAction: true,
               child: Text(
-                secondaryButtonText![0].toUpperCase() + secondaryButtonText!.substring(1).toLowerCase(),
+                secondaryButtonText![0].toUpperCase() +
+                    secondaryButtonText!.substring(1).toLowerCase(),
               ),
               onPressed: action,
             ),

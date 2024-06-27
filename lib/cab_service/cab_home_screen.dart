@@ -304,7 +304,7 @@ class _CabHomeScreenState extends State<CabHomeScreen> {
           )),
           errorWidget: (context, url, error) => ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.network(
+              child: Image.asset(
                 placeholderImage,
                 fit: BoxFit.cover,
               )),

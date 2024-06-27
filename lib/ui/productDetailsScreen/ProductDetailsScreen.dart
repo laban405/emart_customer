@@ -34,7 +34,9 @@ class ProductDetailsScreen extends StatefulWidget {
   final ProductModel productModel;
   final VendorModel vendorModel;
 
-  const ProductDetailsScreen({Key? key, required this.productModel, required this.vendorModel}) : super(key: key);
+  const ProductDetailsScreen(
+      {Key? key, required this.productModel, required this.vendorModel})
+      : super(key: key);
 
   @override
   _ProductDetailsScreenState createState() => _ProductDetailsScreenState();
@@ -69,8 +71,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       if (day == element.day.toString()) {
         if (element.timeslot!.isNotEmpty) {
           for (var element in element.timeslot!) {
-            var start = DateFormat("dd-MM-yyyy HH:mm").parse(date + " " + element.from.toString());
-            var end = DateFormat("dd-MM-yyyy HH:mm").parse(date + " " + element.to.toString());
+            var start = DateFormat("dd-MM-yyyy HH:mm")
+                .parse(date + " " + element.from.toString());
+            var end = DateFormat("dd-MM-yyyy HH:mm")
+                .parse(date + " " + element.to.toString());
             if (isCurrentDateInRange(start, end)) {
               setState(() {
                 isOpen = true;
@@ -103,15 +107,25 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       if (attributes!.isNotEmpty) {
         for (var element in attributes!) {
           if (element.attributeOptions!.isNotEmpty) {
-            selectedVariants.add(attributes![attributes!.indexOf(element)].attributeOptions![0].toString());
-            selectedIndexVariants.add('${attributes!.indexOf(element)} _${attributes![0].attributeOptions![0].toString()}');
+            selectedVariants.add(attributes![attributes!.indexOf(element)]
+                .attributeOptions![0]
+                .toString());
+            selectedIndexVariants.add(
+                '${attributes!.indexOf(element)} _${attributes![0].attributeOptions![0].toString()}');
             selectedIndexArray.add('${attributes!.indexOf(element)}_0');
           }
         }
       }
 
-      if (variants!.where((element) => element.variant_sku == selectedVariants.join('-')).isNotEmpty) {
-        widget.productModel.price = variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_price ?? '0';
+      if (variants!
+          .where((element) => element.variant_sku == selectedVariants.join('-'))
+          .isNotEmpty) {
+        widget.productModel.price = variants!
+                .where((element) =>
+                    element.variant_sku == selectedVariants.join('-'))
+                .first
+                .variant_price ??
+            '0';
         widget.productModel.disPrice = '0';
       }
     }
@@ -131,7 +145,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   getData() async {
     if (MyAppState.currentUser != null) {
-      await FireStoreUtils().getFavouritesProductList(MyAppState.currentUser!.userID).then((value) {
+      await FireStoreUtils()
+          .getFavouritesProductList(MyAppState.currentUser!.userID)
+          .then((value) {
         setState(() {
           lstFav = value;
         });
@@ -165,7 +181,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       });
     });
 
-    await FireStoreUtils.getProductListByCategoryId(widget.productModel.categoryID.toString()).then((value) {
+    await FireStoreUtils.getProductListByCategoryId(
+            widget.productModel.categoryID.toString())
+        .then((value) {
       for (var element in value) {
         if (element.id != widget.productModel.id) {
           productList.add(element);
@@ -174,7 +192,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       setState(() {});
     });
 
-    await FireStoreUtils.getStoreProduct(widget.productModel.vendorID.toString()).then((value) {
+    await FireStoreUtils.getStoreProduct(
+            widget.productModel.vendorID.toString())
+        .then((value) {
       for (var element in value) {
         if (element.id != widget.productModel.id) {
           storeProductList.add(element);
@@ -203,16 +223,32 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           product.id ==
           widget.productModel.id +
               "~" +
-              (variants!.where((element) => element.variant_sku == selectedVariants.join('-')).isNotEmpty
-                  ? variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_id.toString()
+              (variants!
+                      .where((element) =>
+                          element.variant_sku == selectedVariants.join('-'))
+                      .isNotEmpty
+                  ? variants!
+                      .where((element) =>
+                          element.variant_sku == selectedVariants.join('-'))
+                      .first
+                      .variant_id
+                      .toString()
                   : ""));
       if (_productIsInList) {
         CartProduct element = value.firstWhere((product) =>
             product.id ==
             widget.productModel.id +
                 "~" +
-                (variants!.where((element) => element.variant_sku == selectedVariants.join('-')).isNotEmpty
-                    ? variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_id.toString()
+                (variants!
+                        .where((element) =>
+                            element.variant_sku == selectedVariants.join('-'))
+                        .isNotEmpty
+                    ? variants!
+                        .where((element) =>
+                            element.variant_sku == selectedVariants.join('-'))
+                        .first
+                        .variant_id
+                        .toString()
                     : ""));
 
         setState(() {
@@ -227,7 +263,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     super.didChangeDependencies();
   }
 
-  final PageController _controller = PageController(viewportFraction: 1, keepPage: true);
+  final PageController _controller =
+      PageController(viewportFraction: 1, keepPage: true);
 
   @override
   Widget build(BuildContext context) {
@@ -253,16 +290,21 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           allowImplicitScrolling: true,
                           itemBuilder: (context, index) => CachedNetworkImage(
                                 imageUrl: getImageVAlidUrl(productImage[index]),
-                                imageBuilder: (context, imageProvider) => Container(
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
                                   decoration: BoxDecoration(
-                                    image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                                    image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.cover),
                                   ),
                                 ),
                                 placeholder: (context, url) => Center(
                                     child: CircularProgressIndicator.adaptive(
-                                  valueColor: AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
+                                  valueColor: AlwaysStoppedAnimation(
+                                      Color(COLOR_PRIMARY)),
                                 )),
-                                errorWidget: (context, url, error) => Image.network(
+                                errorWidget: (context, url, error) =>
+                                    Image.asset(
                                   placeholderImage,
                                   fit: BoxFit.fitWidth,
                                 ),
@@ -301,30 +343,43 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     push(context, const AuthScreen());
                   } else {
                     setState(() {
-                      var contain = lstFav.where((element) => element.product_id == widget.productModel.id);
+                      var contain = lstFav.where((element) =>
+                          element.product_id == widget.productModel.id);
 
                       if (contain.isNotEmpty) {
                         FavouriteItemModel favouriteModel = FavouriteItemModel(
-                            product_id: widget.productModel.id, section_id: sectionConstantModel!.id, store_id: widget.vendorModel.id, user_id: MyAppState.currentUser!.userID);
-                        lstFav.removeWhere((item) => item.product_id == widget.productModel.id);
+                            product_id: widget.productModel.id,
+                            section_id: sectionConstantModel!.id,
+                            store_id: widget.vendorModel.id,
+                            user_id: MyAppState.currentUser!.userID);
+                        lstFav.removeWhere((item) =>
+                            item.product_id == widget.productModel.id);
                         FireStoreUtils().removeFavouriteItem(favouriteModel);
                       } else {
                         FavouriteItemModel favouriteModel = FavouriteItemModel(
-                            product_id: widget.productModel.id, section_id: sectionConstantModel!.id, store_id: widget.vendorModel.id, user_id: MyAppState.currentUser!.userID);
+                            product_id: widget.productModel.id,
+                            section_id: sectionConstantModel!.id,
+                            store_id: widget.vendorModel.id,
+                            user_id: MyAppState.currentUser!.userID);
                         FireStoreUtils().setFavouriteStoreItem(favouriteModel);
                         lstFav.add(favouriteModel);
                       }
                     });
                   }
                 },
-                child: lstFav.where((element) => element.product_id == widget.productModel.id).isNotEmpty
+                child: lstFav
+                        .where((element) =>
+                            element.product_id == widget.productModel.id)
+                        .isNotEmpty
                     ? Icon(
                         Icons.favorite,
                         color: Color(COLOR_PRIMARY),
                       )
                     : Icon(
                         Icons.favorite_border,
-                        color: isDarkMode(context) ? Colors.white38 : Colors.black38,
+                        color: isDarkMode(context)
+                            ? Colors.white38
+                            : Colors.black38,
                       ),
               ),
             )
@@ -350,10 +405,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 style: TextStyle(fontSize: 18),
                               ),
                             ),
-                            widget.productModel.disPrice == "" || widget.productModel.disPrice == "0"
+                            widget.productModel.disPrice == "" ||
+                                    widget.productModel.disPrice == "0"
                                 ? Text(
                                     "${amountShow(amount: widget.productModel.price)}",
-                                    style: TextStyle(letterSpacing: 0.5, color: Color(COLOR_PRIMARY)),
+                                    style: TextStyle(
+                                        letterSpacing: 0.5,
+                                        color: Color(COLOR_PRIMARY)),
                                   )
                                 : Row(
                                     children: [
@@ -369,7 +427,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                       ),
                                       Text(
                                         "${amountShow(amount: widget.productModel.price)}",
-                                        style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey, decoration: TextDecoration.lineThrough),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.grey,
+                                            decoration:
+                                                TextDecoration.lineThrough),
                                       ),
                                     ],
                                   ),
@@ -387,15 +449,24 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     decoration: BoxDecoration(
                                       color: Colors.green,
                                       borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10)),
                                     ),
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 6),
                                       child: Row(
                                         children: [
                                           Text(
-                                            widget.productModel.reviewsCount != 0
-                                                ? (widget.productModel.reviewsSum / widget.productModel.reviewsCount).toStringAsFixed(1)
+                                            widget.productModel.reviewsCount !=
+                                                    0
+                                                ? (widget.productModel
+                                                            .reviewsSum /
+                                                        widget.productModel
+                                                            .reviewsCount)
+                                                    .toStringAsFixed(1)
                                                 : 0.toString(),
                                             style: const TextStyle(
                                               color: Colors.white,
@@ -417,13 +488,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     width: 10,
                                   ),
                                   Text(
-                                    "${widget.productModel.reviewsCount}" "Review".tr(),
+                                    "${widget.productModel.reviewsCount}"
+                                            "Review"
+                                        .tr(),
                                     style: TextStyle(),
                                   ),
                                 ],
                               ),
                             ),
-                            sectionConstantModel!.serviceTypeFlag == "ecommerce-service"
+                            sectionConstantModel!.serviceTypeFlag ==
+                                    "ecommerce-service"
                                 ? productQnt == 0
                                     ? TextButton.icon(
                                         onPressed: () {
@@ -432,53 +506,134 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                           } else {
                                             setState(() {
                                               print("Variant---->${variants}");
-                                              print("Variant---->${selectedVariants}");
-                                              if (variants!.where((element) => element.variant_sku == selectedVariants.join('-')).isNotEmpty) {
-                                                if (int.parse(variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_quantity.toString()) >=
+                                              print(
+                                                  "Variant---->${selectedVariants}");
+                                              if (variants!
+                                                  .where((element) =>
+                                                      element.variant_sku ==
+                                                      selectedVariants
+                                                          .join('-'))
+                                                  .isNotEmpty) {
+                                                if (int.parse(variants!
+                                                            .where((element) =>
+                                                                element
+                                                                    .variant_sku ==
+                                                                selectedVariants
+                                                                    .join('-'))
+                                                            .first
+                                                            .variant_quantity
+                                                            .toString()) >=
                                                         1 ||
-                                                    int.parse(variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_quantity.toString()) ==
+                                                    int.parse(variants!
+                                                            .where((element) =>
+                                                                element
+                                                                    .variant_sku ==
+                                                                selectedVariants
+                                                                    .join('-'))
+                                                            .first
+                                                            .variant_quantity
+                                                            .toString()) ==
                                                         -1) {
-                                                  VariantInfo? variantInfo = VariantInfo();
-                                                  widget.productModel.price =
-                                                      variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_price ?? '0';
-                                                  widget.productModel.disPrice = '0';
+                                                  VariantInfo? variantInfo =
+                                                      VariantInfo();
+                                                  widget.productModel
+                                                      .price = variants!
+                                                          .where((element) =>
+                                                              element
+                                                                  .variant_sku ==
+                                                              selectedVariants
+                                                                  .join('-'))
+                                                          .first
+                                                          .variant_price ??
+                                                      '0';
+                                                  widget.productModel.disPrice =
+                                                      '0';
 
-                                                  Map<String, String> mapData = Map();
-                                                  for (var element in attributes!) {
+                                                  Map<String, String> mapData =
+                                                      Map();
+                                                  for (var element
+                                                      in attributes!) {
                                                     mapData.addEntries([
-                                                      MapEntry(attributesList.where((element1) => element.attributesId == element1.id).first.title.toString(),
-                                                          selectedVariants[attributes!.indexOf(element)])
+                                                      MapEntry(
+                                                          attributesList
+                                                              .where((element1) =>
+                                                                  element
+                                                                      .attributesId ==
+                                                                  element1.id)
+                                                              .first
+                                                              .title
+                                                              .toString(),
+                                                          selectedVariants[
+                                                              attributes!
+                                                                  .indexOf(
+                                                                      element)])
                                                     ]);
                                                     setState(() {});
                                                   }
 
                                                   variantInfo = VariantInfo(
-                                                      variant_price: variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_price ?? '0',
-                                                      variant_sku: selectedVariants.join('-'),
+                                                      variant_price: variants!
+                                                              .where((element) =>
+                                                                  element.variant_sku ==
+                                                                  selectedVariants.join(
+                                                                      '-'))
+                                                              .first
+                                                              .variant_price ??
+                                                          '0',
+                                                      variant_sku:
+                                                          selectedVariants
+                                                              .join('-'),
                                                       variant_options: mapData,
-                                                      variant_image: variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_image ?? '',
-                                                      variant_id: variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_id ?? '0');
+                                                      variant_image: variants!
+                                                              .where((element) =>
+                                                                  element.variant_sku ==
+                                                                  selectedVariants
+                                                                      .join(
+                                                                          '-'))
+                                                              .first
+                                                              .variant_image ??
+                                                          '',
+                                                      variant_id: variants!
+                                                              .where((element) => element.variant_sku == selectedVariants.join('-'))
+                                                              .first
+                                                              .variant_id ??
+                                                          '0');
 
-                                                  widget.productModel.variant_info = variantInfo;
+                                                  widget.productModel
+                                                          .variant_info =
+                                                      variantInfo;
 
                                                   setState(() {
                                                     productQnt = 1;
                                                   });
-                                                  addtocard(widget.productModel, true);
+                                                  addtocard(widget.productModel,
+                                                      true);
                                                 } else {
-                                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                                    content: Text("Product is out of Stock"),
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                          const SnackBar(
+                                                    content: Text(
+                                                        "Product is out of Stock"),
                                                   ));
                                                 }
                                               } else {
-                                                if (widget.productModel.quantity > productQnt || widget.productModel.quantity == -1) {
+                                                if (widget.productModel
+                                                            .quantity >
+                                                        productQnt ||
+                                                    widget.productModel
+                                                            .quantity ==
+                                                        -1) {
                                                   setState(() {
                                                     productQnt = 1;
                                                   });
-                                                  addtocard(widget.productModel, true);
+                                                  addtocard(widget.productModel,
+                                                      true);
                                                 } else {
-                                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                                    content: Text("Product is out of Stock"),
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                          const SnackBar(
+                                                    content: Text(
+                                                        "Product is out of Stock"),
                                                   ));
                                                 }
                                               }
@@ -492,15 +647,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                         ),
                                         label: Text(
                                           'ADD'.tr(),
-                                          style: TextStyle(color: Color(COLOR_PRIMARY)),
+                                          style: TextStyle(
+                                              color: Color(COLOR_PRIMARY)),
                                         ),
                                         style: TextButton.styleFrom(
-                                          side: BorderSide(color: Colors.grey.shade300, width: 2),
+                                          side: BorderSide(
+                                              color: Colors.grey.shade300,
+                                              width: 2),
                                         ),
                                       )
                                     : Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
                                           IconButton(
                                               onPressed: () {
@@ -510,12 +670,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                                     productQnt--;
                                                   }
                                                   if (productQnt >= 0) {
-                                                    removetocard(widget.productModel, true);
+                                                    removetocard(
+                                                        widget.productModel,
+                                                        true);
                                                   }
                                                 });
                                               },
                                               icon: Image(
-                                                image: const AssetImage("assets/images/minus.png"),
+                                                image: const AssetImage(
+                                                    "assets/images/minus.png"),
                                                 color: Color(COLOR_PRIMARY),
                                                 height: 26,
                                               )),
@@ -524,7 +687,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                           ),
                                           Text(
                                             productQnt.toString(),
-                                            style: TextStyle(fontSize: 16, color: Color(COLOR_PRIMARY)),
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Color(COLOR_PRIMARY)),
                                           ),
                                           const SizedBox(
                                             width: 5,
@@ -532,256 +697,497 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                           IconButton(
                                               onPressed: () {
                                                 setState(() {
-                                                  if (variants!.where((element) => element.variant_sku == selectedVariants.join('-')).isNotEmpty) {
-                                                    if (int.parse(
-                                                                variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_quantity.toString()) >
+                                                  if (variants!
+                                                      .where((element) =>
+                                                          element.variant_sku ==
+                                                          selectedVariants
+                                                              .join('-'))
+                                                      .isNotEmpty) {
+                                                    if (int.parse(variants!
+                                                                .where((element) =>
+                                                                    element
+                                                                        .variant_sku ==
+                                                                    selectedVariants
+                                                                        .join(
+                                                                            '-'))
+                                                                .first
+                                                                .variant_quantity
+                                                                .toString()) >
                                                             productQnt ||
                                                         int.parse(variants!
-                                                                .where((element) => element.variant_sku == selectedVariants.join('-'))
+                                                                .where((element) =>
+                                                                    element
+                                                                        .variant_sku ==
+                                                                    selectedVariants
+                                                                        .join(
+                                                                            '-'))
                                                                 .first
                                                                 .variant_quantity
                                                                 .toString()) ==
                                                             -1) {
-                                                      VariantInfo? variantInfo = VariantInfo();
-                                                      Map<String, String> mapData = Map();
-                                                      for (var element in attributes!) {
+                                                      VariantInfo? variantInfo =
+                                                          VariantInfo();
+                                                      Map<String, String>
+                                                          mapData = Map();
+                                                      for (var element
+                                                          in attributes!) {
                                                         mapData.addEntries([
-                                                          MapEntry(attributesList.where((element1) => element.attributesId == element1.id).first.title.toString(),
-                                                              selectedVariants[attributes!.indexOf(element)])
+                                                          MapEntry(
+                                                              attributesList
+                                                                  .where((element1) =>
+                                                                      element
+                                                                          .attributesId ==
+                                                                      element1
+                                                                          .id)
+                                                                  .first
+                                                                  .title
+                                                                  .toString(),
+                                                              selectedVariants[
+                                                                  attributes!
+                                                                      .indexOf(
+                                                                          element)])
                                                         ]);
                                                         setState(() {});
                                                       }
 
                                                       variantInfo = VariantInfo(
-                                                          variant_price: variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_price ?? '0',
-                                                          variant_sku: selectedVariants.join('-'),
-                                                          variant_options: mapData,
-                                                          variant_image: variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_image ?? '',
-                                                          variant_id: variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_id ?? '0');
+                                                          variant_price: variants!
+                                                                  .where((element) =>
+                                                                      element.variant_sku ==
+                                                                      selectedVariants.join(
+                                                                          '-'))
+                                                                  .first
+                                                                  .variant_price ??
+                                                              '0',
+                                                          variant_sku:
+                                                              selectedVariants
+                                                                  .join('-'),
+                                                          variant_options:
+                                                              mapData,
+                                                          variant_image: variants!
+                                                                  .where((element) =>
+                                                                      element.variant_sku ==
+                                                                      selectedVariants.join(
+                                                                          '-'))
+                                                                  .first
+                                                                  .variant_image ??
+                                                              '',
+                                                          variant_id: variants!
+                                                                  .where((element) => element.variant_sku == selectedVariants.join('-'))
+                                                                  .first
+                                                                  .variant_id ??
+                                                              '0');
 
-                                                      widget.productModel.variant_info = variantInfo;
+                                                      widget.productModel
+                                                              .variant_info =
+                                                          variantInfo;
                                                       if (productQnt != 0) {
                                                         productQnt++;
                                                       }
                                                       // widget.productModel.price = widget.productModel.disPrice == "" || widget.productModel.disPrice == "0" ? (widget.productModel.price) : (widget.productModel.disPrice!);
-                                                      addtocard(widget.productModel, true);
+                                                      addtocard(
+                                                          widget.productModel,
+                                                          true);
                                                     } else {
-                                                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                                        content: Text("Product is out of Stock"),
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                              const SnackBar(
+                                                        content: Text(
+                                                            "Product is out of Stock"),
                                                       ));
                                                     }
                                                   } else {
-                                                    if (widget.productModel.quantity > productQnt || widget.productModel.quantity == -1) {
+                                                    if (widget.productModel
+                                                                .quantity >
+                                                            productQnt ||
+                                                        widget.productModel
+                                                                .quantity ==
+                                                            -1) {
                                                       if (productQnt != 0) {
                                                         productQnt++;
                                                       }
                                                       // widget.productModel.price = widget.productModel.disPrice == "" || widget.productModel.disPrice == "0" ? (widget.productModel.price) : (widget.productModel.disPrice!);
-                                                      addtocard(widget.productModel, true);
+                                                      addtocard(
+                                                          widget.productModel,
+                                                          true);
                                                     } else {
-                                                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                                        content: Text("Product is out of Stock"),
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                              const SnackBar(
+                                                        content: Text(
+                                                            "Product is out of Stock"),
                                                       ));
                                                     }
                                                   }
                                                 });
                                               },
                                               icon: Image(
-                                                image: const AssetImage("assets/images/plus.png"),
+                                                image: const AssetImage(
+                                                    "assets/images/plus.png"),
                                                 color: Color(COLOR_PRIMARY),
                                                 height: 26,
                                               ))
                                         ],
                                       )
-                                : Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                                    productQnt == 0
-                                        ? isOpen == false
-                                            ? const Center()
-                                            : TextButton.icon(
-                                                onPressed: () {
-                                                  if (MyAppState.currentUser == null) {
-                                                    push(context, const AuthScreen());
-                                                  } else {
-                                                    setState(() {
-                                                      print("Variant---->${variants}");
-                                                      print("Variant---->${selectedVariants}");
-                                                      if (variants!.where((element) => element.variant_sku == selectedVariants.join('-')).isNotEmpty) {
-                                                        if (int.parse(variants!
-                                                                    .where((element) => element.variant_sku == selectedVariants.join('-'))
-                                                                    .first
-                                                                    .variant_quantity
-                                                                    .toString()) >=
-                                                                1 ||
-                                                            int.parse(variants!
-                                                                    .where((element) => element.variant_sku == selectedVariants.join('-'))
-                                                                    .first
-                                                                    .variant_quantity
-                                                                    .toString()) ==
-                                                                -1) {
-                                                          VariantInfo? variantInfo = VariantInfo();
-                                                          widget.productModel.price =
-                                                              variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_price ?? '0';
-                                                          widget.productModel.disPrice = '0';
-
-                                                          Map<String, String> mapData = Map();
-                                                          for (var element in attributes!) {
-                                                            mapData.addEntries([
-                                                              MapEntry(attributesList.where((element1) => element.attributesId == element1.id).first.title.toString(),
-                                                                  selectedVariants[attributes!.indexOf(element)])
-                                                            ]);
-                                                            setState(() {});
-                                                          }
-
-                                                          variantInfo = VariantInfo(
-                                                              variant_price:
-                                                                  variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_price ?? '0',
-                                                              variant_sku: selectedVariants.join('-'),
-                                                              variant_options: mapData,
-                                                              variant_image:
-                                                                  variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_image ?? '',
-                                                              variant_id: variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_id ?? '0');
-
-                                                          widget.productModel.variant_info = variantInfo;
-
-                                                          setState(() {
-                                                            productQnt = 1;
-                                                          });
-                                                          addtocard(widget.productModel, true);
-                                                        } else {
-                                                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                                            content: Text("Product is out of Stock"),
-                                                          ));
-                                                        }
+                                : Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                        productQnt == 0
+                                            ? isOpen == false
+                                                ? const Center()
+                                                : TextButton.icon(
+                                                    onPressed: () {
+                                                      if (MyAppState
+                                                              .currentUser ==
+                                                          null) {
+                                                        push(context,
+                                                            const AuthScreen());
                                                       } else {
-                                                        if (widget.productModel.quantity > productQnt || widget.productModel.quantity == -1) {
-                                                          setState(() {
-                                                            productQnt = 1;
-                                                          });
-                                                          addtocard(widget.productModel, true);
-                                                        } else {
-                                                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                                            content: Text("Product is out of Stock"),
-                                                          ));
-                                                        }
-                                                      }
-                                                    });
-                                                  }
-                                                },
-                                                icon: Icon(
-                                                  Icons.add,
-                                                  color: Color(COLOR_PRIMARY),
-                                                  size: 18,
-                                                ),
-                                                label: Text(
-                                                  'ADD'.tr(),
-                                                  style: TextStyle(color: Color(COLOR_PRIMARY)),
-                                                ),
-                                                style: TextButton.styleFrom(
-                                                  side: BorderSide(color: Colors.grey.shade300, width: 2),
-                                                ),
-                                              )
-                                        : isOpen == false
-                                            ? Container()
-                                            : Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                children: [
-                                                  IconButton(
-                                                      onPressed: () {
-                                                        print("------->${productQnt}");
                                                         setState(() {
-                                                          if (productQnt != 0) {
-                                                            productQnt--;
-                                                          }
-                                                          if (productQnt >= 0) {
-                                                            removetocard(widget.productModel, true);
-                                                          }
-                                                        });
-                                                      },
-                                                      icon: Image(
-                                                        image: const AssetImage("assets/images/minus.png"),
-                                                        color: Color(COLOR_PRIMARY),
-                                                        height: 26,
-                                                      )),
-                                                  const SizedBox(
-                                                    width: 5,
-                                                  ),
-                                                  Text(
-                                                    productQnt.toString(),
-                                                    style: TextStyle(fontSize: 16, color: Color(COLOR_PRIMARY)),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 5,
-                                                  ),
-                                                  IconButton(
-                                                      onPressed: () {
-                                                        setState(() {
-                                                          if (variants!.where((element) => element.variant_sku == selectedVariants.join('-')).isNotEmpty) {
+                                                          print(
+                                                              "Variant---->${variants}");
+                                                          print(
+                                                              "Variant---->${selectedVariants}");
+                                                          if (variants!
+                                                              .where((element) =>
+                                                                  element
+                                                                      .variant_sku ==
+                                                                  selectedVariants
+                                                                      .join(
+                                                                          '-'))
+                                                              .isNotEmpty) {
                                                             if (int.parse(variants!
-                                                                        .where((element) => element.variant_sku == selectedVariants.join('-'))
+                                                                        .where((element) =>
+                                                                            element.variant_sku ==
+                                                                            selectedVariants.join(
+                                                                                '-'))
                                                                         .first
                                                                         .variant_quantity
-                                                                        .toString()) >
-                                                                    productQnt ||
+                                                                        .toString()) >=
+                                                                    1 ||
                                                                 int.parse(variants!
-                                                                        .where((element) => element.variant_sku == selectedVariants.join('-'))
+                                                                        .where((element) =>
+                                                                            element.variant_sku ==
+                                                                            selectedVariants.join('-'))
                                                                         .first
                                                                         .variant_quantity
                                                                         .toString()) ==
                                                                     -1) {
-                                                              VariantInfo? variantInfo = VariantInfo();
-                                                              Map<String, String> mapData = Map();
-                                                              for (var element in attributes!) {
-                                                                mapData.addEntries([
-                                                                  MapEntry(attributesList.where((element1) => element.attributesId == element1.id).first.title.toString(),
-                                                                      selectedVariants[attributes!.indexOf(element)])
+                                                              VariantInfo?
+                                                                  variantInfo =
+                                                                  VariantInfo();
+                                                              widget
+                                                                  .productModel
+                                                                  .price = variants!
+                                                                      .where((element) =>
+                                                                          element
+                                                                              .variant_sku ==
+                                                                          selectedVariants
+                                                                              .join('-'))
+                                                                      .first
+                                                                      .variant_price ??
+                                                                  '0';
+                                                              widget
+                                                                  .productModel
+                                                                  .disPrice = '0';
+
+                                                              Map<String,
+                                                                      String>
+                                                                  mapData =
+                                                                  Map();
+                                                              for (var element
+                                                                  in attributes!) {
+                                                                mapData
+                                                                    .addEntries([
+                                                                  MapEntry(
+                                                                      attributesList
+                                                                          .where((element1) =>
+                                                                              element.attributesId ==
+                                                                              element1
+                                                                                  .id)
+                                                                          .first
+                                                                          .title
+                                                                          .toString(),
+                                                                      selectedVariants[
+                                                                          attributes!
+                                                                              .indexOf(element)])
                                                                 ]);
                                                                 setState(() {});
                                                               }
 
                                                               variantInfo = VariantInfo(
-                                                                  variant_price:
-                                                                      variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_price ?? '0',
-                                                                  variant_sku: selectedVariants.join('-'),
-                                                                  variant_options: mapData,
+                                                                  variant_price: variants!
+                                                                          .where((element) =>
+                                                                              element.variant_sku ==
+                                                                              selectedVariants.join(
+                                                                                  '-'))
+                                                                          .first
+                                                                          .variant_price ??
+                                                                      '0',
+                                                                  variant_sku:
+                                                                      selectedVariants
+                                                                          .join(
+                                                                              '-'),
+                                                                  variant_options:
+                                                                      mapData,
                                                                   variant_image:
-                                                                      variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_image ?? '',
-                                                                  variant_id:
-                                                                      variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_id ?? '0');
+                                                                      variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_image ??
+                                                                          '',
+                                                                  variant_id: variants!
+                                                                          .where((element) =>
+                                                                              element.variant_sku ==
+                                                                              selectedVariants.join('-'))
+                                                                          .first
+                                                                          .variant_id ??
+                                                                      '0');
 
-                                                              widget.productModel.variant_info = variantInfo;
-                                                              if (productQnt != 0) {
-                                                                productQnt++;
-                                                              }
-                                                              // widget.productModel.price = widget.productModel.disPrice == "" || widget.productModel.disPrice == "0" ? (widget.productModel.price) : (widget.productModel.disPrice!);
-                                                              addtocard(widget.productModel, true);
+                                                              widget.productModel
+                                                                      .variant_info =
+                                                                  variantInfo;
+
+                                                              setState(() {
+                                                                productQnt = 1;
+                                                              });
+                                                              addtocard(
+                                                                  widget
+                                                                      .productModel,
+                                                                  true);
                                                             } else {
-                                                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                                                content: Text("Product is out of Stock"),
+                                                              ScaffoldMessenger
+                                                                      .of(
+                                                                          context)
+                                                                  .showSnackBar(
+                                                                      const SnackBar(
+                                                                content: Text(
+                                                                    "Product is out of Stock"),
                                                               ));
                                                             }
                                                           } else {
-                                                            if (widget.productModel.quantity > productQnt || widget.productModel.quantity == -1) {
-                                                              if (productQnt != 0) {
-                                                                productQnt++;
-                                                              }
-                                                              // widget.productModel.price = widget.productModel.disPrice == "" || widget.productModel.disPrice == "0" ? (widget.productModel.price) : (widget.productModel.disPrice!);
-                                                              addtocard(widget.productModel, true);
+                                                            if (widget.productModel
+                                                                        .quantity >
+                                                                    productQnt ||
+                                                                widget.productModel
+                                                                        .quantity ==
+                                                                    -1) {
+                                                              setState(() {
+                                                                productQnt = 1;
+                                                              });
+                                                              addtocard(
+                                                                  widget
+                                                                      .productModel,
+                                                                  true);
                                                             } else {
-                                                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                                                content: Text("Product is out of Stock"),
+                                                              ScaffoldMessenger
+                                                                      .of(
+                                                                          context)
+                                                                  .showSnackBar(
+                                                                      const SnackBar(
+                                                                content: Text(
+                                                                    "Product is out of Stock"),
                                                               ));
                                                             }
                                                           }
                                                         });
-                                                      },
-                                                      icon: Image(
-                                                        image: const AssetImage("assets/images/plus.png"),
-                                                        color: Color(COLOR_PRIMARY),
-                                                        height: 26,
-                                                      ))
-                                                ],
-                                              ),
-                                  ]),
+                                                      }
+                                                    },
+                                                    icon: Icon(
+                                                      Icons.add,
+                                                      color:
+                                                          Color(COLOR_PRIMARY),
+                                                      size: 18,
+                                                    ),
+                                                    label: Text(
+                                                      'ADD'.tr(),
+                                                      style: TextStyle(
+                                                          color: Color(
+                                                              COLOR_PRIMARY)),
+                                                    ),
+                                                    style: TextButton.styleFrom(
+                                                      side: BorderSide(
+                                                          color: Colors
+                                                              .grey.shade300,
+                                                          width: 2),
+                                                    ),
+                                                  )
+                                            : isOpen == false
+                                                ? Container()
+                                                : Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceEvenly,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      IconButton(
+                                                          onPressed: () {
+                                                            print(
+                                                                "------->${productQnt}");
+                                                            setState(() {
+                                                              if (productQnt !=
+                                                                  0) {
+                                                                productQnt--;
+                                                              }
+                                                              if (productQnt >=
+                                                                  0) {
+                                                                removetocard(
+                                                                    widget
+                                                                        .productModel,
+                                                                    true);
+                                                              }
+                                                            });
+                                                          },
+                                                          icon: Image(
+                                                            image: const AssetImage(
+                                                                "assets/images/minus.png"),
+                                                            color: Color(
+                                                                COLOR_PRIMARY),
+                                                            height: 26,
+                                                          )),
+                                                      const SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      Text(
+                                                        productQnt.toString(),
+                                                        style: TextStyle(
+                                                            fontSize: 16,
+                                                            color: Color(
+                                                                COLOR_PRIMARY)),
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      IconButton(
+                                                          onPressed: () {
+                                                            setState(() {
+                                                              if (variants!
+                                                                  .where((element) =>
+                                                                      element
+                                                                          .variant_sku ==
+                                                                      selectedVariants
+                                                                          .join(
+                                                                              '-'))
+                                                                  .isNotEmpty) {
+                                                                if (int.parse(variants!
+                                                                            .where((element) =>
+                                                                                element.variant_sku ==
+                                                                                selectedVariants.join(
+                                                                                    '-'))
+                                                                            .first
+                                                                            .variant_quantity
+                                                                            .toString()) >
+                                                                        productQnt ||
+                                                                    int.parse(variants!
+                                                                            .where((element) =>
+                                                                                element.variant_sku ==
+                                                                                selectedVariants.join('-'))
+                                                                            .first
+                                                                            .variant_quantity
+                                                                            .toString()) ==
+                                                                        -1) {
+                                                                  VariantInfo?
+                                                                      variantInfo =
+                                                                      VariantInfo();
+                                                                  Map<String,
+                                                                          String>
+                                                                      mapData =
+                                                                      Map();
+                                                                  for (var element
+                                                                      in attributes!) {
+                                                                    mapData
+                                                                        .addEntries([
+                                                                      MapEntry(
+                                                                          attributesList
+                                                                              .where((element1) => element.attributesId == element1.id)
+                                                                              .first
+                                                                              .title
+                                                                              .toString(),
+                                                                          selectedVariants[attributes!.indexOf(element)])
+                                                                    ]);
+                                                                    setState(
+                                                                        () {});
+                                                                  }
+
+                                                                  variantInfo = VariantInfo(
+                                                                      variant_price:
+                                                                          variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_price ??
+                                                                              '0',
+                                                                      variant_sku:
+                                                                          selectedVariants.join(
+                                                                              '-'),
+                                                                      variant_options:
+                                                                          mapData,
+                                                                      variant_image:
+                                                                          variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_image ??
+                                                                              '',
+                                                                      variant_id: variants!
+                                                                              .where((element) => element.variant_sku == selectedVariants.join('-'))
+                                                                              .first
+                                                                              .variant_id ??
+                                                                          '0');
+
+                                                                  widget.productModel
+                                                                          .variant_info =
+                                                                      variantInfo;
+                                                                  if (productQnt !=
+                                                                      0) {
+                                                                    productQnt++;
+                                                                  }
+                                                                  // widget.productModel.price = widget.productModel.disPrice == "" || widget.productModel.disPrice == "0" ? (widget.productModel.price) : (widget.productModel.disPrice!);
+                                                                  addtocard(
+                                                                      widget
+                                                                          .productModel,
+                                                                      true);
+                                                                } else {
+                                                                  ScaffoldMessenger.of(
+                                                                          context)
+                                                                      .showSnackBar(
+                                                                          const SnackBar(
+                                                                    content: Text(
+                                                                        "Product is out of Stock"),
+                                                                  ));
+                                                                }
+                                                              } else {
+                                                                if (widget.productModel
+                                                                            .quantity >
+                                                                        productQnt ||
+                                                                    widget.productModel
+                                                                            .quantity ==
+                                                                        -1) {
+                                                                  if (productQnt !=
+                                                                      0) {
+                                                                    productQnt++;
+                                                                  }
+                                                                  // widget.productModel.price = widget.productModel.disPrice == "" || widget.productModel.disPrice == "0" ? (widget.productModel.price) : (widget.productModel.disPrice!);
+                                                                  addtocard(
+                                                                      widget
+                                                                          .productModel,
+                                                                      true);
+                                                                } else {
+                                                                  ScaffoldMessenger.of(
+                                                                          context)
+                                                                      .showSnackBar(
+                                                                          const SnackBar(
+                                                                    content: Text(
+                                                                        "Product is out of Stock"),
+                                                                  ));
+                                                                }
+                                                              }
+                                                            });
+                                                          },
+                                                          icon: Image(
+                                                            image: const AssetImage(
+                                                                "assets/images/plus.png"),
+                                                            color: Color(
+                                                                COLOR_PRIMARY),
+                                                            height: 26,
+                                                          ))
+                                                    ],
+                                                  ),
+                                      ]),
                           ],
                         ),
                         const SizedBox(
@@ -797,23 +1203,32 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     child: CachedNetworkImage(
                                       height: 40,
                                       width: 40,
-                                      imageUrl: getImageVAlidUrl(widget.vendorModel.photo),
-                                      imageBuilder: (context, imageProvider) => Container(
+                                      imageUrl: getImageVAlidUrl(
+                                          widget.vendorModel.photo),
+                                      imageBuilder: (context, imageProvider) =>
+                                          Container(
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(10),
-                                          image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          image: DecorationImage(
+                                              image: imageProvider,
+                                              fit: BoxFit.cover),
                                         ),
                                       ),
                                       placeholder: (context, url) => Center(
-                                          child: CircularProgressIndicator.adaptive(
-                                        valueColor: AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
+                                          child: CircularProgressIndicator
+                                              .adaptive(
+                                        valueColor: AlwaysStoppedAnimation(
+                                            Color(COLOR_PRIMARY)),
                                       )),
-                                      errorWidget: (context, url, error) => ClipRRect(
-                                          borderRadius: BorderRadius.circular(15),
-                                          child: Image.network(
-                                            placeholderImage,
-                                            fit: BoxFit.cover,
-                                          )),
+                                      errorWidget: (context, url, error) =>
+                                          ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                              child: Image.asset(
+                                                placeholderImage,
+                                                fit: BoxFit.cover,
+                                              )),
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -824,10 +1239,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                       onTap: () async {
                                         push(
                                           context,
-                                          NewVendorProductsScreen(vendorModel: widget.vendorModel),
+                                          NewVendorProductsScreen(
+                                              vendorModel: widget.vendorModel),
                                         );
                                       },
-                                      child: Text(widget.vendorModel.title, style: TextStyle(color: Color(COLOR_PRIMARY)))),
+                                      child: Text(widget.vendorModel.title,
+                                          style: TextStyle(
+                                              color: Color(COLOR_PRIMARY)))),
                                 ],
                               ),
                             ),
@@ -837,27 +1255,43 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     child: Row(
                                       children: [
                                         ClipRRect(
-                                          borderRadius: BorderRadius.circular(2),
+                                          borderRadius:
+                                              BorderRadius.circular(2),
                                           child: CachedNetworkImage(
                                             height: 40,
                                             width: 40,
-                                            imageUrl: getImageVAlidUrl(brandModel!.photo.toString()),
-                                            imageBuilder: (context, imageProvider) => Container(
+                                            imageUrl: getImageVAlidUrl(
+                                                brandModel!.photo.toString()),
+                                            imageBuilder:
+                                                (context, imageProvider) =>
+                                                    Container(
                                               decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(10),
-                                                image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                image: DecorationImage(
+                                                    image: imageProvider,
+                                                    fit: BoxFit.cover),
                                               ),
                                             ),
-                                            placeholder: (context, url) => Center(
-                                                child: CircularProgressIndicator.adaptive(
-                                              valueColor: AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
+                                            placeholder: (context, url) =>
+                                                Center(
+                                                    child:
+                                                        CircularProgressIndicator
+                                                            .adaptive(
+                                              valueColor:
+                                                  AlwaysStoppedAnimation(
+                                                      Color(COLOR_PRIMARY)),
                                             )),
-                                            errorWidget: (context, url, error) => ClipRRect(
-                                                borderRadius: BorderRadius.circular(15),
-                                                child: Image.network(
-                                                  placeholderImage,
-                                                  fit: BoxFit.cover,
-                                                )),
+                                            errorWidget: (context, url,
+                                                    error) =>
+                                                ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                    child: Image.asset(
+                                                      placeholderImage,
+                                                      fit: BoxFit.cover,
+                                                    )),
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -866,12 +1300,26 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                         ),
                                         InkWell(
                                             onTap: () async {
-                                              VendorModel? vendorModel = await FireStoreUtils.getVendor(widget.vendorModel.id);
+                                              VendorModel? vendorModel =
+                                                  await FireStoreUtils
+                                                      .getVendor(widget
+                                                          .vendorModel.id);
                                               if (vendorModel != null) {
-                                                push(context, ViewAllBrandProductScreen(brandModel: brandModel));
+                                                push(
+                                                    context,
+                                                    ViewAllBrandProductScreen(
+                                                        brandModel:
+                                                            brandModel));
                                               }
                                             },
-                                            child: Text(brandModel != null ? brandModel!.title.toString() : "", style: TextStyle(color: Color(COLOR_PRIMARY)))),
+                                            child: Text(
+                                                brandModel != null
+                                                    ? brandModel!.title
+                                                        .toString()
+                                                    : "",
+                                                style: TextStyle(
+                                                    color:
+                                                        Color(COLOR_PRIMARY)))),
                                       ],
                                     ),
                                   ),
@@ -884,14 +1332,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     height: 10,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
                           "Details".tr(),
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w500),
                         ),
                         const SizedBox(
                           height: 5,
@@ -906,14 +1356,19 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   Visibility(
                     visible: sectionConstantModel!.dineInActive!,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
                       child: Card(
-                          color: isDarkMode(context) ? Colors.black : Colors.white,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                          color:
+                              isDarkMode(context) ? Colors.black : Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
                           child: Padding(
-                              padding: const EdgeInsets.only(top: 10, right: 20, left: 20, bottom: 10),
+                              padding: const EdgeInsets.only(
+                                  top: 10, right: 20, left: 20, bottom: 10),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Column(
                                     children: [
@@ -924,34 +1379,43 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                       const SizedBox(
                                         height: 8,
                                       ),
-                                      Text("kcal".tr(), style: const TextStyle(fontSize: 16))
+                                      Text("kcal".tr(),
+                                          style: const TextStyle(fontSize: 16))
                                     ],
                                   ),
                                   Column(
                                     children: [
-                                      Text(widget.productModel.grams.toString(), style: const TextStyle(fontSize: 20)),
+                                      Text(widget.productModel.grams.toString(),
+                                          style: const TextStyle(fontSize: 20)),
                                       const SizedBox(
                                         height: 8,
                                       ),
-                                      Text("grams".tr(), style: const TextStyle(fontSize: 16))
+                                      Text("grams".tr(),
+                                          style: const TextStyle(fontSize: 16))
                                     ],
                                   ),
                                   Column(
                                     children: [
-                                      Text(widget.productModel.proteins.toString(), style: const TextStyle(fontSize: 20)),
+                                      Text(
+                                          widget.productModel.proteins
+                                              .toString(),
+                                          style: const TextStyle(fontSize: 20)),
                                       const SizedBox(
                                         height: 8,
                                       ),
-                                      Text("proteins".tr(), style: const TextStyle(fontSize: 16))
+                                      Text("proteins".tr(),
+                                          style: const TextStyle(fontSize: 16))
                                     ],
                                   ),
                                   Column(
                                     children: [
-                                      Text(widget.productModel.fats.toString(), style: const TextStyle(fontSize: 20)),
+                                      Text(widget.productModel.fats.toString(),
+                                          style: const TextStyle(fontSize: 20)),
                                       const SizedBox(
                                         height: 8,
                                       ),
-                                      Text("fats".tr(), style: const TextStyle(fontSize: 16))
+                                      Text("fats".tr(),
+                                          style: const TextStyle(fontSize: 16))
                                     ],
                                   )
                                 ],
@@ -974,7 +1438,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               itemBuilder: (context, index) {
                                 String title = "";
                                 for (var element in attributesList) {
-                                  if (attributes![index].attributesId == element.id) {
+                                  if (attributes![index].attributesId ==
+                                      element.id) {
                                     title = element.title.toString();
                                   }
                                 }
@@ -983,65 +1448,139 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 5),
                                       child: Text(
                                         title,
-                                        style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),
+                                        style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500),
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 15),
                                       child: Wrap(
                                         spacing: 6.0,
                                         runSpacing: 6.0,
                                         children: List.generate(
-                                          attributes![index].attributeOptions!.length,
+                                          attributes![index]
+                                              .attributeOptions!
+                                              .length,
                                           (i) {
                                             return InkWell(
                                                 onTap: () async {
                                                   print("------------->" +
                                                       widget.productModel.id +
                                                       "~" +
-                                                      variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_id.toString());
+                                                      variants!
+                                                          .where((element) =>
+                                                              element
+                                                                  .variant_sku ==
+                                                              selectedVariants
+                                                                  .join('-'))
+                                                          .first
+                                                          .variant_id
+                                                          .toString());
 
                                                   setState(() {
-                                                    if (selectedIndexVariants.where((element) => element.contains('$index _')).isEmpty) {
-                                                      selectedVariants.insert(index, attributes![index].attributeOptions![i].toString());
-                                                      selectedIndexVariants.add('$index _${attributes![index].attributeOptions![i].toString()}');
-                                                      selectedIndexArray.add('${index}_$i');
+                                                    if (selectedIndexVariants
+                                                        .where((element) =>
+                                                            element.contains(
+                                                                '$index _'))
+                                                        .isEmpty) {
+                                                      selectedVariants.insert(
+                                                          index,
+                                                          attributes![index]
+                                                              .attributeOptions![
+                                                                  i]
+                                                              .toString());
+                                                      selectedIndexVariants.add(
+                                                          '$index _${attributes![index].attributeOptions![i].toString()}');
+                                                      selectedIndexArray
+                                                          .add('${index}_$i');
                                                     } else {
                                                       selectedIndexArray.remove(
                                                           '${index}_${attributes![index].attributeOptions?.indexOf(selectedIndexVariants.where((element) => element.contains('$index _')).first.replaceAll('$index _', ''))}');
-                                                      selectedVariants.removeAt(index);
-                                                      selectedIndexVariants.remove(selectedIndexVariants.where((element) => element.contains('$index _')).first);
-                                                      selectedVariants.insert(index, attributes![index].attributeOptions![i].toString());
-                                                      selectedIndexVariants.add('$index _${attributes![index].attributeOptions![i].toString()}');
-                                                      selectedIndexArray.add('${index}_$i');
+                                                      selectedVariants
+                                                          .removeAt(index);
+                                                      selectedIndexVariants.remove(
+                                                          selectedIndexVariants
+                                                              .where((element) =>
+                                                                  element.contains(
+                                                                      '$index _'))
+                                                              .first);
+                                                      selectedVariants.insert(
+                                                          index,
+                                                          attributes![index]
+                                                              .attributeOptions![
+                                                                  i]
+                                                              .toString());
+                                                      selectedIndexVariants.add(
+                                                          '$index _${attributes![index].attributeOptions![i].toString()}');
+                                                      selectedIndexArray
+                                                          .add('${index}_$i');
                                                     }
                                                   });
-                                                  print('object ==> ${selectedVariants.toString()}');
-                                                  print('object ==> ${selectedIndexVariants.toString()}');
-                                                  print('object ==> ${selectedIndexArray.toString()}');
+                                                  print(
+                                                      'object ==> ${selectedVariants.toString()}');
+                                                  print(
+                                                      'object ==> ${selectedIndexVariants.toString()}');
+                                                  print(
+                                                      'object ==> ${selectedIndexArray.toString()}');
 
-                                                  await cartDatabase.allCartProducts.then((value) {
+                                                  await cartDatabase
+                                                      .allCartProducts
+                                                      .then((value) {
                                                     final bool _productIsInList = value.any((product) =>
                                                         product.id ==
                                                         widget.productModel.id +
                                                             "~" +
-                                                            (variants!.where((element) => element.variant_sku == selectedVariants.join('-')).isNotEmpty
-                                                                ? variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_id.toString()
+                                                            (variants!
+                                                                    .where((element) =>
+                                                                        element
+                                                                            .variant_sku ==
+                                                                        selectedVariants.join(
+                                                                            '-'))
+                                                                    .isNotEmpty
+                                                                ? variants!
+                                                                    .where((element) =>
+                                                                        element
+                                                                            .variant_sku ==
+                                                                        selectedVariants
+                                                                            .join('-'))
+                                                                    .first
+                                                                    .variant_id
+                                                                    .toString()
                                                                 : ""));
                                                     if (_productIsInList) {
                                                       CartProduct element = value.firstWhere((product) =>
                                                           product.id ==
-                                                          widget.productModel.id +
+                                                          widget.productModel
+                                                                  .id +
                                                               "~" +
-                                                              (variants!.where((element) => element.variant_sku == selectedVariants.join('-')).isNotEmpty
-                                                                  ? variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_id.toString()
+                                                              (variants!
+                                                                      .where((element) =>
+                                                                          element
+                                                                              .variant_sku ==
+                                                                          selectedVariants.join(
+                                                                              '-'))
+                                                                      .isNotEmpty
+                                                                  ? variants!
+                                                                      .where((element) =>
+                                                                          element
+                                                                              .variant_sku ==
+                                                                          selectedVariants
+                                                                              .join('-'))
+                                                                      .first
+                                                                      .variant_id
+                                                                      .toString()
                                                                   : ""));
 
                                                       setState(() {
-                                                        productQnt = element.quantity;
+                                                        productQnt =
+                                                            element.quantity;
                                                       });
                                                     } else {
                                                       setState(() {
@@ -1050,14 +1589,38 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                                     }
                                                   });
 
-                                                  if (variants!.where((element) => element.variant_sku == selectedVariants.join('-')).isNotEmpty) {
-                                                    widget.productModel.price =
-                                                        variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_price ?? '0';
-                                                    widget.productModel.disPrice = '0';
+                                                  if (variants!
+                                                      .where((element) =>
+                                                          element.variant_sku ==
+                                                          selectedVariants
+                                                              .join('-'))
+                                                      .isNotEmpty) {
+                                                    widget.productModel
+                                                        .price = variants!
+                                                            .where((element) =>
+                                                                element
+                                                                    .variant_sku ==
+                                                                selectedVariants
+                                                                    .join('-'))
+                                                            .first
+                                                            .variant_price ??
+                                                        '0';
+                                                    widget.productModel
+                                                        .disPrice = '0';
                                                   }
                                                 },
-                                                child: _buildChip(attributes![index].attributeOptions![i].toString(), i,
-                                                    selectedVariants.contains(attributes![index].attributeOptions![i].toString()) ? true : false));
+                                                child: _buildChip(
+                                                    attributes![index]
+                                                        .attributeOptions![i]
+                                                        .toString(),
+                                                    i,
+                                                    selectedVariants.contains(
+                                                            attributes![index]
+                                                                .attributeOptions![
+                                                                    i]
+                                                                .toString())
+                                                        ? true
+                                                        : false));
                                           },
                                         ).toList(),
                                       ),
@@ -1181,14 +1744,21 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               height: 10,
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
                               child: Text(
                                 "Addons".tr(),
-                                style: TextStyle(fontFamily: "Poppinsm", fontSize: 16, color: isDarkMode(context) ? const Color(0xffffffff) : const Color(0xff000000)),
+                                style: TextStyle(
+                                    fontFamily: "Poppinsm",
+                                    fontSize: 16,
+                                    color: isDarkMode(context)
+                                        ? const Color(0xffffffff)
+                                        : const Color(0xff000000)),
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
                               child: ListView.builder(
                                   itemCount: lstAddAddonsCustom.length,
                                   physics: const NeverScrollableScrollPhysics(),
@@ -1201,52 +1771,123 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                         children: [
                                           Text(
                                             lstAddAddonsCustom[index].name!,
-                                            style: TextStyle(color: isDarkMode(context) ? const Color(0xffC6C4C4) : const Color(0xff5E5C5C)),
+                                            style: TextStyle(
+                                                color: isDarkMode(context)
+                                                    ? const Color(0xffC6C4C4)
+                                                    : const Color(0xff5E5C5C)),
                                           ),
                                           const Expanded(child: SizedBox()),
                                           Text(
-                                            amountShow(amount: lstAddAddonsCustom[index].price!),
-                                            style: TextStyle(fontWeight: FontWeight.bold, color: Color(COLOR_PRIMARY)),
+                                            amountShow(
+                                                amount:
+                                                    lstAddAddonsCustom[index]
+                                                        .price!),
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Color(COLOR_PRIMARY)),
                                           ),
                                           GestureDetector(
                                             onTap: () {
                                               setState(() {
-                                                lstAddAddonsCustom[index].isCheck = !lstAddAddonsCustom[index].isCheck;
-                                                if (variants!.where((element) => element.variant_sku == selectedVariants.join('-')).isNotEmpty) {
-                                                  VariantInfo? variantInfo = VariantInfo();
-                                                  Map<String, String> mapData = Map();
-                                                  for (var element in attributes!) {
+                                                lstAddAddonsCustom[index]
+                                                        .isCheck =
+                                                    !lstAddAddonsCustom[index]
+                                                        .isCheck;
+                                                if (variants!
+                                                    .where((element) =>
+                                                        element.variant_sku ==
+                                                        selectedVariants
+                                                            .join('-'))
+                                                    .isNotEmpty) {
+                                                  VariantInfo? variantInfo =
+                                                      VariantInfo();
+                                                  Map<String, String> mapData =
+                                                      Map();
+                                                  for (var element
+                                                      in attributes!) {
                                                     mapData.addEntries([
-                                                      MapEntry(attributesList.where((element1) => element.attributesId == element1.id).first.title.toString(),
-                                                          selectedVariants[attributes!.indexOf(element)])
+                                                      MapEntry(
+                                                          attributesList
+                                                              .where((element1) =>
+                                                                  element
+                                                                      .attributesId ==
+                                                                  element1.id)
+                                                              .first
+                                                              .title
+                                                              .toString(),
+                                                          selectedVariants[
+                                                              attributes!
+                                                                  .indexOf(
+                                                                      element)])
                                                     ]);
                                                     setState(() {});
                                                   }
 
                                                   variantInfo = VariantInfo(
-                                                      variant_price: variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_price ?? '0',
-                                                      variant_sku: selectedVariants.join('-'),
+                                                      variant_price: variants!
+                                                              .where((element) =>
+                                                                  element.variant_sku ==
+                                                                  selectedVariants.join(
+                                                                      '-'))
+                                                              .first
+                                                              .variant_price ??
+                                                          '0',
+                                                      variant_sku:
+                                                          selectedVariants
+                                                              .join('-'),
                                                       variant_options: mapData,
-                                                      variant_image: variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_image ?? '',
-                                                      variant_id: variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_id ?? '0');
+                                                      variant_image: variants!
+                                                              .where((element) =>
+                                                                  element.variant_sku ==
+                                                                  selectedVariants
+                                                                      .join(
+                                                                          '-'))
+                                                              .first
+                                                              .variant_image ??
+                                                          '',
+                                                      variant_id: variants!
+                                                              .where((element) => element.variant_sku == selectedVariants.join('-'))
+                                                              .first
+                                                              .variant_id ??
+                                                          '0');
 
-                                                  widget.productModel.variant_info = variantInfo;
+                                                  widget.productModel
+                                                          .variant_info =
+                                                      variantInfo;
                                                 }
 
-                                                if (lstAddAddonsCustom[index].isCheck == true) {
-                                                  AddAddonsDemo addAddonsDemo = AddAddonsDemo(
-                                                      name: widget.productModel.addOnsTitle[index],
-                                                      index: index,
-                                                      isCheck: true,
-                                                      categoryID: widget.productModel.id,
-                                                      price: lstAddAddonsCustom[index].price);
+                                                if (lstAddAddonsCustom[index]
+                                                        .isCheck ==
+                                                    true) {
+                                                  AddAddonsDemo addAddonsDemo =
+                                                      AddAddonsDemo(
+                                                          name: widget
+                                                                  .productModel
+                                                                  .addOnsTitle[
+                                                              index],
+                                                          index: index,
+                                                          isCheck: true,
+                                                          categoryID: widget
+                                                              .productModel.id,
+                                                          price:
+                                                              lstAddAddonsCustom[
+                                                                      index]
+                                                                  .price);
                                                   lstTemp.add(addAddonsDemo);
                                                   saveAddOns(lstTemp);
-                                                  addtocard(widget.productModel, false);
+                                                  addtocard(widget.productModel,
+                                                      false);
                                                 } else {
                                                   var removeIndex = -1;
-                                                  for (int a = 0; a < lstTemp.length; a++) {
-                                                    if (lstTemp[a].index == index && lstTemp[a].categoryID == lstAddAddonsCustom[index].categoryID) {
+                                                  for (int a = 0;
+                                                      a < lstTemp.length;
+                                                      a++) {
+                                                    if (lstTemp[a].index ==
+                                                            index &&
+                                                        lstTemp[a].categoryID ==
+                                                            lstAddAddonsCustom[
+                                                                    index]
+                                                                .categoryID) {
                                                       removeIndex = a;
                                                       break;
                                                     }
@@ -1254,15 +1895,23 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                                   lstTemp.removeAt(removeIndex);
                                                   saveAddOns(lstTemp);
                                                   //widget.productModel.price = widget.productModel.disPrice==""||widget.productModel.disPrice=="0"? (widget.productModel.price) :(widget.productModel.disPrice!);
-                                                  addtocard(widget.productModel, false);
+                                                  addtocard(widget.productModel,
+                                                      false);
                                                 }
                                               });
                                             },
                                             child: Container(
-                                              margin: const EdgeInsets.only(left: 10, right: 10),
+                                              margin: const EdgeInsets.only(
+                                                  left: 10, right: 10),
                                               child: Icon(
-                                                !lstAddAddonsCustom[index].isCheck ? Icons.check_box_outline_blank : Icons.check_box,
-                                                color: isDarkMode(context) ? null : Colors.grey,
+                                                !lstAddAddonsCustom[index]
+                                                        .isCheck
+                                                    ? Icons
+                                                        .check_box_outline_blank
+                                                    : Icons.check_box,
+                                                color: isDarkMode(context)
+                                                    ? null
+                                                    : Colors.grey,
                                               ),
                                             ),
                                           )
@@ -1276,7 +1925,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   Visibility(
                     visible: widget.productModel.specification.isNotEmpty,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -1284,7 +1934,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             height: 10,
                           ),
                           Visibility(
-                            visible: widget.productModel.specification.isNotEmpty,
+                            visible:
+                                widget.productModel.specification.isNotEmpty,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -1292,26 +1943,54 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
                                     "Specification".tr(),
-                                    style: TextStyle(fontFamily: "Poppinsm", fontSize: 20, color: isDarkMode(context) ? const Color(0xffffffff) : const Color(0xff000000)),
+                                    style: TextStyle(
+                                        fontFamily: "Poppinsm",
+                                        fontSize: 20,
+                                        color: isDarkMode(context)
+                                            ? const Color(0xffffffff)
+                                            : const Color(0xff000000)),
                                   ),
                                 ),
                                 widget.productModel.specification.isNotEmpty
                                     ? ListView.builder(
-                                        itemCount: widget.productModel.specification.length,
+                                        itemCount: widget
+                                            .productModel.specification.length,
                                         shrinkWrap: true,
                                         padding: EdgeInsets.zero,
-                                        physics: const NeverScrollableScrollPhysics(),
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
                                         itemBuilder: (context, index) {
                                           return Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Row(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
                                               children: [
-                                                Text(widget.productModel.specification.keys.elementAt(index) + " : ",
-                                                    style: TextStyle(color: Colors.black.withOpacity(0.60), fontWeight: FontWeight.w500, letterSpacing: 0.5, fontSize: 14)),
-                                                Text(widget.productModel.specification.values.elementAt(index),
-                                                    style: TextStyle(color: Colors.black.withOpacity(0.90), fontWeight: FontWeight.w500, letterSpacing: 0.5, fontSize: 14)),
+                                                Text(
+                                                    widget.productModel
+                                                            .specification.keys
+                                                            .elementAt(index) +
+                                                        " : ",
+                                                    style: TextStyle(
+                                                        color: Colors.black
+                                                            .withOpacity(0.60),
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        letterSpacing: 0.5,
+                                                        fontSize: 14)),
+                                                Text(
+                                                    widget.productModel
+                                                        .specification.values
+                                                        .elementAt(index),
+                                                    style: TextStyle(
+                                                        color: Colors.black
+                                                            .withOpacity(0.90),
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        letterSpacing: 0.5,
+                                                        fontSize: 14)),
                                               ],
                                             ),
                                           );
@@ -1328,7 +2007,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   Visibility(
                       visible: storeProductList.isNotEmpty,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -1336,13 +2016,18 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               height: 10,
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               child: Row(
                                 children: [
                                   Expanded(
                                     child: Text(
                                       "More from the Store".tr(),
-                                      style: TextStyle(fontSize: 16, color: isDarkMode(context) ? const Color(0xffffffff) : const Color(0xff000000)),
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: isDarkMode(context)
+                                              ? const Color(0xffffffff)
+                                              : const Color(0xff000000)),
                                     ),
                                   ),
                                   InkWell(
@@ -1351,7 +2036,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     },
                                     child: Text(
                                       "See All".tr(),
-                                      style: TextStyle(fontSize: 16, color: isDarkMode(context) ? const Color(0xffffffff) : Color(COLOR_PRIMARY)),
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: isDarkMode(context)
+                                              ? const Color(0xffffffff)
+                                              : Color(COLOR_PRIMARY)),
                                     ),
                                   ),
                                 ],
@@ -1362,21 +2051,30 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             ),
                             SizedBox(
                                 width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.height * 0.28,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.28,
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
                                   child: ListView.builder(
                                     shrinkWrap: true,
                                     scrollDirection: Axis.horizontal,
                                     physics: const BouncingScrollPhysics(),
-                                    itemCount: storeProductList.length > 6 ? 6 : storeProductList.length,
+                                    itemCount: storeProductList.length > 6
+                                        ? 6
+                                        : storeProductList.length,
                                     itemBuilder: (context, index) {
-                                      ProductModel productModel = storeProductList[index];
+                                      ProductModel productModel =
+                                          storeProductList[index];
                                       return Container(
-                                        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 8),
                                         child: GestureDetector(
                                           onTap: () async {
-                                            VendorModel? vendorModel = await FireStoreUtils.getVendor(storeProductList[index].vendorID);
+                                            VendorModel? vendorModel =
+                                                await FireStoreUtils.getVendor(
+                                                    storeProductList[index]
+                                                        .vendorID);
                                             if (vendorModel != null) {
                                               push(
                                                 context,
@@ -1388,42 +2086,80 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                             }
                                           },
                                           child: SizedBox(
-                                            width: MediaQuery.of(context).size.width * 0.38,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.38,
                                             child: Container(
                                               decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(10),
-                                                border: Border.all(color: isDarkMode(context) ? const Color(DarkContainerBorderColor) : Colors.grey.shade100, width: 1),
-                                                color: isDarkMode(context) ? Color(DarkContainerColor) : Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                border: Border.all(
+                                                    color: isDarkMode(context)
+                                                        ? const Color(
+                                                            DarkContainerBorderColor)
+                                                        : Colors.grey.shade100,
+                                                    width: 1),
+                                                color: isDarkMode(context)
+                                                    ? Color(DarkContainerColor)
+                                                    : Colors.white,
                                                 boxShadow: [
                                                   isDarkMode(context)
                                                       ? const BoxShadow()
                                                       : BoxShadow(
-                                                          color: Colors.grey.withOpacity(0.5),
+                                                          color: Colors.grey
+                                                              .withOpacity(0.5),
                                                           blurRadius: 5,
                                                         ),
                                                 ],
                                               ),
                                               child: Padding(
-                                                padding: const EdgeInsets.all(8.0),
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
                                                 child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     Expanded(
-                                                        child: CachedNetworkImage(
-                                                      imageUrl: getImageVAlidUrl(productModel.photo),
-                                                      imageBuilder: (context, imageProvider) => Container(
-                                                        decoration: BoxDecoration(
-                                                          borderRadius: BorderRadius.circular(20),
-                                                          image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
+                                                        child:
+                                                            CachedNetworkImage(
+                                                      imageUrl:
+                                                          getImageVAlidUrl(
+                                                              productModel
+                                                                  .photo),
+                                                      imageBuilder: (context,
+                                                              imageProvider) =>
+                                                          Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
+                                                          image: DecorationImage(
+                                                              image:
+                                                                  imageProvider,
+                                                              fit: BoxFit
+                                                                  .contain),
                                                         ),
                                                       ),
-                                                      placeholder: (context, url) => Center(
-                                                          child: CircularProgressIndicator.adaptive(
-                                                        valueColor: AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
+                                                      placeholder: (context,
+                                                              url) =>
+                                                          Center(
+                                                              child:
+                                                                  CircularProgressIndicator
+                                                                      .adaptive(
+                                                        valueColor:
+                                                            AlwaysStoppedAnimation(
+                                                                Color(
+                                                                    COLOR_PRIMARY)),
                                                       )),
-                                                      errorWidget: (context, url, error) => ClipRRect(
-                                                        borderRadius: BorderRadius.circular(20),
-                                                        child: Image.network(
+                                                      errorWidget: (context,
+                                                              url, error) =>
+                                                          ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20),
+                                                        child: Image.asset(
                                                           placeholderImage,
                                                           fit: BoxFit.cover,
                                                         ),
@@ -1436,61 +2172,106 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                                         style: const TextStyle(
                                                           letterSpacing: 0.5,
                                                           fontSize: 16,
-                                                          fontWeight: FontWeight.w600,
+                                                          fontWeight:
+                                                              FontWeight.w600,
                                                         )).tr(),
                                                     const SizedBox(
                                                       height: 5,
                                                     ),
                                                     Row(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
                                                       children: [
                                                         Container(
-                                                          decoration: BoxDecoration(
+                                                          decoration:
+                                                              BoxDecoration(
                                                             color: Colors.green,
-                                                            borderRadius: BorderRadius.circular(5),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5),
                                                           ),
                                                           child: Padding(
-                                                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                                    horizontal:
+                                                                        5,
+                                                                    vertical:
+                                                                        2),
                                                             child: Row(
-                                                              mainAxisSize: MainAxisSize.min,
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .min,
                                                               children: [
                                                                 Text(
-                                                                    productModel.reviewsCount != 0
-                                                                        ? (productModel.reviewsSum / productModel.reviewsCount).toStringAsFixed(1)
-                                                                        : 0.toString(),
-                                                                    style: const TextStyle(
-                                                                      letterSpacing: 0.5,
-                                                                      color: Colors.white,
+                                                                    productModel.reviewsCount !=
+                                                                            0
+                                                                        ? (productModel.reviewsSum / productModel.reviewsCount)
+                                                                            .toStringAsFixed(
+                                                                                1)
+                                                                        : 0
+                                                                            .toString(),
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      letterSpacing:
+                                                                          0.5,
+                                                                      color: Colors
+                                                                          .white,
                                                                     )),
-                                                                const SizedBox(width: 3),
+                                                                const SizedBox(
+                                                                    width: 3),
                                                                 const Icon(
                                                                   Icons.star,
                                                                   size: 16,
-                                                                  color: Colors.white,
+                                                                  color: Colors
+                                                                      .white,
                                                                 ),
                                                               ],
                                                             ),
                                                           ),
                                                         ),
-                                                        productModel.disPrice == "" || productModel.disPrice == "0"
+                                                        productModel.disPrice ==
+                                                                    "" ||
+                                                                productModel
+                                                                        .disPrice ==
+                                                                    "0"
                                                             ? Text(
                                                                 "${amountShow(amount: productModel.price)}",
-                                                                style: TextStyle(letterSpacing: 0.5, color: Color(COLOR_PRIMARY)),
+                                                                style: TextStyle(
+                                                                    letterSpacing:
+                                                                        0.5,
+                                                                    color: Color(
+                                                                        COLOR_PRIMARY)),
                                                               )
                                                             : Column(
                                                                 children: [
                                                                   Text(
                                                                     "${amountShow(amount: productModel.disPrice)}",
-                                                                    style: TextStyle(
-                                                                      fontWeight: FontWeight.bold,
-                                                                      fontSize: 14,
-                                                                      color: Color(COLOR_PRIMARY),
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontSize:
+                                                                          14,
+                                                                      color: Color(
+                                                                          COLOR_PRIMARY),
                                                                     ),
                                                                   ),
                                                                   Text(
                                                                     '${amountShow(amount: productModel.price)}',
                                                                     style: const TextStyle(
-                                                                        fontWeight: FontWeight.bold, fontSize: 12, color: Colors.grey, decoration: TextDecoration.lineThrough),
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontSize:
+                                                                            12,
+                                                                        color: Colors
+                                                                            .grey,
+                                                                        decoration:
+                                                                            TextDecoration.lineThrough),
                                                                   ),
                                                                 ],
                                                               ),
@@ -1512,7 +2293,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   Visibility(
                       visible: productList.isNotEmpty,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -1520,10 +2302,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               height: 10,
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               child: Text(
                                 "Related Products".tr(),
-                                style: TextStyle(fontSize: 16, color: isDarkMode(context) ? const Color(0xffffffff) : const Color(0xff000000)),
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: isDarkMode(context)
+                                        ? const Color(0xffffffff)
+                                        : const Color(0xff000000)),
                               ),
                             ),
                             const SizedBox(
@@ -1531,21 +2318,29 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             ),
                             SizedBox(
                                 width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.height * 0.28,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.28,
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
                                   child: ListView.builder(
                                     shrinkWrap: true,
                                     scrollDirection: Axis.horizontal,
                                     physics: const BouncingScrollPhysics(),
-                                    itemCount: productList.length > 6 ? 6 : productList.length,
+                                    itemCount: productList.length > 6
+                                        ? 6
+                                        : productList.length,
                                     itemBuilder: (context, index) {
-                                      ProductModel productModel = productList[index];
+                                      ProductModel productModel =
+                                          productList[index];
                                       return Container(
-                                        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 8),
                                         child: GestureDetector(
                                           onTap: () async {
-                                            VendorModel? vendorModel = await FireStoreUtils.getVendor(productModel.vendorID);
+                                            VendorModel? vendorModel =
+                                                await FireStoreUtils.getVendor(
+                                                    productModel.vendorID);
                                             if (vendorModel != null) {
                                               push(
                                                 context,
@@ -1557,42 +2352,80 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                             }
                                           },
                                           child: SizedBox(
-                                            width: MediaQuery.of(context).size.width * 0.38,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.38,
                                             child: Container(
                                               decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(10),
-                                                border: Border.all(color: isDarkMode(context) ? const Color(DarkContainerBorderColor) : Colors.grey.shade100, width: 1),
-                                                color: isDarkMode(context) ? Color(DarkContainerColor) : Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                border: Border.all(
+                                                    color: isDarkMode(context)
+                                                        ? const Color(
+                                                            DarkContainerBorderColor)
+                                                        : Colors.grey.shade100,
+                                                    width: 1),
+                                                color: isDarkMode(context)
+                                                    ? Color(DarkContainerColor)
+                                                    : Colors.white,
                                                 boxShadow: [
                                                   isDarkMode(context)
                                                       ? const BoxShadow()
                                                       : BoxShadow(
-                                                          color: Colors.grey.withOpacity(0.5),
+                                                          color: Colors.grey
+                                                              .withOpacity(0.5),
                                                           blurRadius: 5,
                                                         ),
                                                 ],
                                               ),
                                               child: Padding(
-                                                padding: const EdgeInsets.all(8.0),
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
                                                 child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     Expanded(
-                                                        child: CachedNetworkImage(
-                                                      imageUrl: getImageVAlidUrl(productModel.photo),
-                                                      imageBuilder: (context, imageProvider) => Container(
-                                                        decoration: BoxDecoration(
-                                                          borderRadius: BorderRadius.circular(20),
-                                                          image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                                                        child:
+                                                            CachedNetworkImage(
+                                                      imageUrl:
+                                                          getImageVAlidUrl(
+                                                              productModel
+                                                                  .photo),
+                                                      imageBuilder: (context,
+                                                              imageProvider) =>
+                                                          Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
+                                                          image: DecorationImage(
+                                                              image:
+                                                                  imageProvider,
+                                                              fit:
+                                                                  BoxFit.cover),
                                                         ),
                                                       ),
-                                                      placeholder: (context, url) => Center(
-                                                          child: CircularProgressIndicator.adaptive(
-                                                        valueColor: AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
+                                                      placeholder: (context,
+                                                              url) =>
+                                                          Center(
+                                                              child:
+                                                                  CircularProgressIndicator
+                                                                      .adaptive(
+                                                        valueColor:
+                                                            AlwaysStoppedAnimation(
+                                                                Color(
+                                                                    COLOR_PRIMARY)),
                                                       )),
-                                                      errorWidget: (context, url, error) => ClipRRect(
-                                                        borderRadius: BorderRadius.circular(20),
-                                                        child: Image.network(
+                                                      errorWidget: (context,
+                                                              url, error) =>
+                                                          ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20),
+                                                        child: Image.asset(
                                                           placeholderImage,
                                                           fit: BoxFit.cover,
                                                         ),
@@ -1605,61 +2438,108 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                                         style: const TextStyle(
                                                           letterSpacing: 0.5,
                                                           fontSize: 16,
-                                                          fontWeight: FontWeight.w600,
+                                                          fontWeight:
+                                                              FontWeight.w600,
                                                         )).tr(),
                                                     const SizedBox(
                                                       height: 5,
                                                     ),
                                                     Row(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
                                                       children: [
                                                         Container(
-                                                          decoration: BoxDecoration(
+                                                          decoration:
+                                                              BoxDecoration(
                                                             color: Colors.green,
-                                                            borderRadius: BorderRadius.circular(5),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5),
                                                           ),
                                                           child: Padding(
-                                                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                                    horizontal:
+                                                                        5,
+                                                                    vertical:
+                                                                        2),
                                                             child: Row(
-                                                              mainAxisSize: MainAxisSize.min,
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .min,
                                                               children: [
                                                                 Text(
-                                                                    productModel.reviewsCount != 0
-                                                                        ? (productModel.reviewsSum / productModel.reviewsCount).toStringAsFixed(1)
-                                                                        : 0.toString(),
-                                                                    style: const TextStyle(
-                                                                      letterSpacing: 0.5,
-                                                                      color: Colors.white,
+                                                                    productModel.reviewsCount !=
+                                                                            0
+                                                                        ? (productModel.reviewsSum / productModel.reviewsCount)
+                                                                            .toStringAsFixed(
+                                                                                1)
+                                                                        : 0
+                                                                            .toString(),
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      letterSpacing:
+                                                                          0.5,
+                                                                      color: Colors
+                                                                          .white,
                                                                     )),
-                                                                const SizedBox(width: 3),
+                                                                const SizedBox(
+                                                                    width: 3),
                                                                 const Icon(
                                                                   Icons.star,
                                                                   size: 16,
-                                                                  color: Colors.white,
+                                                                  color: Colors
+                                                                      .white,
                                                                 ),
                                                               ],
                                                             ),
                                                           ),
                                                         ),
-                                                        productModel.disPrice == "" || productModel.disPrice == "0"
+                                                        productModel.disPrice ==
+                                                                    "" ||
+                                                                productModel
+                                                                        .disPrice ==
+                                                                    "0"
                                                             ? Text(
                                                                 "${amountShow(amount: productModel.price)}",
-                                                                style: TextStyle(letterSpacing: 0.5, color: Color(COLOR_PRIMARY)),
+                                                                style: TextStyle(
+                                                                    letterSpacing:
+                                                                        0.5,
+                                                                    color: Color(
+                                                                        COLOR_PRIMARY)),
                                                               )
                                                             : Column(
                                                                 children: [
                                                                   Text(
                                                                     "${amountShow(amount: productModel.disPrice)}",
-                                                                    style: TextStyle(
-                                                                      fontWeight: FontWeight.bold,
-                                                                      fontSize: 14,
-                                                                      color: Color(COLOR_PRIMARY),
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontSize:
+                                                                          14,
+                                                                      color: Color(
+                                                                          COLOR_PRIMARY),
                                                                     ),
                                                                   ),
                                                                   Text(
-                                                                    amountShow(amount: productModel.price),
+                                                                    amountShow(
+                                                                        amount:
+                                                                            productModel.price),
                                                                     style: const TextStyle(
-                                                                        fontWeight: FontWeight.bold, fontSize: 12, color: Colors.grey, decoration: TextDecoration.lineThrough),
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontSize:
+                                                                            12,
+                                                                        color: Colors
+                                                                            .grey,
+                                                                        decoration:
+                                                                            TextDecoration.lineThrough),
                                                                   ),
                                                                 ],
                                                               ),
@@ -1690,41 +2570,70 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             "By feature".tr(),
-                            style: TextStyle(fontSize: 20, color: isDarkMode(context) ? const Color(0xffffffff) : const Color(0xff000000)),
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: isDarkMode(context)
+                                    ? const Color(0xffffffff)
+                                    : const Color(0xff000000)),
                           ),
                         ),
                         widget.productModel.reviewAttributes != null
                             ? Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: ListView.builder(
-                                  itemCount: widget.productModel.reviewAttributes!.length,
+                                  itemCount: widget
+                                      .productModel.reviewAttributes!.length,
                                   shrinkWrap: true,
                                   padding: EdgeInsets.zero,
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemBuilder: (context, index) {
-                                    ReviewAttributeModel reviewAttribute = ReviewAttributeModel();
+                                    ReviewAttributeModel reviewAttribute =
+                                        ReviewAttributeModel();
                                     for (var element in reviewAttributeList) {
-                                      if (element.id == widget.productModel.reviewAttributes!.keys.elementAt(index)) {
+                                      if (element.id ==
+                                          widget.productModel.reviewAttributes!
+                                              .keys
+                                              .elementAt(index)) {
                                         reviewAttribute = element;
                                       }
                                     }
-                                    ReviewsAttribute reviewsAttributeModel = ReviewsAttribute.fromJson(widget.productModel.reviewAttributes!.values.elementAt(index));
+                                    ReviewsAttribute reviewsAttributeModel =
+                                        ReviewsAttribute.fromJson(widget
+                                            .productModel
+                                            .reviewAttributes!
+                                            .values
+                                            .elementAt(index));
                                     return Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           Expanded(
-                                              child: Text(reviewAttribute.title.toString(),
+                                              child: Text(
+                                                  reviewAttribute.title
+                                                      .toString(),
                                                   style: TextStyle(
-                                                      color: isDarkMode(context) ? Colors.white : Colors.black.withOpacity(0.60),
-                                                      fontWeight: FontWeight.w500,
+                                                      color: isDarkMode(context)
+                                                          ? Colors.white
+                                                          : Colors.black
+                                                              .withOpacity(
+                                                                  0.60),
+                                                      fontWeight:
+                                                          FontWeight.w500,
                                                       letterSpacing: 0.5,
                                                       fontSize: 14))),
                                           RatingBar.builder(
                                             ignoreGestures: true,
-                                            initialRating: (reviewsAttributeModel.reviewsSum!.toDouble() / reviewsAttributeModel.reviewsCount!.toDouble()),
+                                            initialRating:
+                                                (reviewsAttributeModel
+                                                        .reviewsSum!
+                                                        .toDouble() /
+                                                    reviewsAttributeModel
+                                                        .reviewsCount!
+                                                        .toDouble()),
                                             minRating: 1,
                                             itemSize: 20,
                                             direction: Axis.horizontal,
@@ -1743,9 +2652,18 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                             width: 8,
                                           ),
                                           Text(
-                                            (reviewsAttributeModel.reviewsSum!.toDouble() / reviewsAttributeModel.reviewsCount!.toDouble()).toStringAsFixed(1),
+                                            (reviewsAttributeModel.reviewsSum!
+                                                        .toDouble() /
+                                                    reviewsAttributeModel
+                                                        .reviewsCount!
+                                                        .toDouble())
+                                                .toStringAsFixed(1),
                                             textAlign: TextAlign.center,
-                                            style: TextStyle(color: isDarkMode(context) ? Colors.white : Colors.black, fontWeight: FontWeight.w400),
+                                            style: TextStyle(
+                                                color: isDarkMode(context)
+                                                    ? Colors.white
+                                                    : Colors.black,
+                                                fontWeight: FontWeight.w400),
                                           )
                                         ],
                                       ),
@@ -1768,7 +2686,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         Padding(
                           padding: const EdgeInsets.all(4.0),
                           child: ListView.builder(
-                            itemCount: reviewList.length > 10 ? 10 : reviewList.length,
+                            itemCount:
+                                reviewList.length > 10 ? 10 : reviewList.length,
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
                             physics: const NeverScrollableScrollPhysics(),
@@ -1778,13 +2697,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                     color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10), //border corner radius
+                                    borderRadius: BorderRadius.circular(
+                                        10), //border corner radius
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.grey.withOpacity(0.5), //color of shadow
+                                        color: Colors.grey
+                                            .withOpacity(0.5), //color of shadow
                                         spreadRadius: 3, //spread radius
                                         blurRadius: 7, // blur radius
-                                        offset: const Offset(0, 2), // changes position of shadow
+                                        offset: const Offset(
+                                            0, 2), // changes position of shadow
                                         //first paramerter of offset is left-right
                                         //second parameter is top to down
                                       ),
@@ -1794,31 +2716,50 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(10.0),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Row(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             CachedNetworkImage(
                                               height: 45,
                                               width: 45,
-                                              imageUrl: getImageVAlidUrl(reviewList[index].profile.toString()),
-                                              imageBuilder: (context, imageProvider) => Container(
+                                              imageUrl: getImageVAlidUrl(
+                                                  reviewList[index]
+                                                      .profile
+                                                      .toString()),
+                                              imageBuilder:
+                                                  (context, imageProvider) =>
+                                                      Container(
                                                 decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(35),
-                                                  image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                                                  borderRadius:
+                                                      BorderRadius.circular(35),
+                                                  image: DecorationImage(
+                                                      image: imageProvider,
+                                                      fit: BoxFit.cover),
                                                 ),
                                               ),
-                                              placeholder: (context, url) => Center(
-                                                  child: CircularProgressIndicator.adaptive(
-                                                valueColor: AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
+                                              placeholder: (context, url) =>
+                                                  Center(
+                                                      child:
+                                                          CircularProgressIndicator
+                                                              .adaptive(
+                                                valueColor:
+                                                    AlwaysStoppedAnimation(
+                                                        Color(COLOR_PRIMARY)),
                                               )),
-                                              errorWidget: (context, url, error) => ClipRRect(
-                                                  borderRadius: BorderRadius.circular(35),
-                                                  child: Image.network(
-                                                    placeholderImage,
-                                                    fit: BoxFit.cover,
-                                                  )),
+                                              errorWidget: (context, url,
+                                                      error) =>
+                                                  ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              35),
+                                                      child: Image.asset(
+                                                        placeholderImage,
+                                                        fit: BoxFit.cover,
+                                                      )),
                                               fit: BoxFit.cover,
                                             ),
                                             const SizedBox(
@@ -1826,26 +2767,42 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                             ),
                                             Expanded(
                                               child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    reviewList[index].uname.toString(),
-                                                    style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w600, letterSpacing: 1, fontSize: 16),
+                                                    reviewList[index]
+                                                        .uname
+                                                        .toString(),
+                                                    style: const TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        letterSpacing: 1,
+                                                        fontSize: 16),
                                                   ),
                                                   RatingBar.builder(
                                                     ignoreGestures: true,
-                                                    initialRating: reviewList[index].rating ?? 0.0,
+                                                    initialRating:
+                                                        reviewList[index]
+                                                                .rating ??
+                                                            0.0,
                                                     minRating: 1,
                                                     itemSize: 22,
                                                     direction: Axis.horizontal,
                                                     allowHalfRating: true,
                                                     itemCount: 5,
-                                                    itemPadding: const EdgeInsets.only(top: 5.0),
-                                                    itemBuilder: (context, _) => Icon(
+                                                    itemPadding:
+                                                        const EdgeInsets.only(
+                                                            top: 5.0),
+                                                    itemBuilder: (context, _) =>
+                                                        Icon(
                                                       Icons.star,
-                                                      color: Color(COLOR_PRIMARY),
+                                                      color:
+                                                          Color(COLOR_PRIMARY),
                                                     ),
-                                                    onRatingUpdate: (double rate) {
+                                                    onRatingUpdate:
+                                                        (double rate) {
                                                       // ratings = rate;
                                                       // print(ratings);
                                                     },
@@ -1853,8 +2810,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                                 ],
                                               ),
                                             ),
-                                            Text(orderDate(reviewList[index].createdAt),
-                                                style: TextStyle(color: isDarkMode(context) ? Colors.grey.shade200 : const Color(0XFF555353))),
+                                            Text(
+                                                orderDate(reviewList[index]
+                                                    .createdAt),
+                                                style: TextStyle(
+                                                    color: isDarkMode(context)
+                                                        ? Colors.grey.shade200
+                                                        : const Color(
+                                                            0XFF555353))),
                                           ],
                                         ),
                                         // const Padding(
@@ -1863,8 +2826,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                         //     thickness: 2,
                                         //   ),
                                         // ),
-                                        Text(reviewList[index].comment.toString(),
-                                            style: TextStyle(color: Colors.black.withOpacity(0.70), fontWeight: FontWeight.w400, letterSpacing: 1, fontSize: 14)),
+                                        Text(
+                                            reviewList[index]
+                                                .comment
+                                                .toString(),
+                                            style: TextStyle(
+                                                color: Colors.black
+                                                    .withOpacity(0.70),
+                                                fontWeight: FontWeight.w400,
+                                                letterSpacing: 1,
+                                                fontSize: 14)),
                                         const SizedBox(
                                           height: 10,
                                         ),
@@ -1872,32 +2843,66 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                             ? SizedBox(
                                                 height: 75,
                                                 child: ListView.builder(
-                                                  itemCount: reviewList[index].photos!.length,
+                                                  itemCount: reviewList[index]
+                                                      .photos!
+                                                      .length,
                                                   shrinkWrap: true,
-                                                  scrollDirection: Axis.horizontal,
-                                                  itemBuilder: (context, index1) {
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  itemBuilder:
+                                                      (context, index1) {
                                                     return Padding(
-                                                      padding: const EdgeInsets.all(6.0),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              6.0),
                                                       child: CachedNetworkImage(
                                                         height: 65,
                                                         width: 65,
-                                                        imageUrl: getImageVAlidUrl(reviewList[index].photos![index1]),
-                                                        imageBuilder: (context, imageProvider) => Container(
-                                                          decoration: BoxDecoration(
-                                                            borderRadius: BorderRadius.circular(10),
-                                                            image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                                                        imageUrl:
+                                                            getImageVAlidUrl(
+                                                                reviewList[index]
+                                                                        .photos![
+                                                                    index1]),
+                                                        imageBuilder: (context,
+                                                                imageProvider) =>
+                                                            Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
+                                                            image: DecorationImage(
+                                                                image:
+                                                                    imageProvider,
+                                                                fit: BoxFit
+                                                                    .cover),
                                                           ),
                                                         ),
-                                                        placeholder: (context, url) => Center(
-                                                            child: CircularProgressIndicator.adaptive(
-                                                          valueColor: AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
+                                                        placeholder: (context,
+                                                                url) =>
+                                                            Center(
+                                                                child:
+                                                                    CircularProgressIndicator
+                                                                        .adaptive(
+                                                          valueColor:
+                                                              AlwaysStoppedAnimation(
+                                                                  Color(
+                                                                      COLOR_PRIMARY)),
                                                         )),
-                                                        errorWidget: (context, url, error) => ClipRRect(
-                                                            borderRadius: BorderRadius.circular(10),
-                                                            child: Image.network(
-                                                              placeholderImage,
-                                                              fit: BoxFit.cover,
-                                                            )),
+                                                        errorWidget: (context,
+                                                                url, error) =>
+                                                            ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                                child: Image
+                                                                    .network(
+                                                                  placeholderImage,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                )),
                                                         fit: BoxFit.cover,
                                                       ),
                                                     );
@@ -1915,7 +2920,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         ),
                         Center(
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
                             child: SizedBox(
                               width: MediaQuery.of(context).size.width,
                               height: MediaQuery.of(context).size.height * 0.06,
@@ -1931,7 +2937,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 ),
                                 child: const Text(
                                   'See All Reviews',
-                                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.white),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16,
+                                      color: Colors.white),
                                 ).tr(),
                                 onPressed: () {
                                   push(
@@ -1954,15 +2963,19 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           ),
         ]),
       ),
-      bottomNavigationBar: sectionConstantModel!.serviceTypeFlag == "ecommerce-service"
+      bottomNavigationBar: sectionConstantModel!.serviceTypeFlag ==
+              "ecommerce-service"
           ? Container(
               color: Color(COLOR_PRIMARY),
-              padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 20),
+              padding: const EdgeInsets.only(
+                  left: 20, right: 20, bottom: 20, top: 20),
               child: Row(
                 children: [
                   Expanded(
                     child: Text(
-                      "Item Total".tr() + " " + amountShow(amount: priceTemp.toString()),
+                      "Item Total".tr() +
+                          " " +
+                          amountShow(amount: priceTemp.toString()),
                       style: const TextStyle(color: Colors.white, fontSize: 18),
                     ).tr(),
                   ),
@@ -1971,7 +2984,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       if (MyAppState.currentUser == null) {
                         push(context, const AuthScreen());
                       } else {
-                        if (sectionConstantModel!.serviceTypeFlag == "ecommerce-service") {
+                        if (sectionConstantModel!.serviceTypeFlag ==
+                            "ecommerce-service") {
                           pushAndRemoveUntil(
                               context,
                               EcommeceDashBoardScreen(
@@ -2005,13 +3019,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           : isOpen
               ? Container(
                   color: Color(COLOR_PRIMARY),
-                  padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 20),
+                  padding: const EdgeInsets.only(
+                      left: 20, right: 20, bottom: 20, top: 20),
                   child: Row(
                     children: [
                       Expanded(
                         child: Text(
-                          "Item Total".tr() + " " + amountShow(amount: priceTemp.toString()),
-                          style: const TextStyle(color: Colors.white, fontSize: 18),
+                          "Item Total".tr() +
+                              " " +
+                              amountShow(amount: priceTemp.toString()),
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 18),
                         ).tr(),
                       ),
                       GestureDetector(
@@ -2019,12 +3037,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           if (MyAppState.currentUser == null) {
                             push(context, const AuthScreen());
                           } else {
-                            if (sectionConstantModel!.serviceTypeFlag == "ecommerce-service") {
+                            if (sectionConstantModel!.serviceTypeFlag ==
+                                "ecommerce-service") {
                               pushAndRemoveUntil(
                                   context,
                                   EcommeceDashBoardScreen(
                                     user: MyAppState.currentUser!,
-                                    drawerSelection: DrawerSelectionEcommarce.Cart,
+                                    drawerSelection:
+                                        DrawerSelectionEcommarce.Cart,
                                     currentWidget: const CartScreen(),
                                     appBarTitle: 'Your Cart',
                                   ),
@@ -2044,7 +3064,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         },
                         child: Text(
                           "VIEW CART".tr(),
-                          style: const TextStyle(color: Colors.white, fontSize: 18),
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 18),
                         ).tr(),
                       )
                     ],
@@ -2074,11 +3095,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       double extras_price = 0.0;
 
       SharedPreferences sp = await SharedPreferences.getInstance();
-      String addOns = sp.getString("musics_key") != null ? sp.getString('musics_key')! : "";
+      String addOns =
+          sp.getString("musics_key") != null ? sp.getString('musics_key')! : "";
 
       bool isAddSame = false;
       if (!isAddSame) {
-        if (productModel.disPrice != null && productModel.disPrice!.isNotEmpty && double.parse(productModel.disPrice!) != 0) {
+        if (productModel.disPrice != null &&
+            productModel.disPrice!.isNotEmpty &&
+            double.parse(productModel.disPrice!) != 0) {
           mainPrice = productModel.disPrice!;
         } else {
           mainPrice = productModel.price;
@@ -2102,11 +3126,21 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
       print("------------>${productQnt}");
 
-      final bool _productIsInList =
-          cartProducts.any((product) => product.id == productModel.id + "~" + (productModel.variant_info != null ? productModel.variant_info!.variant_id.toString() : ""));
+      final bool _productIsInList = cartProducts.any((product) =>
+          product.id ==
+          productModel.id +
+              "~" +
+              (productModel.variant_info != null
+                  ? productModel.variant_info!.variant_id.toString()
+                  : ""));
       if (_productIsInList) {
-        CartProduct element =
-            cartProducts.firstWhere((product) => product.id == productModel.id + "~" + (productModel.variant_info != null ? productModel.variant_info!.variant_id.toString() : ""));
+        CartProduct element = cartProducts.firstWhere((product) =>
+            product.id ==
+            productModel.id +
+                "~" +
+                (productModel.variant_info != null
+                    ? productModel.variant_info!.variant_id.toString()
+                    : ""));
 
         await cartDatabase.updateProduct(CartProduct(
             id: element.id,
@@ -2114,14 +3148,19 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             photo: element.photo,
             price: element.price,
             vendorID: element.vendorID,
-            quantity: isIncerementQuantity ? element.quantity + 1 : element.quantity,
+            quantity:
+                isIncerementQuantity ? element.quantity + 1 : element.quantity,
             category_id: element.category_id,
             extras_price: extras_price.toString(),
             extras: joinTitleString,
             discountPrice: element.discountPrice!));
       } else {
         await cartDatabase.updateProduct(CartProduct(
-            id: productModel.id + "~" + (productModel.variant_info != null ? productModel.variant_info!.variant_id.toString() : ""),
+            id: productModel.id +
+                "~" +
+                (productModel.variant_info != null
+                    ? productModel.variant_info!.variant_id.toString()
+                    : ""),
             name: productModel.name,
             photo: productModel.photo,
             price: mainPrice,
@@ -2137,13 +3176,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       setState(() {});
     } else {
       if (cartProducts.isEmpty) {
-        cartDatabase.addProduct(productModel, cartDatabase, isIncerementQuantity);
+        cartDatabase.addProduct(
+            productModel, cartDatabase, isIncerementQuantity);
       } else {
         if (cartProducts[0].vendorID == widget.vendorModel.id) {
-          cartDatabase.addProduct(productModel, cartDatabase, isIncerementQuantity);
+          cartDatabase.addProduct(
+              productModel, cartDatabase, isIncerementQuantity);
         } else {
           cartDatabase.deleteAllProducts();
-          cartDatabase.addProduct(productModel, cartDatabase, isIncerementQuantity);
+          cartDatabase.addProduct(
+              productModel, cartDatabase, isIncerementQuantity);
 
           if (isAddOnApplied && AddOnVal > 0) {
             priceTemp += (AddOnVal * productQnt);
@@ -2175,11 +3217,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       double extras_price = 0.0;
 
       SharedPreferences sp = await SharedPreferences.getInstance();
-      String addOns = sp.getString("musics_key") != null ? sp.getString('musics_key')! : "";
+      String addOns =
+          sp.getString("musics_key") != null ? sp.getString('musics_key')! : "";
 
       bool isAddSame = false;
       if (!isAddSame) {
-        if (productModel.disPrice != null && productModel.disPrice!.isNotEmpty && double.parse(productModel.disPrice!) != 0) {
+        if (productModel.disPrice != null &&
+            productModel.disPrice!.isNotEmpty &&
+            double.parse(productModel.disPrice!) != 0) {
           mainPrice = productModel.disPrice!;
         } else {
           mainPrice = productModel.price;
@@ -2205,16 +3250,32 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           product.id ==
           productModel.id +
               "~" +
-              (variants!.where((element) => element.variant_sku == selectedVariants.join('-')).isNotEmpty
-                  ? variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_id.toString()
+              (variants!
+                      .where((element) =>
+                          element.variant_sku == selectedVariants.join('-'))
+                      .isNotEmpty
+                  ? variants!
+                      .where((element) =>
+                          element.variant_sku == selectedVariants.join('-'))
+                      .first
+                      .variant_id
+                      .toString()
                   : ""));
       if (_productIsInList) {
         CartProduct element = cartProducts.firstWhere((product) =>
             product.id ==
             productModel.id +
                 "~" +
-                (variants!.where((element) => element.variant_sku == selectedVariants.join('-')).isNotEmpty
-                    ? variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_id.toString()
+                (variants!
+                        .where((element) =>
+                            element.variant_sku == selectedVariants.join('-'))
+                        .isNotEmpty
+                    ? variants!
+                        .where((element) =>
+                            element.variant_sku == selectedVariants.join('-'))
+                        .first
+                        .variant_id
+                        .toString()
                     : ""));
         print("------------>${element.quantity}");
         await cartDatabase.updateProduct(CartProduct(
@@ -2223,7 +3284,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             photo: element.photo,
             price: element.price,
             vendorID: element.vendorID,
-            quantity: isIncerementQuantity ? element.quantity - 1 : element.quantity,
+            quantity:
+                isIncerementQuantity ? element.quantity - 1 : element.quantity,
             category_id: element.category_id,
             extras_price: extras_price.toString(),
             extras: joinTitleString,
@@ -2232,8 +3294,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         await cartDatabase.updateProduct(CartProduct(
             id: productModel.id +
                 "~" +
-                (variants!.where((element) => element.variant_sku == selectedVariants.join('-')).isNotEmpty
-                    ? variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_id.toString()
+                (variants!
+                        .where((element) =>
+                            element.variant_sku == selectedVariants.join('-'))
+                        .isNotEmpty
+                    ? variants!
+                        .where((element) =>
+                            element.variant_sku == selectedVariants.join('-'))
+                        .first
+                        .variant_id
+                        .toString()
                     : ""),
             name: productModel.name,
             photo: productModel.photo,
@@ -2249,8 +3319,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     } else {
       cartDatabase.removeProduct(productModel.id +
           "~" +
-          (variants!.where((element) => element.variant_sku == selectedVariants.join('-')).isNotEmpty
-              ? variants!.where((element) => element.variant_sku == selectedVariants.join('-')).first.variant_id.toString()
+          (variants!
+                  .where((element) =>
+                      element.variant_sku == selectedVariants.join('-'))
+                  .isNotEmpty
+              ? variants!
+                  .where((element) =>
+                      element.variant_sku == selectedVariants.join('-'))
+                  .first
+                  .variant_id
+                  .toString()
               : ""));
       setState(() {
         productQnt = 0;
@@ -2261,7 +3339,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   void getAddOnsData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String musicsString = prefs.getString('musics_key') != null ? prefs.getString('musics_key')! : "";
+    final String musicsString = prefs.getString('musics_key') != null
+        ? prefs.getString('musics_key')!
+        : "";
 
     if (musicsString.isNotEmpty) {
       setState(() {
@@ -2270,7 +3350,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     }
 
     if (productQnt > 0) {
-      lastPrice = widget.productModel.disPrice == "" || widget.productModel.disPrice == "0"
+      lastPrice = widget.productModel.disPrice == "" ||
+              widget.productModel.disPrice == "0"
           ? double.parse(widget.productModel.price)
           : double.parse(widget.productModel.disPrice!) * productQnt;
     }
@@ -2279,8 +3360,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       setState(() {
         if (widget.productModel.addOnsTitle.isNotEmpty) {
           for (int a = 0; a < widget.productModel.addOnsTitle.length; a++) {
-            AddAddonsDemo addAddonsDemo =
-                AddAddonsDemo(name: widget.productModel.addOnsTitle[a], index: a, isCheck: false, categoryID: widget.productModel.id, price: widget.productModel.addOnsPrice[a]);
+            AddAddonsDemo addAddonsDemo = AddAddonsDemo(
+                name: widget.productModel.addOnsTitle[a],
+                index: a,
+                isCheck: false,
+                categoryID: widget.productModel.id,
+                price: widget.productModel.addOnsPrice[a]);
             lstAddAddonsCustom.add(addAddonsDemo);
             //saveAddonData(lstAddAddonsCustom);
           }
@@ -2291,7 +3376,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
       for (int d = 0; d < lstTemp.length; d++) {
         if (lstTemp[d].categoryID == widget.productModel.id) {
-          AddAddonsDemo addAddonsDemo = AddAddonsDemo(name: lstTemp[d].name, index: lstTemp[d].index, isCheck: true, categoryID: lstTemp[d].categoryID, price: lstTemp[d].price);
+          AddAddonsDemo addAddonsDemo = AddAddonsDemo(
+              name: lstTemp[d].name,
+              index: lstTemp[d].index,
+              isCheck: true,
+              categoryID: lstTemp[d].categoryID,
+              price: lstTemp[d].price);
           tempArray.add(addAddonsDemo);
         }
       }
@@ -2304,12 +3394,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           }
         }
         if (isAddonSelected) {
-          AddAddonsDemo addAddonsDemo =
-              AddAddonsDemo(name: widget.productModel.addOnsTitle[a], index: a, isCheck: true, categoryID: widget.productModel.id, price: widget.productModel.addOnsPrice[a]);
+          AddAddonsDemo addAddonsDemo = AddAddonsDemo(
+              name: widget.productModel.addOnsTitle[a],
+              index: a,
+              isCheck: true,
+              categoryID: widget.productModel.id,
+              price: widget.productModel.addOnsPrice[a]);
           lstAddAddonsCustom.add(addAddonsDemo);
         } else {
-          AddAddonsDemo addAddonsDemo =
-              AddAddonsDemo(name: widget.productModel.addOnsTitle[a], index: a, isCheck: false, categoryID: widget.productModel.id, price: widget.productModel.addOnsPrice[a]);
+          AddAddonsDemo addAddonsDemo = AddAddonsDemo(
+              name: widget.productModel.addOnsTitle[a],
+              index: a,
+              isCheck: false,
+              categoryID: widget.productModel.id,
+              price: widget.productModel.addOnsPrice[a]);
           lstAddAddonsCustom.add(addAddonsDemo);
         }
       }
@@ -2356,7 +3454,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         cartProducts.addAll(value);
         for (int i = 0; i < cartProducts.length; i++) {
           CartProduct e = cartProducts[i];
-          if (e.extras_price != null && e.extras_price != "" && double.parse(e.extras_price!) != 0) {
+          if (e.extras_price != null &&
+              e.extras_price != "" &&
+              double.parse(e.extras_price!) != 0) {
             priceTemp += double.parse(e.extras_price!) * e.quantity;
           }
           priceTemp += double.parse(e.price) * e.quantity;
@@ -2427,20 +3527,40 @@ class AddAddonsDemo {
   bool isCheck;
   String? categoryID;
 
-  AddAddonsDemo({this.name, this.index, this.price, this.isCheck = false, this.categoryID});
+  AddAddonsDemo(
+      {this.name,
+      this.index,
+      this.price,
+      this.isCheck = false,
+      this.categoryID});
 
-  static Map<String, dynamic> toMap(AddAddonsDemo music) =>
-      {'index': music.index, 'name': music.name, 'price': music.price, 'isCheck': music.isCheck, "categoryID": music.categoryID};
+  static Map<String, dynamic> toMap(AddAddonsDemo music) => {
+        'index': music.index,
+        'name': music.name,
+        'price': music.price,
+        'isCheck': music.isCheck,
+        "categoryID": music.categoryID
+      };
 
   factory AddAddonsDemo.fromJson(Map<String, dynamic> jsonData) {
-    return AddAddonsDemo(index: jsonData['index'], name: jsonData['name'], price: jsonData['price'], isCheck: jsonData['isCheck'], categoryID: jsonData["categoryID"]);
+    return AddAddonsDemo(
+        index: jsonData['index'],
+        name: jsonData['name'],
+        price: jsonData['price'],
+        isCheck: jsonData['isCheck'],
+        categoryID: jsonData["categoryID"]);
   }
 
   static String encode(List<AddAddonsDemo> item) => json.encode(
-        item.map<Map<String, dynamic>>((item) => AddAddonsDemo.toMap(item)).toList(),
+        item
+            .map<Map<String, dynamic>>((item) => AddAddonsDemo.toMap(item))
+            .toList(),
       );
 
-  static List<AddAddonsDemo> decode(String item) => (json.decode(item) as List<dynamic>).map<AddAddonsDemo>((item) => AddAddonsDemo.fromJson(item)).toList();
+  static List<AddAddonsDemo> decode(String item) =>
+      (json.decode(item) as List<dynamic>)
+          .map<AddAddonsDemo>((item) => AddAddonsDemo.fromJson(item))
+          .toList();
 
   @override
   String toString() {
@@ -2448,7 +3568,13 @@ class AddAddonsDemo {
   }
 
   Map<String, dynamic> toJson() {
-    return {'name': name, 'index': index, 'price': price, 'isCheck': isCheck, 'categoryID': categoryID};
+    return {
+      'name': name,
+      'index': index,
+      'price': price,
+      'isCheck': isCheck,
+      'categoryID': categoryID
+    };
   }
 }
 

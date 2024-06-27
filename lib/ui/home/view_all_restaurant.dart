@@ -33,12 +33,22 @@ class _ViewAllRestaurantState extends State<ViewAllRestaurant> {
     setState(() {
       isLoading = true;
     });
-    var collectionReference = FireStoreUtils.firestore.collection(VENDORS).where("section_id", isEqualTo: sectionConstantModel!.id);
+    var collectionReference = FireStoreUtils.firestore
+        .collection(VENDORS)
+        .where("section_id", isEqualTo: sectionConstantModel!.id);
 
-    GeoFirePoint center = GeoFlutterFire().point(latitude: MyAppState.selectedPosotion.location!.latitude, longitude: MyAppState.selectedPosotion.location!.longitude);
+    GeoFirePoint center = GeoFlutterFire().point(
+        latitude: MyAppState.selectedPosotion.location!.latitude,
+        longitude: MyAppState.selectedPosotion.location!.longitude);
     String field = 'g';
 
-    Stream<List<DocumentSnapshot>> stream = GeoFlutterFire().collection(collectionRef: collectionReference).within(center: center, radius: double.parse(sectionConstantModel!.nearByRadius.toString()), field: field, strictMode: true);
+    Stream<List<DocumentSnapshot>> stream = GeoFlutterFire()
+        .collection(collectionRef: collectionReference)
+        .within(
+            center: center,
+            radius: double.parse(sectionConstantModel!.nearByRadius.toString()),
+            field: field,
+            strictMode: true);
     stream.listen((documentList) {
       for (var document in documentList) {
         final data = document.data() as Map<String, dynamic>;
@@ -61,7 +71,8 @@ class _ViewAllRestaurantState extends State<ViewAllRestaurant> {
 
   getData() {
     if (MyAppState.currentUser != null) {
-      lstFavourites = FireStoreUtils().getFavouriteStore(MyAppState.currentUser!.userID);
+      lstFavourites =
+          FireStoreUtils().getFavouriteStore(MyAppState.currentUser!.userID);
       lstFavourites.then((event) {
         lstFav.clear();
         for (int a = 0; a < event.length; a++) {
@@ -106,11 +117,15 @@ class _ViewAllRestaurantState extends State<ViewAllRestaurant> {
     List<OfferModel> tempList = [];
     List<double> discountAmountTempList = [];
     offerList.forEach((element) {
-      print("---------->${vendorModel.id} || ${element.storeId} || ${vendorModel.id == element.storeId}");
-      print("---------->${element.expireOfferDate!.toDate()} || ${DateTime.now()}");
-      if (vendorModel.id == element.storeId && element.expireOfferDate!.toDate().isAfter(DateTime.now())) {
+      print(
+          "---------->${vendorModel.id} || ${element.storeId} || ${vendorModel.id == element.storeId}");
+      print(
+          "---------->${element.expireOfferDate!.toDate()} || ${DateTime.now()}");
+      if (vendorModel.id == element.storeId &&
+          element.expireOfferDate!.toDate().isAfter(DateTime.now())) {
         tempList.add(element);
-        discountAmountTempList.add(double.parse(element.discountOffer.toString()));
+        discountAmountTempList
+            .add(double.parse(element.discountOffer.toString()));
         print("---------->${discountAmountTempList.length}");
       }
     });
@@ -124,8 +139,13 @@ class _ViewAllRestaurantState extends State<ViewAllRestaurant> {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: isDarkMode(context) ? const Color(DarkContainerBorderColor) : Colors.grey.shade100, width: 1),
-            color: isDarkMode(context) ? Color(DarkContainerColor) : Colors.white,
+            border: Border.all(
+                color: isDarkMode(context)
+                    ? const Color(DarkContainerBorderColor)
+                    : Colors.grey.shade100,
+                width: 1),
+            color:
+                isDarkMode(context) ? Color(DarkContainerColor) : Colors.white,
             boxShadow: [
               isDarkMode(context)
                   ? const BoxShadow()
@@ -148,16 +168,18 @@ class _ViewAllRestaurantState extends State<ViewAllRestaurant> {
                       imageBuilder: (context, imageProvider) => Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                          image: DecorationImage(
+                              image: imageProvider, fit: BoxFit.cover),
                         ),
                       ),
                       placeholder: (context, url) => Center(
                           child: CircularProgressIndicator.adaptive(
-                        valueColor: AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
+                        valueColor:
+                            AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
                       )),
                       errorWidget: (context, url, error) => ClipRRect(
                           borderRadius: BorderRadius.circular(10),
-                          child: Image.network(
+                          child: Image.asset(
                             placeholderImage,
                             fit: BoxFit.cover,
                             cacheHeight: 100,
@@ -170,12 +192,20 @@ class _ViewAllRestaurantState extends State<ViewAllRestaurant> {
                         bottom: -6,
                         left: -1,
                         child: Container(
-                          decoration: const BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/offer_badge.png'))),
+                          decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                  image: AssetImage(
+                                      'assets/images/offer_badge.png'))),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              discountAmountTempList.reduce(min).toStringAsFixed(currencyData!.decimal) + "% off",
-                              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                              discountAmountTempList
+                                      .reduce(min)
+                                      .toStringAsFixed(currencyData!.decimal) +
+                                  "% off",
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
@@ -197,7 +227,9 @@ class _ViewAllRestaurantState extends State<ViewAllRestaurant> {
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
-                                color: isDarkMode(context) ? Colors.white : Colors.black,
+                                color: isDarkMode(context)
+                                    ? Colors.white
+                                    : Colors.black,
                               ),
                               maxLines: 1,
                             ),
@@ -209,12 +241,27 @@ class _ViewAllRestaurantState extends State<ViewAllRestaurant> {
                               } else {
                                 setState(() {
                                   if (lstFav.contains(vendorModel.id) == true) {
-                                    FavouriteModel favouriteModel = FavouriteModel(section_id: sectionConstantModel!.id, store_id: vendorModel.id, user_id: MyAppState.currentUser!.userID);
-                                    lstFav.removeWhere((item) => item == vendorModel.id);
-                                    FireStoreUtils().removeFavouriteStore(favouriteModel);
+                                    FavouriteModel favouriteModel =
+                                        FavouriteModel(
+                                            section_id:
+                                                sectionConstantModel!.id,
+                                            store_id: vendorModel.id,
+                                            user_id:
+                                                MyAppState.currentUser!.userID);
+                                    lstFav.removeWhere(
+                                        (item) => item == vendorModel.id);
+                                    FireStoreUtils()
+                                        .removeFavouriteStore(favouriteModel);
                                   } else {
-                                    FavouriteModel favouriteModel = FavouriteModel(section_id: sectionConstantModel!.id, store_id: vendorModel.id, user_id: MyAppState.currentUser!.userID);
-                                    FireStoreUtils().setFavouriteStore(favouriteModel);
+                                    FavouriteModel favouriteModel =
+                                        FavouriteModel(
+                                            section_id:
+                                                sectionConstantModel!.id,
+                                            store_id: vendorModel.id,
+                                            user_id:
+                                                MyAppState.currentUser!.userID);
+                                    FireStoreUtils()
+                                        .setFavouriteStore(favouriteModel);
                                     lstFav.add(vendorModel.id);
                                   }
                                 });
@@ -227,7 +274,9 @@ class _ViewAllRestaurantState extends State<ViewAllRestaurant> {
                                   )
                                 : Icon(
                                     Icons.favorite_border,
-                                    color: isDarkMode(context) ? Colors.white38 : Colors.black38,
+                                    color: isDarkMode(context)
+                                        ? Colors.white38
+                                        : Colors.black38,
                                   ),
                           )
                         ],
@@ -257,7 +306,9 @@ class _ViewAllRestaurantState extends State<ViewAllRestaurant> {
                               vendorModel.location,
                               maxLines: 1,
                               style: TextStyle(
-                                color: isDarkMode(context) ? Colors.white70 : const Color(0xff9091A4),
+                                color: isDarkMode(context)
+                                    ? Colors.white70
+                                    : const Color(0xff9091A4),
                               ),
                             ),
                           ),
@@ -274,16 +325,26 @@ class _ViewAllRestaurantState extends State<ViewAllRestaurant> {
                             color: Color(COLOR_PRIMARY),
                           ),
                           const SizedBox(width: 3),
-                          Text(vendorModel.reviewsCount != 0 ? (vendorModel.reviewsSum / vendorModel.reviewsCount).toStringAsFixed(1) : 0.toString(),
+                          Text(
+                              vendorModel.reviewsCount != 0
+                                  ? (vendorModel.reviewsSum /
+                                          vendorModel.reviewsCount)
+                                      .toStringAsFixed(1)
+                                  : 0.toString(),
                               style: TextStyle(
                                 letterSpacing: 0.5,
-                                color: isDarkMode(context) ? Colors.white : const Color(0xff000000),
+                                color: isDarkMode(context)
+                                    ? Colors.white
+                                    : const Color(0xff000000),
                               )),
                           const SizedBox(width: 3),
-                          Text('(${vendorModel.reviewsCount.toStringAsFixed(1)})',
+                          Text(
+                              '(${vendorModel.reviewsCount.toStringAsFixed(1)})',
                               style: TextStyle(
                                 letterSpacing: 0.5,
-                                color: isDarkMode(context) ? Colors.white60 : const Color(0xff666666),
+                                color: isDarkMode(context)
+                                    ? Colors.white60
+                                    : const Color(0xff666666),
                               )),
                           const SizedBox(width: 5),
                         ],

@@ -17,7 +17,8 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 class OnDemandDetailsScreen extends StatefulWidget {
   final ProviderServiceModel providerModel;
 
-  const OnDemandDetailsScreen({Key? key, required this.providerModel}) : super(key: key);
+  const OnDemandDetailsScreen({Key? key, required this.providerModel})
+      : super(key: key);
 
   @override
   State<OnDemandDetailsScreen> createState() => _OnDemandDetailsScreenState();
@@ -45,25 +46,32 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
   }
 
   getReviewList() async {
-    await FireStoreUtils().getCategoryById(provider.categoryId.toString()).then((value) {
+    await FireStoreUtils()
+        .getCategoryById(provider.categoryId.toString())
+        .then((value) {
       if (value != null) {
         categoryTitle = value.title.toString();
       }
     });
 
-    await FireStoreUtils().getSubCategoryById(provider.subCategoryId.toString()).then((value) {
+    await FireStoreUtils()
+        .getSubCategoryById(provider.subCategoryId.toString())
+        .then((value) {
       if (value != null) {
         subCategoryTitle = value.title.toString();
       }
     });
 
-    await FireStoreUtils().getReviewByProviderServiceId(provider.id.toString()).then((value) {
+    await FireStoreUtils()
+        .getReviewByProviderServiceId(provider.id.toString())
+        .then((value) {
       setState(() {
         ratingService = value;
       });
     });
 
-    await FireStoreUtils.getCurrentUser(provider.author.toString()).then((value) {
+    await FireStoreUtils.getCurrentUser(provider.author.toString())
+        .then((value) {
       setState(() {
         userModel = value;
       });
@@ -88,7 +96,9 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      backgroundColor: isDarkMode(context) ? const Color(DARK_BG_COLOR) : const Color(0xffF9F9F9),
+      backgroundColor: isDarkMode(context)
+          ? const Color(DARK_BG_COLOR)
+          : const Color(0xffF9F9F9),
       body: isLoading == true
           ? Center(
               child: CircularProgressIndicator(),
@@ -114,7 +124,11 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
                       if (MyAppState.currentUser == null) {
                         push(context, const AuthScreen());
                       } else {
-                        push(context, OnDemandBookingScreen(providerModel: widget.providerModel, categoryTitle: subCategoryTitle.toString()));
+                        push(
+                            context,
+                            OnDemandBookingScreen(
+                                providerModel: widget.providerModel,
+                                categoryTitle: subCategoryTitle.toString()));
                       }
                     },
                     child: Text(
@@ -140,8 +154,10 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
     var date = DateFormat('dd-MM-yyyy').format(now);
     for (var element in provider.days) {
       if (day == element.toString()) {
-        var start = DateFormat("dd-MM-yyyy HH:mm").parse(date + " " + provider.startTime.toString());
-        var end = DateFormat("dd-MM-yyyy HH:mm").parse(date + " " + provider.endTime.toString());
+        var start = DateFormat("dd-MM-yyyy HH:mm")
+            .parse(date + " " + provider.startTime.toString());
+        var end = DateFormat("dd-MM-yyyy HH:mm")
+            .parse(date + " " + provider.endTime.toString());
         if (isCurrentDateInRange(start, end)) {
           setState(() {
             isOpen = true;
@@ -169,23 +185,29 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
           Stack(
             children: [
               ClipRRect(
-                  borderRadius: BorderRadius.only(bottomRight: Radius.circular(22), bottomLeft: Radius.circular(22)),
+                  borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(22),
+                      bottomLeft: Radius.circular(22)),
                   child: Container(
                     height: _height * 0.45,
                     width: _width * 1,
                     child: CachedNetworkImage(
-                      imageUrl: getImageVAlidUrl(provider.photos.isNotEmpty ? provider.photos.first.toString() : ""),
+                      imageUrl: getImageVAlidUrl(provider.photos.isNotEmpty
+                          ? provider.photos.first.toString()
+                          : ""),
                       imageBuilder: (context, imageProvider) => Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(0),
-                          image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                          image: DecorationImage(
+                              image: imageProvider, fit: BoxFit.cover),
                         ),
                       ),
                       placeholder: (context, url) => Center(
                           child: CircularProgressIndicator.adaptive(
-                        valueColor: AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
+                        valueColor:
+                            AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
                       )),
-                      errorWidget: (context, url, error) => Image.network(
+                      errorWidget: (context, url, error) => Image.asset(
                         placeholderImage,
                         fit: BoxFit.fitWidth,
                       ),
@@ -197,7 +219,9 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
                   left: _width * 0.03,
                   child: ClipOval(
                     child: Container(
-                      decoration: BoxDecoration(color: Colors.black.withOpacity(0.70), borderRadius: BorderRadius.all(Radius.circular(60))),
+                      decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.70),
+                          borderRadius: BorderRadius.all(Radius.circular(60))),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: InkWell(
@@ -217,9 +241,12 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
                 top: _height * 0.05,
                 right: _width * 0.03,
                 child: Container(
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: isOpen == true ? Colors.green : Colors.red),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(40),
+                      color: isOpen == true ? Colors.green : Colors.red),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 10),
                     child: Text(
                       isOpen == true ? "Open" : "Close",
                       textAlign: TextAlign.center,
@@ -249,7 +276,8 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
                           fontSize: 20,
                           fontFamily: "Poppinsm",
                           fontWeight: FontWeight.bold,
-                          color: isDarkMode(context) ? Colors.white : Colors.black,
+                          color:
+                              isDarkMode(context) ? Colors.white : Colors.black,
                         ),
                       ),
                     ),
@@ -257,30 +285,45 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
                       children: [
                         provider.disPrice == "" || provider.disPrice == "0"
                             ? Text(
-                                provider.priceUnit == 'Fixed' ? amountShow(amount: provider.price) : '${amountShow(amount: provider.price)}/hr',
+                                provider.priceUnit == 'Fixed'
+                                    ? amountShow(amount: provider.price)
+                                    : '${amountShow(amount: provider.price)}/hr',
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontFamily: "Poppinsm",
                                   fontWeight: FontWeight.bold,
-                                  color: isDarkMode(context) ? Colors.white : Color(COLOR_PRIMARY),
+                                  color: isDarkMode(context)
+                                      ? Colors.white
+                                      : Color(COLOR_PRIMARY),
                                 ),
                               )
                             : Row(
                                 children: [
                                   Text(
-                                    provider.priceUnit == 'Fixed' ? amountShow(amount: provider.disPrice) : '${amountShow(amount: provider.disPrice)}/hr',
+                                    provider.priceUnit == 'Fixed'
+                                        ? amountShow(amount: provider.disPrice)
+                                        : '${amountShow(amount: provider.disPrice)}/hr',
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontFamily: "Poppinsm",
                                       fontWeight: FontWeight.bold,
-                                      color: isDarkMode(context) ? Colors.white : Color(COLOR_PRIMARY),
+                                      color: isDarkMode(context)
+                                          ? Colors.white
+                                          : Color(COLOR_PRIMARY),
                                     ),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 8.0),
                                     child: Text(
-                                      provider.priceUnit == 'Fixed' ? amountShow(amount: provider.price) : '${amountShow(amount: provider.price)}/hr',
-                                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.grey, decoration: TextDecoration.lineThrough),
+                                      provider.priceUnit == 'Fixed'
+                                          ? amountShow(amount: provider.price)
+                                          : '${amountShow(amount: provider.price)}/hr',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                          color: Colors.grey,
+                                          decoration:
+                                              TextDecoration.lineThrough),
                                     ),
                                   ),
                                 ],
@@ -300,7 +343,9 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
                             fontSize: 14,
                             fontFamily: "Poppinsm",
                             fontWeight: FontWeight.w400,
-                            color: isDarkMode(context) ? Colors.white : Colors.black,
+                            color: isDarkMode(context)
+                                ? Colors.white
+                                : Colors.black,
                           ),
                         ),
                       ),
@@ -316,7 +361,11 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
                           ),
                           const SizedBox(width: 3),
                           Text(
-                            provider.reviewsCount != 0 ? ((provider.reviewsSum ?? 0.0) / (provider.reviewsCount ?? 0.0)).toStringAsFixed(1) : 0.toString(),
+                            provider.reviewsCount != 0
+                                ? ((provider.reviewsSum ?? 0.0) /
+                                        (provider.reviewsCount ?? 0.0))
+                                    .toStringAsFixed(1)
+                                : 0.toString(),
                             style: const TextStyle(
                               letterSpacing: 0.5,
                               fontSize: 16,
@@ -335,7 +384,9 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
                               fontSize: 16,
                               fontFamily: "Poppinsm",
                               fontWeight: FontWeight.w500,
-                              color: isDarkMode(context) ? Colors.white : Colors.black,
+                              color: isDarkMode(context)
+                                  ? Colors.white
+                                  : Colors.black,
                             ),
                           ),
                         ],
@@ -349,9 +400,13 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
                     children: [
                       subCategoryTitle != null && subCategoryTitle!.isNotEmpty
                           ? Container(
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Color(COLOR_PRIMARY).withOpacity(0.20)),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color:
+                                      Color(COLOR_PRIMARY).withOpacity(0.20)),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 10),
                                 child: Text(
                                   subCategoryTitle.toString(),
                                   style: TextStyle(
@@ -368,9 +423,12 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
                         width: 10,
                       ),
                       Container(
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.green.withOpacity(0.20)),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.green.withOpacity(0.20)),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 10),
                           child: InkWell(
                               onTap: () {
                                 showModalBottomSheet(
@@ -481,7 +539,8 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
                         style: TextStyle(
                           fontFamily: "Poppinsm",
                           fontWeight: FontWeight.w400,
-                          color: isDarkMode(context) ? Colors.white : Colors.black,
+                          color:
+                              isDarkMode(context) ? Colors.white : Colors.black,
                         ),
                       ),
                     ),
@@ -521,16 +580,21 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
           },
           child: const Text('About').tr(),
           style: ButtonStyle(
-              foregroundColor:
-                  tabString == "About" ? WidgetStateProperty.all<Color>(Colors.white) : WidgetStateProperty.all<Color>(isDarkMode(context) ? Colors.white : Colors.black),
+              foregroundColor: tabString == "About"
+                  ? WidgetStateProperty.all<Color>(Colors.white)
+                  : WidgetStateProperty.all<Color>(
+                      isDarkMode(context) ? Colors.white : Colors.black),
               backgroundColor: tabString == "About"
                   ? WidgetStateProperty.all<Color>(Color(COLOR_PRIMARY))
-                  : WidgetStateProperty.all<Color>(isDarkMode(context) ? Color(DarkContainerColor) : Colors.white),
-              shape: WidgetStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                  side: BorderSide(
-                    color: Colors.grey.withOpacity(0.30),
-                  )))),
+                  : WidgetStateProperty.all<Color>(isDarkMode(context)
+                      ? Color(DarkContainerColor)
+                      : Colors.white),
+              shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                      side: BorderSide(
+                        color: Colors.grey.withOpacity(0.30),
+                      )))),
         ),
         const SizedBox(
           width: 10,
@@ -547,15 +611,19 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
                 style: ButtonStyle(
                     foregroundColor: tabString == "Gallery"
                         ? WidgetStateProperty.all<Color>(Colors.white)
-                        : WidgetStateProperty.all<Color>(isDarkMode(context) ? Colors.white : Colors.black),
+                        : WidgetStateProperty.all<Color>(
+                            isDarkMode(context) ? Colors.white : Colors.black),
                     backgroundColor: tabString == "Gallery"
                         ? WidgetStateProperty.all<Color>(Color(COLOR_PRIMARY))
-                        : WidgetStateProperty.all<Color>(isDarkMode(context) ? Color(DarkContainerColor) : Colors.white),
-                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                        side: BorderSide(
-                          color: Colors.grey.withOpacity(0.30),
-                        )))),
+                        : WidgetStateProperty.all<Color>(isDarkMode(context)
+                            ? Color(DarkContainerColor)
+                            : Colors.white),
+                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: BorderSide(
+                              color: Colors.grey.withOpacity(0.30),
+                            )))),
               ),
         const SizedBox(
           width: 10,
@@ -572,15 +640,19 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
                 style: ButtonStyle(
                     foregroundColor: tabString == "Review"
                         ? WidgetStateProperty.all<Color>(Colors.black)
-                        : WidgetStateProperty.all<Color>(isDarkMode(context) ? Colors.white : Colors.black),
+                        : WidgetStateProperty.all<Color>(
+                            isDarkMode(context) ? Colors.white : Colors.black),
                     backgroundColor: tabString == "Review"
                         ? WidgetStateProperty.all<Color>(Color(COLOR_PRIMARY))
-                        : WidgetStateProperty.all<Color>(isDarkMode(context) ? Color(DarkContainerColor) : Colors.white),
-                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                        side: BorderSide(
-                          color: Colors.grey.withOpacity(0.30),
-                        )))),
+                        : WidgetStateProperty.all<Color>(isDarkMode(context)
+                            ? Color(DarkContainerColor)
+                            : Colors.white),
+                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: BorderSide(
+                              color: Colors.grey.withOpacity(0.30),
+                            )))),
               ),
       ],
     );
@@ -617,8 +689,14 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: isDarkMode(context) ? const Color(DarkContainerBorderColor) : Colors.grey.shade100, width: 1),
-                        color: isDarkMode(context) ? Color(DarkContainerColor) : Colors.white,
+                        border: Border.all(
+                            color: isDarkMode(context)
+                                ? const Color(DarkContainerBorderColor)
+                                : Colors.grey.shade100,
+                            width: 1),
+                        color: isDarkMode(context)
+                            ? Color(DarkContainerColor)
+                            : Colors.white,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -628,34 +706,57 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
                               child: Row(
                                 children: [
                                   userModel!.profilePictureURL != ""
-                                      ? CircleAvatar(backgroundImage: NetworkImage(userModel!.profilePictureURL.toString()), radius: 30.0)
-                                      : CircleAvatar(backgroundImage: NetworkImage(placeholderImage), radius: 30.0),
+                                      ? CircleAvatar(
+                                          backgroundImage: NetworkImage(
+                                              userModel!.profilePictureURL
+                                                  .toString()),
+                                          radius: 30.0)
+                                      : CircleAvatar(
+                                          backgroundImage:
+                                              NetworkImage(placeholderImage),
+                                          radius: 30.0),
                                   SizedBox(
                                     width: 10,
                                   ),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           userModel!.fullName().toString(),
                                           style: TextStyle(
-                                              color: isDarkMode(context) ? Colors.white : Colors.black, fontFamily: "Poppinsm", fontSize: 14, fontWeight: FontWeight.bold),
+                                              color: isDarkMode(context)
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                              fontFamily: "Poppinsm",
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold),
                                         ),
                                         SizedBox(
                                           height: 5,
                                         ),
                                         Text(
                                           userModel!.email.toString(),
-                                          style: TextStyle(color: isDarkMode(context) ? Colors.white : Colors.black, fontFamily: "Poppinsm", fontSize: 14),
+                                          style: TextStyle(
+                                              color: isDarkMode(context)
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                              fontFamily: "Poppinsm",
+                                              fontSize: 14),
                                         ),
                                         SizedBox(
                                           height: 10,
                                         ),
                                         Container(
-                                          decoration: BoxDecoration(color: Color(SemanticColorWarning06), borderRadius: BorderRadius.all(Radius.circular(16))),
+                                          decoration: BoxDecoration(
+                                              color:
+                                                  Color(SemanticColorWarning06),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(16))),
                                           child: Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10, vertical: 5),
                                             child: Row(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
@@ -666,7 +767,14 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
                                                 ),
                                                 const SizedBox(width: 3),
                                                 Text(
-                                                  userModel!.reviewsCount != 0 ? ((userModel!.reviewsSum) / (userModel!.reviewsCount ?? 0.0)).toStringAsFixed(1) : 0.toString(),
+                                                  userModel!.reviewsCount != 0
+                                                      ? ((userModel!
+                                                                  .reviewsSum) /
+                                                              (userModel!
+                                                                      .reviewsCount ??
+                                                                  0.0))
+                                                          .toStringAsFixed(1)
+                                                      : 0.toString(),
                                                   style: const TextStyle(
                                                     letterSpacing: 0.5,
                                                     fontSize: 12,
@@ -742,7 +850,11 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
             shrinkWrap: true,
             padding: EdgeInsets.zero,
             physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 0, crossAxisSpacing: 8, mainAxisExtent: 180),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 0,
+                crossAxisSpacing: 8,
+                mainAxisExtent: 180),
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -755,7 +867,8 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
                     imageBuilder: (context, imageProvider) => Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                        image: DecorationImage(
+                            image: imageProvider, fit: BoxFit.cover),
                       ),
                     ),
                     placeholder: (context, url) => Center(
@@ -786,14 +899,18 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius:
-                        const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
+                        bottomLeft: Radius.circular(10),
+                        bottomRight: Radius.circular(10)),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.5),
                         spreadRadius: 2,
                         blurRadius: 2,
-                        offset: const Offset(0, 2), // changes position of shadow
+                        offset:
+                            const Offset(0, 2), // changes position of shadow
                       ),
                     ],
                   ),
@@ -808,9 +925,14 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(ratingService[index].uname.toString(), style: const TextStyle(fontSize: 16, letterSpacing: 1, fontWeight: FontWeight.w600)),
+                                Text(ratingService[index].uname.toString(),
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        letterSpacing: 1,
+                                        fontWeight: FontWeight.w600)),
                                 Text(
-                                  DateFormat('dd MMM').format(ratingService[index].createdAt!.toDate()),
+                                  DateFormat('dd MMM').format(
+                                      ratingService[index].createdAt!.toDate()),
                                   style: TextStyle(fontSize: 12),
                                 ),
                               ],
@@ -819,11 +941,13 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
                               height: 4,
                             ),
                             RatingBar.builder(
-                              initialRating: double.parse(ratingService[index].rating.toString()),
+                              initialRating: double.parse(
+                                  ratingService[index].rating.toString()),
                               direction: Axis.horizontal,
                               itemSize: 20,
                               ignoreGestures: true,
-                              itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                              itemPadding:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
                               itemBuilder: (context, _) => Icon(
                                 Icons.star,
                                 color: Color(COLOR_PRIMARY),
@@ -849,8 +973,10 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
   showTiming(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: isDarkMode(context) ? const Color(DARK_BG_COLOR) : Colors.white,
-          borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+          color:
+              isDarkMode(context) ? const Color(DARK_BG_COLOR) : Colors.white,
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(20), topRight: Radius.circular(20))),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -878,16 +1004,27 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6),
                       side: BorderSide(
-                        color: isDarkMode(context) ? const Color(0XFF3c3a2e) : const Color(0XFFC3C5D1),
+                        color: isDarkMode(context)
+                            ? const Color(0XFF3c3a2e)
+                            : const Color(0XFFC3C5D1),
                         width: 1,
                       ),
                     ),
                     child: Padding(
-                        padding: const EdgeInsets.only(top: 7, bottom: 7, left: 20, right: 20),
+                        padding: const EdgeInsets.only(
+                            top: 7, bottom: 7, left: 20, right: 20),
                         child: Row(
                           children: [
-                            Text("Start Time : ", style: TextStyle(color: isDarkMode(context) ? const Color(0XFFa5a292) : const Color(0XFF5A5D6D))),
-                            Text(provider.startTime.toString(), style: TextStyle(color: isDarkMode(context) ? const Color(0XFFa5a292) : const Color(0XFF5A5D6D))),
+                            Text("Start Time : ",
+                                style: TextStyle(
+                                    color: isDarkMode(context)
+                                        ? const Color(0XFFa5a292)
+                                        : const Color(0XFF5A5D6D))),
+                            Text(provider.startTime.toString(),
+                                style: TextStyle(
+                                    color: isDarkMode(context)
+                                        ? const Color(0XFFa5a292)
+                                        : const Color(0XFF5A5D6D))),
                           ],
                         )),
                   ),
@@ -901,16 +1038,27 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6),
                       side: BorderSide(
-                        color: isDarkMode(context) ? const Color(0XFF3c3a2e) : const Color(0XFFC3C5D1),
+                        color: isDarkMode(context)
+                            ? const Color(0XFF3c3a2e)
+                            : const Color(0XFFC3C5D1),
                         width: 1,
                       ),
                     ),
                     child: Padding(
-                        padding: const EdgeInsets.only(top: 7, bottom: 7, left: 20, right: 20),
+                        padding: const EdgeInsets.only(
+                            top: 7, bottom: 7, left: 20, right: 20),
                         child: Row(
                           children: [
-                            Text("End Time : ", style: TextStyle(color: isDarkMode(context) ? const Color(0XFFa5a292) : const Color(0XFF5A5D6D))),
-                            Text(provider.endTime.toString(), style: TextStyle(color: isDarkMode(context) ? const Color(0XFFa5a292) : const Color(0XFF5A5D6D))),
+                            Text("End Time : ",
+                                style: TextStyle(
+                                    color: isDarkMode(context)
+                                        ? const Color(0XFFa5a292)
+                                        : const Color(0XFF5A5D6D))),
+                            Text(provider.endTime.toString(),
+                                style: TextStyle(
+                                    color: isDarkMode(context)
+                                        ? const Color(0XFFa5a292)
+                                        : const Color(0XFF5A5D6D))),
                           ],
                         )),
                   ),
@@ -943,13 +1091,20 @@ class _OnDemandDetailsScreenState extends State<OnDemandDetailsScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6),
                       side: BorderSide(
-                        color: isDarkMode(context) ? const Color(0XFF3c3a2e) : const Color(0XFFC3C5D1),
+                        color: isDarkMode(context)
+                            ? const Color(0XFF3c3a2e)
+                            : const Color(0XFFC3C5D1),
                         width: 1,
                       ),
                     ),
                     child: Padding(
-                        padding: const EdgeInsets.only(top: 7, bottom: 7, left: 20, right: 20),
-                        child: Text(provider.days[i], style: TextStyle(color: isDarkMode(context) ? const Color(0XFFa5a292) : const Color(0XFF5A5D6D)))),
+                        padding: const EdgeInsets.only(
+                            top: 7, bottom: 7, left: 20, right: 20),
+                        child: Text(provider.days[i],
+                            style: TextStyle(
+                                color: isDarkMode(context)
+                                    ? const Color(0XFFa5a292)
+                                    : const Color(0XFF5A5D6D)))),
                   );
                 },
               ).toList(),

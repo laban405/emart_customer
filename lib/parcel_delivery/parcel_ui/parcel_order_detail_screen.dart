@@ -170,8 +170,7 @@ class _ParcelOrderDetailScreenState extends State<ParcelOrderDetailScreen> {
                                               Image.asset(
                                                   'assets/images/img_placeholder.png'),
                                           errorWidget: (context, url, error) =>
-                                              Image.network(
-                                                  placeholderImage,
+                                              Image.asset(placeholderImage,
                                                   fit: BoxFit.fill),
                                         ),
                                       ),
@@ -339,7 +338,7 @@ class _ParcelOrderDetailScreenState extends State<ParcelOrderDetailScreen> {
         ListView.builder(
           itemCount: orderModel!.taxModel!.length,
           shrinkWrap: true,
-        //  padding: EdgeInsets.zero,
+          //  padding: EdgeInsets.zero,
           physics: NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
             TaxModel taxModel = orderModel!.taxModel![index];
@@ -360,17 +359,18 @@ class _ParcelOrderDetailScreenState extends State<ParcelOrderDetailScreen> {
                     Text(
                       amountShow(
                           amount: getTaxValue(
-                              amount: (double.parse(
-                                  orderModel!.subTotal.toString()) -
-                                  double.parse(
-                                      orderModel!.discount.toString()))
-                                  .toString(),
-                              taxModel: taxModel)
+                                  amount: (double.parse(
+                                              orderModel!.subTotal.toString()) -
+                                          double.parse(
+                                              orderModel!.discount.toString()))
+                                      .toString(),
+                                  taxModel: taxModel)
                               .toString()),
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
-                        color: isDarkMode(context) ? Colors.white : Colors.black,
+                        color:
+                            isDarkMode(context) ? Colors.white : Colors.black,
                       ),
                     ),
                   ],

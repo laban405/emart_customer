@@ -34,7 +34,8 @@ class _MapViewScreenState extends State<MapViewScreen> {
       const ImageConfiguration(),
       'assets/images/map_unselected2x.png',
     );
-    mapMarkerSelect = await BitmapDescriptor.fromAssetImage(const ImageConfiguration(), 'assets/images/map_selected3x.png');
+    mapMarkerSelect = await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(), 'assets/images/map_selected3x.png');
   }
 
   GoogleMapController? _mapController;
@@ -85,7 +86,8 @@ class _MapViewScreenState extends State<MapViewScreen> {
     List<LatLng> polylineCoordinates = [];
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       GOOGLE_API_KEY,
-      PointLatLng(MyAppState.selectedPosotion.location!.latitude, MyAppState.selectedPosotion.location!.longitude),
+      PointLatLng(MyAppState.selectedPosotion.location!.latitude,
+          MyAppState.selectedPosotion.location!.longitude),
       PointLatLng(latitude, longLatitude),
       travelMode: TravelMode.driving,
     );
@@ -110,7 +112,8 @@ class _MapViewScreenState extends State<MapViewScreen> {
       geodesic: true,
     );
     polyLines[id] = polyline;
-    updateCameraLocation(polylineCoordinates.first, polylineCoordinates.last, _mapController);
+    updateCameraLocation(
+        polylineCoordinates.first, polylineCoordinates.last, _mapController);
     setState(() {});
   }
 
@@ -123,12 +126,17 @@ class _MapViewScreenState extends State<MapViewScreen> {
 
     LatLngBounds bounds;
 
-    if (source.latitude > destination.latitude && source.longitude > destination.longitude) {
+    if (source.latitude > destination.latitude &&
+        source.longitude > destination.longitude) {
       bounds = LatLngBounds(southwest: destination, northeast: source);
     } else if (source.longitude > destination.longitude) {
-      bounds = LatLngBounds(southwest: LatLng(source.latitude, destination.longitude), northeast: LatLng(destination.latitude, source.longitude));
+      bounds = LatLngBounds(
+          southwest: LatLng(source.latitude, destination.longitude),
+          northeast: LatLng(destination.latitude, source.longitude));
     } else if (source.latitude > destination.latitude) {
-      bounds = LatLngBounds(southwest: LatLng(destination.latitude, source.longitude), northeast: LatLng(source.latitude, destination.longitude));
+      bounds = LatLngBounds(
+          southwest: LatLng(destination.latitude, source.longitude),
+          northeast: LatLng(source.latitude, destination.longitude));
     } else {
       bounds = LatLngBounds(southwest: source, northeast: destination);
     }
@@ -138,7 +146,8 @@ class _MapViewScreenState extends State<MapViewScreen> {
     return checkCameraLocation(cameraUpdate, mapController);
   }
 
-  Future<void> checkCameraLocation(CameraUpdate cameraUpdate, GoogleMapController mapController) async {
+  Future<void> checkCameraLocation(
+      CameraUpdate cameraUpdate, GoogleMapController mapController) async {
     mapController.animateCamera(cameraUpdate);
     LatLngBounds l1 = await mapController.getVisibleRegion();
     LatLngBounds l2 = await mapController.getVisibleRegion();
@@ -164,7 +173,8 @@ class _MapViewScreenState extends State<MapViewScreen> {
                     return Container(
                       child: Center(
                         child: CircularProgressIndicator.adaptive(
-                          valueColor: AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
+                          valueColor:
+                              AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
                         ),
                       ),
                     );
@@ -189,7 +199,8 @@ class _MapViewScreenState extends State<MapViewScreen> {
                           });
                         },
                         markerId: MarkerId('marker_$index'),
-                        position: LatLng(vendors[index].latitude, vendors[index].longitude),
+                        position: LatLng(
+                            vendors[index].latitude, vendors[index].longitude),
                         icon: selected == index ? mapMarkerSelect : mapMarker,
                         onTap: () {
                           setState(() {
@@ -217,9 +228,11 @@ class _MapViewScreenState extends State<MapViewScreen> {
                     initialCameraPosition: CameraPosition(
                       target: locationData == null
                           ? vendors.isNotEmpty
-                              ? LatLng(vendors.first.latitude, vendors.first.longitude)
+                              ? LatLng(vendors.first.latitude,
+                                  vendors.first.longitude)
                               : const LatLng(0, 0)
-                          : LatLng(locationData!.latitude, locationData!.longitude),
+                          : LatLng(
+                              locationData!.latitude, locationData!.longitude),
                       zoom: 14,
                     ),
 
@@ -240,12 +253,14 @@ class _MapViewScreenState extends State<MapViewScreen> {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(
                         child: CircularProgressIndicator.adaptive(
-                          valueColor: AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
+                          valueColor:
+                              AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
                         ),
                       );
                     }
 
-                    if (snapshot.hasData || (snapshot.data?.isNotEmpty ?? false)) {
+                    if (snapshot.hasData ||
+                        (snapshot.data?.isNotEmpty ?? false)) {
                       vendors = snapshot.data!;
                       return NotificationListener(
                           onNotification: (change) {
@@ -254,10 +269,12 @@ class _MapViewScreenState extends State<MapViewScreen> {
                                 //  print(contro.position.pixels~/100);
                                 print(selected);
 
-                                selected = contro.position.pixels ~/ 300.toInt();
+                                selected =
+                                    contro.position.pixels ~/ 300.toInt();
                                 latpos = vendors[selected].latitude;
                                 lotpos = vendors[selected].longitude;
-                                getDirections(vendors[selected].latitude, vendors[selected].longitude);
+                                getDirections(vendors[selected].latitude,
+                                    vendors[selected].longitude);
                                 move();
                               });
                             }
@@ -281,34 +298,59 @@ class _MapViewScreenState extends State<MapViewScreen> {
                                     width: 330,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(15),
-                                      color: isDarkMode(context) ? const Color(0XFF0a0a0a) : Colors.grey.shade100,
+                                      color: isDarkMode(context)
+                                          ? const Color(0XFF0a0a0a)
+                                          : Colors.grey.shade100,
                                     ),
                                     child: Row(
                                       children: [
                                         Expanded(
                                             flex: 3,
                                             child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
                                               child: CachedNetworkImage(
-                                                imageUrl: getImageVAlidUrl(vendors[index].photo),
-                                                imageBuilder: (context, imageProvider) => Container(
+                                                imageUrl: getImageVAlidUrl(
+                                                    vendors[index].photo),
+                                                imageBuilder:
+                                                    (context, imageProvider) =>
+                                                        Container(
                                                   decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(15),
-                                                    image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                    image: DecorationImage(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.cover),
                                                   ),
                                                 ),
-                                                placeholder: (context, url) => Center(
-                                                    child: CircularProgressIndicator.adaptive(
-                                                  valueColor: AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
+                                                placeholder: (context, url) =>
+                                                    Center(
+                                                        child:
+                                                            CircularProgressIndicator
+                                                                .adaptive(
+                                                  valueColor:
+                                                      AlwaysStoppedAnimation(
+                                                          Color(COLOR_PRIMARY)),
                                                 )),
-                                                errorWidget: (context, url, error) => ClipRRect(
-                                                    borderRadius: BorderRadius.circular(15),
-                                                    child: Image.network(
-                                                      placeholderImage,
-                                                      fit: BoxFit.cover,
-                                                      width: MediaQuery.of(context).size.width,
-                                                      height: MediaQuery.of(context).size.height,
-                                                    )),
+                                                errorWidget: (context, url,
+                                                        error) =>
+                                                    ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15),
+                                                        child: Image.asset(
+                                                          placeholderImage,
+                                                          fit: BoxFit.cover,
+                                                          width: MediaQuery.of(
+                                                                  context)
+                                                              .size
+                                                              .width,
+                                                          height: MediaQuery.of(
+                                                                  context)
+                                                              .size
+                                                              .height,
+                                                        )),
                                                 fit: BoxFit.cover,
                                               ),
                                             )),
@@ -317,28 +359,46 @@ class _MapViewScreenState extends State<MapViewScreen> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Text(
                                                   vendors[index].title,
-                                                  style: TextStyle(fontWeight: FontWeight.bold, color: isDarkMode(context) ? Colors.white70 : Colors.black, fontSize: 17),
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: isDarkMode(context)
+                                                          ? Colors.white70
+                                                          : Colors.black,
+                                                      fontSize: 17),
                                                 ),
                                                 Row(
                                                   children: [
-                                                    Icon(Icons.star, color: Color(COLOR_PRIMARY)),
+                                                    Icon(Icons.star,
+                                                        color: Color(
+                                                            COLOR_PRIMARY)),
                                                     const SizedBox(width: 5),
                                                     Text(
-                                                      vendors[index].reviewsCount.toStringAsFixed(1),
+                                                      vendors[index]
+                                                          .reviewsCount
+                                                          .toStringAsFixed(1),
                                                       style: TextStyle(
-                                                        color: isDarkMode(context) ? Colors.white70 : Colors.black,
+                                                        color:
+                                                            isDarkMode(context)
+                                                                ? Colors.white70
+                                                                : Colors.black,
                                                       ),
                                                     ),
                                                     const SizedBox(width: 4),
                                                     Text(
                                                       "(${vendors[index].reviewsSum.toString()})",
                                                       style: TextStyle(
-                                                        color: isDarkMode(context) ? Colors.white70 : Colors.black,
+                                                        color:
+                                                            isDarkMode(context)
+                                                                ? Colors.white70
+                                                                : Colors.black,
                                                       ),
                                                     ),
                                                   ],
@@ -347,7 +407,9 @@ class _MapViewScreenState extends State<MapViewScreen> {
                                                   vendors[index].location,
                                                   maxLines: 2,
                                                   style: TextStyle(
-                                                    color: isDarkMode(context) ? Colors.white70 : Colors.black,
+                                                    color: isDarkMode(context)
+                                                        ? Colors.white70
+                                                        : Colors.black,
                                                   ),
                                                 ),
                                               ],
@@ -434,7 +496,9 @@ class _MapViewScreenState extends State<MapViewScreen> {
 
   Future<void> getTempLocation() async {
     debugPrint('location map: ${MyAppState.selectedPosotion.location}');
-    if (MyAppState.currentUser == null && MyAppState.selectedPosotion.location!.latitude != 0 && MyAppState.selectedPosotion.location!.longitude != 0) {
+    if (MyAppState.currentUser == null &&
+        MyAppState.selectedPosotion.location!.latitude != 0 &&
+        MyAppState.selectedPosotion.location!.longitude != 0) {
       locationData = MyAppState.selectedPosotion.location;
       setState(() {});
     }

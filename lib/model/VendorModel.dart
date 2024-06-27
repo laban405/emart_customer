@@ -22,7 +22,7 @@ class VendorModel {
 
   Timestamp? createdAt;
 
-  String description;
+  dynamic description;
 
   String phonenumber;
 

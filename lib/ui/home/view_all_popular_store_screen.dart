@@ -16,7 +16,8 @@ class ViewAllPopularStoreScreen extends StatefulWidget {
   const ViewAllPopularStoreScreen({Key? key}) : super(key: key);
 
   @override
-  _ViewAllPopularStoreScreenState createState() => _ViewAllPopularStoreScreenState();
+  _ViewAllPopularStoreScreenState createState() =>
+      _ViewAllPopularStoreScreenState();
 }
 
 class _ViewAllPopularStoreScreenState extends State<ViewAllPopularStoreScreen> {
@@ -36,22 +37,64 @@ class _ViewAllPopularStoreScreenState extends State<ViewAllPopularStoreScreen> {
     vendorsFuture!.listen((value) {
       storeAllLst.clear();
       storeAllLst.addAll(value);
-      List<VendorModel> temp5 = storeAllLst.where((element) => num.parse((element.reviewsSum / element.reviewsCount).toString()) == 5).toList();
+      List<VendorModel> temp5 = storeAllLst
+          .where((element) =>
+              num.parse(
+                  (element.reviewsSum / element.reviewsCount).toString()) ==
+              5)
+          .toList();
       List<VendorModel> temp5_ = storeAllLst
-          .where((element) => num.parse((element.reviewsSum / element.reviewsCount).toString()) > 4 && num.parse((element.reviewsSum / element.reviewsCount).toString()) < 5)
+          .where((element) =>
+              num.parse(
+                      (element.reviewsSum / element.reviewsCount).toString()) >
+                  4 &&
+              num.parse(
+                      (element.reviewsSum / element.reviewsCount).toString()) <
+                  5)
           .toList();
       List<VendorModel> temp4 = storeAllLst
-          .where((element) => num.parse((element.reviewsSum / element.reviewsCount).toString()) > 3 && num.parse((element.reviewsSum / element.reviewsCount).toString()) < 4)
+          .where((element) =>
+              num.parse(
+                      (element.reviewsSum / element.reviewsCount).toString()) >
+                  3 &&
+              num.parse(
+                      (element.reviewsSum / element.reviewsCount).toString()) <
+                  4)
           .toList();
       List<VendorModel> temp3 = storeAllLst
-          .where((element) => num.parse((element.reviewsSum / element.reviewsCount).toString()) > 2 && num.parse((element.reviewsSum / element.reviewsCount).toString()) < 3)
+          .where((element) =>
+              num.parse(
+                      (element.reviewsSum / element.reviewsCount).toString()) >
+                  2 &&
+              num.parse(
+                      (element.reviewsSum / element.reviewsCount).toString()) <
+                  3)
           .toList();
       List<VendorModel> temp2 = storeAllLst
-          .where((element) => num.parse((element.reviewsSum / element.reviewsCount).toString()) > 1 && num.parse((element.reviewsSum / element.reviewsCount).toString()) < 2)
+          .where((element) =>
+              num.parse(
+                      (element.reviewsSum / element.reviewsCount).toString()) >
+                  1 &&
+              num.parse(
+                      (element.reviewsSum / element.reviewsCount).toString()) <
+                  2)
           .toList();
-      List<VendorModel> temp1 = storeAllLst.where((element) => num.parse((element.reviewsSum / element.reviewsCount).toString()) == 1).toList();
-      List<VendorModel> temp0 = storeAllLst.where((element) => num.parse((element.reviewsSum / element.reviewsCount).toString()) == 0).toList();
-      List<VendorModel> temp0_ = storeAllLst.where((element) => element.reviewsSum == 0 && element.reviewsCount == 0).toList();
+      List<VendorModel> temp1 = storeAllLst
+          .where((element) =>
+              num.parse(
+                  (element.reviewsSum / element.reviewsCount).toString()) ==
+              1)
+          .toList();
+      List<VendorModel> temp0 = storeAllLst
+          .where((element) =>
+              num.parse(
+                  (element.reviewsSum / element.reviewsCount).toString()) ==
+              0)
+          .toList();
+      List<VendorModel> temp0_ = storeAllLst
+          .where(
+              (element) => element.reviewsSum == 0 && element.reviewsCount == 0)
+          .toList();
 
       storeAllLst.clear();
       storeAllLst.addAll(temp5);
@@ -90,7 +133,8 @@ class _ViewAllPopularStoreScreenState extends State<ViewAllPopularStoreScreen> {
                         scrollDirection: Axis.vertical,
                         physics: const BouncingScrollPhysics(),
                         itemCount: storeAllLst.length,
-                        itemBuilder: (context, index) => buildPopularsItem(storeAllLst[index]))));
+                        itemBuilder: (context, index) =>
+                            buildPopularsItem(storeAllLst[index]))));
   }
 
   Widget buildPopularsItem(VendorModel vendorModel) {
@@ -105,7 +149,11 @@ class _ViewAllPopularStoreScreenState extends State<ViewAllPopularStoreScreen> {
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: isDarkMode(context) ? const Color(DarkContainerBorderColor) : Colors.grey.shade100, width: 1),
+          border: Border.all(
+              color: isDarkMode(context)
+                  ? const Color(DarkContainerBorderColor)
+                  : Colors.grey.shade100,
+              width: 1),
           color: isDarkMode(context) ? Color(DarkContainerColor) : Colors.white,
           boxShadow: [
             isDarkMode(context)
@@ -125,7 +173,8 @@ class _ViewAllPopularStoreScreenState extends State<ViewAllPopularStoreScreen> {
               imageBuilder: (context, imageProvider) => Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                  image:
+                      DecorationImage(image: imageProvider, fit: BoxFit.cover),
                 ),
               ),
               placeholder: (context, url) => Center(
@@ -134,7 +183,7 @@ class _ViewAllPopularStoreScreenState extends State<ViewAllPopularStoreScreen> {
               )),
               errorWidget: (context, url, error) => ClipRRect(
                   borderRadius: BorderRadius.circular(15),
-                  child: Image.network(
+                  child: Image.asset(
                     placeholderImage,
                     fit: BoxFit.cover,
                     width: MediaQuery.of(context).size.width,
@@ -172,7 +221,12 @@ class _ViewAllPopularStoreScreenState extends State<ViewAllPopularStoreScreen> {
                                   color: Color(COLOR_PRIMARY),
                                 ),
                                 const SizedBox(width: 3),
-                                Text(vendorModel.reviewsCount != 0 ? (vendorModel.reviewsSum / vendorModel.reviewsCount).toStringAsFixed(1) : 0.toString(),
+                                Text(
+                                    vendorModel.reviewsCount != 0
+                                        ? (vendorModel.reviewsSum /
+                                                vendorModel.reviewsCount)
+                                            .toStringAsFixed(1)
+                                        : 0.toString(),
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Color(0xff666666),
@@ -224,8 +278,12 @@ class _ViewAllPopularStoreScreenState extends State<ViewAllPopularStoreScreen> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(left: 10, right: 10),
-                              child: Text(getKm(vendorModel.latitude, vendorModel.longitude)! + " km",
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                              child: Text(
+                                  getKm(vendorModel.latitude,
+                                          vendorModel.longitude)! +
+                                      " km",
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
@@ -254,7 +312,8 @@ class _ViewAllPopularStoreScreenState extends State<ViewAllPopularStoreScreen> {
     //      .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 
     setState(() {
-      position = LatLng(MyAppState.selectedPosotion.location!.latitude, MyAppState.selectedPosotion.location!.longitude);
+      position = LatLng(MyAppState.selectedPosotion.location!.latitude,
+          MyAppState.selectedPosotion.location!.longitude);
       // cameraPosition = CameraPosition(
       //   target: LatLng(position.latitude, position.longitude),
       //   zoom: 14.4746,
@@ -263,7 +322,8 @@ class _ViewAllPopularStoreScreenState extends State<ViewAllPopularStoreScreen> {
   }
 
   String? getKm(double latitude, double longitude) {
-    double distanceInMeters = Geolocator.distanceBetween(latitude, longitude, position.latitude, position.longitude);
+    double distanceInMeters = Geolocator.distanceBetween(
+        latitude, longitude, position.latitude, position.longitude);
     double kilometer = distanceInMeters / 1000;
 
     double minutes = 1.2;

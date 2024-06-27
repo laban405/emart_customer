@@ -49,7 +49,8 @@ class FAppBar extends SliverAppBar {
   }) : super(elevation: 4.0, pinned: true, forceElevated: true);
 
   @override
-  Color? get backgroundColor => isDarkMode(context) ? Colors.black : Colors.white;
+  Color? get backgroundColor =>
+      isDarkMode(context) ? Colors.black : Colors.white;
 
   @override
   Widget? get leading {
@@ -85,7 +86,9 @@ class FAppBar extends SliverAppBar {
     return PreferredSize(
       preferredSize: const Size.fromHeight(48),
       child: Container(
-        color: isDarkMode(context) ? const Color(DarkContainerColor) : Colors.white,
+        color: isDarkMode(context)
+            ? const Color(DarkContainerColor)
+            : Colors.white,
         alignment: Alignment.centerLeft,
         child: TabBar(
           isScrollable: true,
@@ -93,7 +96,9 @@ class FAppBar extends SliverAppBar {
           indicatorPadding: const EdgeInsets.symmetric(horizontal: 12.0),
           indicatorColor: Color(COLOR_PRIMARY),
           labelColor: Color(COLOR_PRIMARY),
-          unselectedLabelColor: isDarkMode(context) ? Colors.white : Colors.black.withOpacity(0.60),
+          unselectedLabelColor: isDarkMode(context)
+              ? Colors.white
+              : Colors.black.withOpacity(0.60),
           indicatorWeight: 3.0,
           tabs: vendorCateoryModel.map((e) {
             return Tab(text: e.title);
@@ -112,7 +117,8 @@ class FAppBar extends SliverAppBar {
         BoxConstraints constraints,
       ) {
         final top = constraints.constrainHeight();
-        final collapsedHight = MediaQuery.of(context).viewPadding.top + kToolbarHeight + 48;
+        final collapsedHight =
+            MediaQuery.of(context).viewPadding.top + kToolbarHeight + 48;
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
           onCollapsed(collapsedHight != top);
         });
@@ -120,7 +126,10 @@ class FAppBar extends SliverAppBar {
         var _height = MediaQuery.of(context).size.height;
 
         double distanceInMeters = Geolocator.distanceBetween(
-            vendorModel.latitude, vendorModel.longitude, MyAppState.selectedPosotion.location!.latitude, MyAppState.selectedPosotion.location!.longitude);
+            vendorModel.latitude,
+            vendorModel.longitude,
+            MyAppState.selectedPosotion.location!.latitude,
+            MyAppState.selectedPosotion.location!.longitude);
         double kilometer = distanceInMeters / 1000;
 
         double minutes = 1.2;
@@ -136,7 +145,12 @@ class FAppBar extends SliverAppBar {
                 Container(
                     height: _height * 0.29,
                     decoration: const BoxDecoration(
-                      boxShadow: <BoxShadow>[BoxShadow(color: Colors.white38, blurRadius: 25.0, offset: Offset(0.0, 0.75))],
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                            color: Colors.white38,
+                            blurRadius: 25.0,
+                            offset: Offset(0.0, 0.75))
+                      ],
                     ),
                     width: _width * 1,
                     child: CachedNetworkImage(
@@ -144,14 +158,16 @@ class FAppBar extends SliverAppBar {
                       imageBuilder: (context, imageProvider) => Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(0),
-                          image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                          image: DecorationImage(
+                              image: imageProvider, fit: BoxFit.cover),
                         ),
                       ),
                       placeholder: (context, url) => Center(
                           child: CircularProgressIndicator.adaptive(
-                        valueColor: AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
+                        valueColor:
+                            AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
                       )),
-                      errorWidget: (context, url, error) => Image.network(
+                      errorWidget: (context, url, error) => Image.asset(
                         placeholderImage,
                         fit: BoxFit.fitWidth,
                       ),
@@ -171,69 +187,85 @@ class FAppBar extends SliverAppBar {
                           push(context, StorePhotos(vendorModel: vendorModel));
                         }))
               ]),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                Container(
-                    constraints: const BoxConstraints(maxWidth: 250),
-                    padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 15),
-                    child: Text(vendorModel.title,
-                        maxLines: 2,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          letterSpacing: 0.5,
-                        ))),
-                resttiming()
-              ]),
-              // SizedBox(height: 10,),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                Container(
-                    padding: const EdgeInsets.only(left: 15, right: 15),
-                    child: Row(children: [
-                      const ImageIcon(
-                        AssetImage('assets/images/location3x.png'),
-                        size: 18,
-                        color: Color(0xff9091A4),
-                      ),
-                      const SizedBox(width: 5),
-                      Container(
-                          constraints: const BoxConstraints(maxWidth: 230),
-                          child: Text(
-                            vendorModel.location,
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                        constraints: const BoxConstraints(maxWidth: 250),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 6, horizontal: 15),
+                        child: Text(vendorModel.title,
                             maxLines: 2,
-                            style: const TextStyle(letterSpacing: 0.5, color: Color(0xFF9091A4)),
-                          ))
-                    ])),
-                sectionConstantModel!.serviceTypeFlag == "ecommerce-service"
-                    ? Container()
-                    : InkWell(
-                        onTap: () {
-                          showModalBottomSheet(
-                            isScrollControlled: true,
-                            isDismissible: true,
-                            context: context,
-                            backgroundColor: Colors.transparent,
-                            enableDrag: true,
-                            builder: (context) => showTiming(context),
-                          );
-                        },
-                        child: Container(
-                            padding: const EdgeInsets.only(
-                              right: 2,
-                              left: 2,
-                            ),
-                            child: Text(
-                              "View Timing".tr(),
-                              style: TextStyle(
-                                color: Color(COLOR_PRIMARY),
-                                letterSpacing: 0.5,
-                              ),
-                            ).tr()))
-              ]),
+                            style: const TextStyle(
+                              fontSize: 18,
+                              letterSpacing: 0.5,
+                            ))),
+                    resttiming()
+                  ]),
+              // SizedBox(height: 10,),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                        padding: const EdgeInsets.only(left: 15, right: 15),
+                        child: Row(children: [
+                          const ImageIcon(
+                            AssetImage('assets/images/location3x.png'),
+                            size: 18,
+                            color: Color(0xff9091A4),
+                          ),
+                          const SizedBox(width: 5),
+                          Container(
+                              constraints: const BoxConstraints(maxWidth: 230),
+                              child: Text(
+                                vendorModel.location,
+                                maxLines: 2,
+                                style: const TextStyle(
+                                    letterSpacing: 0.5,
+                                    color: Color(0xFF9091A4)),
+                              ))
+                        ])),
+                    sectionConstantModel!.serviceTypeFlag == "ecommerce-service"
+                        ? Container()
+                        : InkWell(
+                            onTap: () {
+                              showModalBottomSheet(
+                                isScrollControlled: true,
+                                isDismissible: true,
+                                context: context,
+                                backgroundColor: Colors.transparent,
+                                enableDrag: true,
+                                builder: (context) => showTiming(context),
+                              );
+                            },
+                            child: Container(
+                                padding: const EdgeInsets.only(
+                                  right: 2,
+                                  left: 2,
+                                ),
+                                child: Text(
+                                  "View Timing".tr(),
+                                  style: TextStyle(
+                                    color: Color(COLOR_PRIMARY),
+                                    letterSpacing: 0.5,
+                                  ),
+                                ).tr()))
+                  ]),
               Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: isDarkMode(context) ? const Color(DarkContainerBorderColor) : Colors.grey.shade100, width: 1),
-                    color: isDarkMode(context) ? Color(DarkContainerColor) : Colors.white,
+                    border: Border.all(
+                        color: isDarkMode(context)
+                            ? const Color(DarkContainerBorderColor)
+                            : Colors.grey.shade100,
+                        width: 1),
+                    color: isDarkMode(context)
+                        ? Color(DarkContainerColor)
+                        : Colors.white,
                     boxShadow: [
                       isDarkMode(context)
                           ? const BoxShadow()
@@ -251,7 +283,8 @@ class FAppBar extends SliverAppBar {
                           Expanded(
                             child: Column(children: [
                               Image(
-                                image: const AssetImage("assets/images/location.png"),
+                                image: const AssetImage(
+                                    "assets/images/location.png"),
                                 color: Color(COLOR_PRIMARY),
                                 height: 25,
                               ),
@@ -260,14 +293,17 @@ class FAppBar extends SliverAppBar {
                               ),
                               Text(
                                 "${kilometer.toDouble().toStringAsFixed(currencyData!.decimal)} km",
-                                style: const TextStyle(letterSpacing: 0.5, color: Color(0xff565764)),
+                                style: const TextStyle(
+                                    letterSpacing: 0.5,
+                                    color: Color(0xff565764)),
                               ).tr()
                             ]),
                           ),
                           Expanded(
                             child: Column(children: [
                               Image(
-                                image: const AssetImage("assets/images/time.png"),
+                                image:
+                                    const AssetImage("assets/images/time.png"),
                                 color: Color(COLOR_PRIMARY),
                                 height: 25,
                               ),
@@ -277,18 +313,24 @@ class FAppBar extends SliverAppBar {
                               Text(
                                 '${hour.toString().padLeft(2, "0")}h ${minute.toStringAsFixed(0).padLeft(2, "0")}m',
                                 // "${minute.toDouble()} min",
-                                style: const TextStyle(letterSpacing: 0.5, color: Color(0xff565764)),
+                                style: const TextStyle(
+                                    letterSpacing: 0.5,
+                                    color: Color(0xff565764)),
                               )
                             ]),
                           ),
                           Expanded(
                             child: InkWell(
                                 onTap: () async {
-                                  await FlutterShare.share(title: vendorModel.title, text: "${vendorModel.location}", linkUrl: vendorModel.photo);
+                                  await FlutterShare.share(
+                                      title: vendorModel.title,
+                                      text: "${vendorModel.location}",
+                                      linkUrl: vendorModel.photo);
                                 },
                                 child: Column(children: [
                                   Image(
-                                    image: const AssetImage("assets/images/share.png"),
+                                    image: const AssetImage(
+                                        "assets/images/share.png"),
                                     color: Color(COLOR_PRIMARY),
                                     height: 25,
                                   ),
@@ -297,7 +339,9 @@ class FAppBar extends SliverAppBar {
                                   ),
                                   Text(
                                     "Share".tr(),
-                                    style: const TextStyle(letterSpacing: 0.5, color: Color(0xff565764)),
+                                    style: const TextStyle(
+                                        letterSpacing: 0.5,
+                                        color: Color(0xff565764)),
                                   ).tr()
                                 ])),
                           ),
@@ -308,7 +352,8 @@ class FAppBar extends SliverAppBar {
                             onTap: () {},
                             child: Column(children: [
                               Image(
-                                image: const AssetImage("assets/images/rate.png"),
+                                image:
+                                    const AssetImage("assets/images/rate.png"),
                                 color: Color(COLOR_PRIMARY),
                                 height: 25,
                               ),
@@ -321,7 +366,9 @@ class FAppBar extends SliverAppBar {
                                     : ' ${double.parse((vendorModel.reviewsSum / vendorModel.reviewsCount).toStringAsFixed(1))}'
                                             ' Rate'
                                         .tr(),
-                                style: const TextStyle(letterSpacing: 0.5, color: Color(0xff565764)),
+                                style: const TextStyle(
+                                    letterSpacing: 0.5,
+                                    color: Color(0xff565764)),
                               ).tr()
                             ]),
                           ),
@@ -342,7 +389,9 @@ class FAppBar extends SliverAppBar {
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () {
-                                  FlutterClipboard.copy(offerList[index].offerCode!).then((value) => print('copied'));
+                                  FlutterClipboard.copy(
+                                          offerList[index].offerCode!)
+                                      .then((value) => print('copied'));
 
                                   showModalBottomSheet(
                                     isScrollControlled: true,
@@ -353,7 +402,8 @@ class FAppBar extends SliverAppBar {
                                     ),
                                     backgroundColor: Colors.transparent,
                                     enableDrag: true,
-                                    builder: (context) => openCouponCode(context, offerList[index]),
+                                    builder: (context) => openCouponCode(
+                                        context, offerList[index]),
                                   );
                                 },
                                 child: buildOfferItem(index),
@@ -372,8 +422,10 @@ class FAppBar extends SliverAppBar {
     List<WorkingHoursModel> workingHours = vendorModel.workingHours;
     return Container(
         decoration: BoxDecoration(
-            color: isDarkMode(context) ? const Color(DARK_BG_COLOR) : Colors.white,
-            borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+            color:
+                isDarkMode(context) ? const Color(DARK_BG_COLOR) : Colors.white,
+            borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
         child: Stack(children: [
           SingleChildScrollView(
             child: Column(
@@ -381,15 +433,21 @@ class FAppBar extends SliverAppBar {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Container(
-                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-                  Container(
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.only(top: 15),
-                      child: Text(
-                        'Store Timing'.tr(),
-                        style: TextStyle(fontSize: 18, color: isDarkMode(context) ? const Color(0XFFdadada) : const Color(0XFF252525)),
-                      )),
-                ])),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                      Container(
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.only(top: 15),
+                          child: Text(
+                            'Store Timing'.tr(),
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: isDarkMode(context)
+                                    ? const Color(0XFFdadada)
+                                    : const Color(0XFF252525)),
+                          )),
+                    ])),
                 const SizedBox(
                   height: 10,
                 ),
@@ -400,36 +458,57 @@ class FAppBar extends SliverAppBar {
                     itemBuilder: (context, dayIndex) {
                       print(workingHours[dayIndex].day.toString());
                       return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 2),
                         child: Card(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                            color: isDarkMode(context) ? const Color(0XFFdadada).withOpacity(0.1) : Colors.grey.shade100,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6)),
+                            color: isDarkMode(context)
+                                ? const Color(0XFFdadada).withOpacity(0.1)
+                                : Colors.grey.shade100,
                             elevation: 2,
                             child: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 4),
                               child: Column(
                                 children: [
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20),
                                         child: Text(
                                           workingHours[dayIndex].day.toString(),
-                                          style: TextStyle(fontSize: 16, color: isDarkMode(context) ? const Color(0XFFdadada) : const Color(0XFF252525)),
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: isDarkMode(context)
+                                                  ? const Color(0XFFdadada)
+                                                  : const Color(0XFF252525)),
                                         ),
                                       ),
                                       Visibility(
-                                        visible: workingHours[dayIndex].timeslot!.isEmpty,
+                                        visible: workingHours[dayIndex]
+                                            .timeslot!
+                                            .isEmpty,
                                         child: Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 15),
                                           child: Container(
                                               height: 35,
                                               decoration: BoxDecoration(
-                                                  border: Border.all(color: Colors.grey.shade400, width: 1.5),
-                                                  color: isDarkMode(context) ? Colors.white : Colors.white,
-                                                  borderRadius: BorderRadius.circular(10)),
-                                              padding: const EdgeInsets.only(right: 15, left: 10),
+                                                  border: Border.all(
+                                                      color:
+                                                          Colors.grey.shade400,
+                                                      width: 1.5),
+                                                  color: isDarkMode(context)
+                                                      ? Colors.white
+                                                      : Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              padding: const EdgeInsets.only(
+                                                  right: 15, left: 10),
                                               child: Row(children: [
                                                 const Icon(
                                                   Icons.circle,
@@ -439,20 +518,29 @@ class FAppBar extends SliverAppBar {
                                                 const SizedBox(
                                                   width: 5,
                                                 ),
-                                                Text("Closed".tr(), style: const TextStyle(color: Colors.redAccent))
+                                                Text("Closed".tr(),
+                                                    style: const TextStyle(
+                                                        color:
+                                                            Colors.redAccent))
                                               ])),
                                         ),
                                       )
                                     ],
                                   ),
                                   Visibility(
-                                    visible: workingHours[dayIndex].timeslot!.isNotEmpty,
+                                    visible: workingHours[dayIndex]
+                                        .timeslot!
+                                        .isNotEmpty,
                                     child: ListView.builder(
                                         physics: const BouncingScrollPhysics(),
                                         shrinkWrap: true,
-                                        itemCount: workingHours[dayIndex].timeslot!.length,
+                                        itemCount: workingHours[dayIndex]
+                                            .timeslot!
+                                            .length,
                                         itemBuilder: (context, slotIndex) {
-                                          return buildTimeCard(timeslot: workingHours[dayIndex].timeslot![slotIndex]);
+                                          return buildTimeCard(
+                                              timeslot: workingHours[dayIndex]
+                                                  .timeslot![slotIndex]);
                                         }),
                                   ),
                                 ],
@@ -495,18 +583,29 @@ class FAppBar extends SliverAppBar {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(6),
             side: BorderSide(
-              color: isDarkMode(context) ? const Color(0XFF3c3a2e) : const Color(0XFFC3C5D1),
+              color: isDarkMode(context)
+                  ? const Color(0XFF3c3a2e)
+                  : const Color(0XFFC3C5D1),
               width: 1,
             ),
           ),
           child: Padding(
-              padding: const EdgeInsets.only(top: 7, bottom: 7, left: 20, right: 20),
+              padding:
+                  const EdgeInsets.only(top: 7, bottom: 7, left: 20, right: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text("From ".tr(), style: TextStyle(color: isDarkMode(context) ? const Color(0XFFa5a292) : const Color(0xff5A5D6D))),
+                  Text("From ".tr(),
+                      style: TextStyle(
+                          color: isDarkMode(context)
+                              ? const Color(0XFFa5a292)
+                              : const Color(0xff5A5D6D))),
                   //  SizedBox(height: 5,),
-                  Text(timeslot.from.toString(), style: TextStyle(color: isDarkMode(context) ? const Color(0XFFa5a292) : const Color(0XFF5A5D6D)))
+                  Text(timeslot.from.toString(),
+                      style: TextStyle(
+                          color: isDarkMode(context)
+                              ? const Color(0XFFa5a292)
+                              : const Color(0XFF5A5D6D)))
                 ],
               )),
         ),
@@ -518,18 +617,29 @@ class FAppBar extends SliverAppBar {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(6),
             side: BorderSide(
-              color: isDarkMode(context) ? const Color(0XFF3c3a2e) : const Color(0XFFC3C5D1),
+              color: isDarkMode(context)
+                  ? const Color(0XFF3c3a2e)
+                  : const Color(0XFFC3C5D1),
               width: 1,
             ),
           ),
           child: Padding(
-              padding: const EdgeInsets.only(top: 7, bottom: 7, left: 20, right: 20),
+              padding:
+                  const EdgeInsets.only(top: 7, bottom: 7, left: 20, right: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text("To ".tr(), style: TextStyle(color: isDarkMode(context) ? const Color(0XFFa5a292) : const Color(0xff5A5D6D))),
+                  Text("To ".tr(),
+                      style: TextStyle(
+                          color: isDarkMode(context)
+                              ? const Color(0XFFa5a292)
+                              : const Color(0xff5A5D6D))),
                   //  SizedBox(height: 5,),
-                  Text(timeslot.to.toString(), style: TextStyle(color: isDarkMode(context) ? const Color(0XFFa5a292) : const Color(0XFF5A5D6D)))
+                  Text(timeslot.to.toString(),
+                      style: TextStyle(
+                          color: isDarkMode(context)
+                              ? const Color(0XFFa5a292)
+                              : const Color(0XFF5A5D6D)))
                 ],
               )),
         ),
@@ -578,7 +688,10 @@ class FAppBar extends SliverAppBar {
                                   ? "${offerList[index].discountOffer}${currencyData!.symbol.toString()} OFF"
                                   : "${currencyData!.symbol.toString()}${offerList[index].discountOffer} OFF"
                               : "${offerList[index].discountOffer} % Off",
-                          style: const TextStyle(color: Color(GREY_TEXT_COLOR), fontWeight: FontWeight.bold, letterSpacing: 0.7),
+                          style: const TextStyle(
+                              color: Color(GREY_TEXT_COLOR),
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 0.7),
                         ),
                       ),
                     ],
@@ -593,15 +706,26 @@ class FAppBar extends SliverAppBar {
                       Text(
                         offerList[index].offerCode!,
                         textAlign: TextAlign.left,
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.normal, letterSpacing: 0.5, color: Color(GREY_TEXT_COLOR)),
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.normal,
+                            letterSpacing: 0.5,
+                            color: Color(GREY_TEXT_COLOR)),
                       ),
                       Container(
-                        margin: const EdgeInsets.only(left: 15, right: 15, top: 3),
+                        margin:
+                            const EdgeInsets.only(left: 15, right: 15, top: 3),
                         width: 1,
                         color: const Color(COUPON_DASH_COLOR),
                       ),
-                      Text("valid till ".tr() + getDate(offerList[index].expireOfferDate!.toDate().toString())!,
-                          style: const TextStyle(letterSpacing: 0.5, color: Color(0Xff696A75)))
+                      Text(
+                          "valid till ".tr() +
+                              getDate(offerList[index]
+                                  .expireOfferDate!
+                                  .toDate()
+                                  .toString())!,
+                          style: const TextStyle(
+                              letterSpacing: 0.5, color: Color(0Xff696A75)))
                     ],
                   ),
                 ],
@@ -640,12 +764,17 @@ class FAppBar extends SliverAppBar {
                 left: 50,
                 right: 50,
               ),
-              decoration: const BoxDecoration(image: DecorationImage(image: AssetImage("assets/images/offer_code_bg.png"))),
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage("assets/images/offer_code_bg.png"))),
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Text(
                   offerModel.offerCode!,
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500, letterSpacing: 0.9),
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.9),
                 ),
               )),
           GestureDetector(
@@ -667,7 +796,10 @@ class FAppBar extends SliverAppBar {
               margin: const EdgeInsets.only(top: 30, bottom: 30),
               child: Text(
                 "COPY CODE".tr(),
-                style: TextStyle(color: Color(COLOR_PRIMARY), fontWeight: FontWeight.w500, letterSpacing: 0.1),
+                style: TextStyle(
+                    color: Color(COLOR_PRIMARY),
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 0.1),
               ),
             ),
           ),
@@ -676,16 +808,25 @@ class FAppBar extends SliverAppBar {
             child: RichText(
               text: TextSpan(
                 text: "Use code ".tr(),
-                style: const TextStyle(fontSize: 16.0, color: Colors.grey, fontWeight: FontWeight.w700),
+                style: const TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.w700),
                 children: <TextSpan>[
                   TextSpan(
                     text: offerModel.offerCode,
-                    style: TextStyle(color: Color(COLOR_PRIMARY), fontWeight: FontWeight.w500, letterSpacing: 0.1),
+                    style: TextStyle(
+                        color: Color(COLOR_PRIMARY),
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 0.1),
                   ),
                   TextSpan(
                     text:
                         "${" & get ".tr()}${offerModel.discountTypeOffer == "Fix Price" ? currencyData!.symbol : ""}${offerModel.discountOffer}${offerModel.discountTypeOffer == "Percentage" ? "% off".tr() : " off".tr()} ",
-                    style: const TextStyle(fontSize: 16.0, color: Colors.grey, fontWeight: FontWeight.w700),
+                    style: const TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w700),
                   ),
                 ],
               ),
@@ -703,7 +844,11 @@ class FAppBar extends SliverAppBar {
       if (isOpen == true) {
         return Container(
             height: 35,
-            decoration: const BoxDecoration(color: Color(0XFFF1F4F7), borderRadius: BorderRadius.only(topLeft: Radius.circular(10), bottomLeft: Radius.circular(10))),
+            decoration: const BoxDecoration(
+                color: Color(0XFFF1F4F7),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    bottomLeft: Radius.circular(10))),
             padding: const EdgeInsets.only(right: 40, left: 10),
             child: Row(children: [
               const Icon(
@@ -714,12 +859,18 @@ class FAppBar extends SliverAppBar {
               const SizedBox(
                 width: 10,
               ),
-              Text("Open".tr(), style: const TextStyle(fontSize: 16, color: Color(0XFF3dae7d)))
+              Text("Open".tr(),
+                  style:
+                      const TextStyle(fontSize: 16, color: Color(0XFF3dae7d)))
             ]));
       } else {
         return Container(
             height: 35,
-            decoration: const BoxDecoration(color: Color(0XFFF1F4F7), borderRadius: BorderRadius.only(topLeft: Radius.circular(10), bottomLeft: Radius.circular(10))),
+            decoration: const BoxDecoration(
+                color: Color(0XFFF1F4F7),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    bottomLeft: Radius.circular(10))),
             padding: const EdgeInsets.only(right: 40, left: 10),
             child: Row(children: [
               const Icon(
@@ -730,7 +881,11 @@ class FAppBar extends SliverAppBar {
               const SizedBox(
                 width: 10,
               ),
-              Text("Close".tr(), style: const TextStyle(fontSize: 16, letterSpacing: 0.5, color: Colors.redAccent))
+              Text("Close".tr(),
+                  style: const TextStyle(
+                      fontSize: 16,
+                      letterSpacing: 0.5,
+                      color: Colors.redAccent))
             ]));
       }
     }

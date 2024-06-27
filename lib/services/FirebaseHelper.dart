@@ -1068,9 +1068,10 @@ class FireStoreUtils {
     QuerySnapshot<Map<String, dynamic>> productsQuery = await firestore.collection(SECTION).where("isActive", isEqualTo: true).get();
 
     await Future.forEach(productsQuery.docs, (QueryDocumentSnapshot<Map<String, dynamic>> document) {
+      print('document sections ${document.data()}');
       try {
         print("--->${document.data()}");
-        sections.add(SectionModel.fromJson(document.data()));
+        sections.add(SectionModel.fromJson(document.data() as dynamic));
       } catch (e) {
         print('**-FireStoreUtils.getSection Parse error $e');
       }
@@ -1202,11 +1203,12 @@ class FireStoreUtils {
     QuerySnapshot<Map<String, dynamic>> cuisinesQuery =
         await firestore.collection(CATEGORIES).where("section_id", isEqualTo: sectionConstantModel!.id).where('publish', isEqualTo: true).get();
     await Future.forEach(cuisinesQuery.docs, (QueryDocumentSnapshot<Map<String, dynamic>> document) {
-      try {
+      print('>>>>>>>>>>>>>>>>>>>getCuisines ${document.data()}');
+      // try {
         cuisines.add(VendorCategoryModel.fromJson(document.data()));
-      } catch (e) {
-        print('FireStoreUtils.getCuisines Parse error $e');
-      }
+      // } catch (e) {
+      //   print('FireStoreUtils.getCuisines Parse error $e');
+      // }
     });
     return cuisines;
   }
@@ -1518,6 +1520,8 @@ class FireStoreUtils {
         for (var document in documentList) {
           print("----------->  ${documentList.toString()}");
           final data = document.data() as Map<String, dynamic>;
+          print("----------- store data>  ${data}");
+
           vendors.add(VendorModel.fromJson(data));
           allResaturantStreamController!.add(vendors);
         }

@@ -117,7 +117,7 @@ class _FavouriteItemScreenState extends State<FavouriteItemScreen> {
                   )),
                   errorWidget: (context, url, error) => ClipRRect(
                       borderRadius: BorderRadius.circular(15),
-                      child: Image.network(
+                      child: Image.asset(
                         placeholderImage,
                         fit: BoxFit.cover,
                         width: MediaQuery.of(context).size.width,

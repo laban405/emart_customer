@@ -115,7 +115,7 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
                   )),
                   errorWidget: (context, url, error) => ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: Image.network(
+                      child: Image.asset(
                         placeholderImage,
                         fit: BoxFit.fitWidth,
                         width: MediaQuery.of(context).size.width,

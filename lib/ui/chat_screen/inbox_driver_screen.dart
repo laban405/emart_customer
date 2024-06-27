@@ -32,14 +32,18 @@ class _InboxDriverScreenState extends State<InboxDriverScreen> {
             onTap: () async {
               await showProgress(context, "Please wait".tr(), false);
 
-              User? customer = await FireStoreUtils.getCurrentUser(inboxModel.customerId.toString());
-              User? restaurantUser = await FireStoreUtils.getCurrentUser(inboxModel.restaurantId.toString());
+              User? customer = await FireStoreUtils.getCurrentUser(
+                  inboxModel.customerId.toString());
+              User? restaurantUser = await FireStoreUtils.getCurrentUser(
+                  inboxModel.restaurantId.toString());
               hideProgress();
               push(
                   context,
                   ChatScreens(
                     customerName: customer!.firstName + " " + customer.lastName,
-                    restaurantName: restaurantUser!.firstName + " " + restaurantUser.lastName,
+                    restaurantName: restaurantUser!.firstName +
+                        " " +
+                        restaurantUser.lastName,
                     orderId: inboxModel.orderId,
                     restaurantId: restaurantUser.userID,
                     customerId: customer.userID,
@@ -66,7 +70,7 @@ class _InboxDriverScreenState extends State<InboxDriverScreen> {
                         ),
                     errorWidget: (context, url, error) => ClipRRect(
                         borderRadius: BorderRadius.circular(5),
-                        child: Image.network(
+                        child: Image.asset(
                           placeholderImage,
                           fit: BoxFit.cover,
                         ))),
@@ -74,18 +78,25 @@ class _InboxDriverScreenState extends State<InboxDriverScreen> {
               title: Row(
                 children: [
                   Expanded(child: Text(inboxModel.restaurantName.toString())),
-                  Text(DateFormat('MMM d, yyyy').format(DateTime.fromMillisecondsSinceEpoch(inboxModel.createdAt!.millisecondsSinceEpoch)),
+                  Text(
+                      DateFormat('MMM d, yyyy').format(
+                          DateTime.fromMillisecondsSinceEpoch(
+                              inboxModel.createdAt!.millisecondsSinceEpoch)),
                       style: TextStyle(color: Colors.grey, fontSize: 14)),
                 ],
               ),
-              subtitle: Text("Order Id : #".tr() + inboxModel.orderId.toString()),
+              subtitle:
+                  Text("Order Id : #".tr() + inboxModel.orderId.toString()),
             ),
           );
         },
         shrinkWrap: true,
         onEmpty: const Center(child: Text("No Conversion found")),
         // orderBy is compulsory to enable pagination
-        query: FirebaseFirestore.instance.collection('chat_driver').where("customerId", isEqualTo: MyAppState.currentUser!.userID).orderBy('createdAt', descending: true),
+        query: FirebaseFirestore.instance
+            .collection('chat_driver')
+            .where("customerId", isEqualTo: MyAppState.currentUser!.userID)
+            .orderBy('createdAt', descending: true),
         //Change types customerId
         itemBuilderType: PaginateBuilderType.listView,
         initialLoader: const CircularProgressIndicator(),

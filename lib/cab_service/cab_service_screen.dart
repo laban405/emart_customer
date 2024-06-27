@@ -32,7 +32,11 @@ class CabServiceScreen extends StatefulWidget {
 }
 
 class _CabServiceScreenState extends State<CabServiceScreen> {
-  final CameraPosition _kInitialPosition = const CameraPosition(target: LatLng(19.018255973653343, 72.84793849278007), zoom: 11.0, tilt: 0, bearing: 0);
+  final CameraPosition _kInitialPosition = const CameraPosition(
+      target: LatLng(19.018255973653343, 72.84793849278007),
+      zoom: 11.0,
+      tilt: 0,
+      bearing: 0);
 
   final TextEditingController departureController = TextEditingController();
   final TextEditingController destinationController = TextEditingController();
@@ -121,7 +125,8 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
     try {
       if (MyAppState.currentUser != null) {
         if (MyAppState.currentUser!.inProgressOrderID != null) {
-          ordersFuture = FireStoreUtils().getCabOrder(MyAppState.currentUser!.inProgressOrderID.toString());
+          ordersFuture = FireStoreUtils().getCabOrder(
+              MyAppState.currentUser!.inProgressOrderID.toString());
           ordersFuture.listen((event) {
             print("------->${event.status}");
             print("------->${event.paymentMethod}");
@@ -148,18 +153,33 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
   void getCurrentLocation(bool isDepartureSet) async {
     if (isDepartureSet) {
       LocationData location = await currentLocation.getLocation();
-      List<get_cord_address.Placemark> placeMarks = await get_cord_address.placemarkFromCoordinates(location.latitude ?? 0.0, location.longitude ?? 0.0);
+      List<get_cord_address.Placemark> placeMarks =
+          await get_cord_address.placemarkFromCoordinates(
+              location.latitude ?? 0.0, location.longitude ?? 0.0);
 
-      final address = (placeMarks.first.subLocality!.isEmpty ? '' : "${placeMarks.first.subLocality}, ") +
-          (placeMarks.first.street!.isEmpty ? '' : "${placeMarks.first.street}, ") +
+      final address = (placeMarks.first.subLocality!.isEmpty
+              ? ''
+              : "${placeMarks.first.subLocality}, ") +
+          (placeMarks.first.street!.isEmpty
+              ? ''
+              : "${placeMarks.first.street}, ") +
           (placeMarks.first.name!.isEmpty ? '' : "${placeMarks.first.name}, ") +
-          (placeMarks.first.subAdministrativeArea!.isEmpty ? '' : "${placeMarks.first.subAdministrativeArea}, ") +
-          (placeMarks.first.administrativeArea!.isEmpty ? '' : "${placeMarks.first.administrativeArea}, ") +
-          (placeMarks.first.country!.isEmpty ? '' : "${placeMarks.first.country}, ") +
-          (placeMarks.first.postalCode!.isEmpty ? '' : "${placeMarks.first.postalCode}, ");
+          (placeMarks.first.subAdministrativeArea!.isEmpty
+              ? ''
+              : "${placeMarks.first.subAdministrativeArea}, ") +
+          (placeMarks.first.administrativeArea!.isEmpty
+              ? ''
+              : "${placeMarks.first.administrativeArea}, ") +
+          (placeMarks.first.country!.isEmpty
+              ? ''
+              : "${placeMarks.first.country}, ") +
+          (placeMarks.first.postalCode!.isEmpty
+              ? ''
+              : "${placeMarks.first.postalCode}, ");
       departureController.text = address;
       setState(() {
-        setDepartureMarker(LatLng(location.latitude ?? 0.0, location.longitude ?? 0.0));
+        setDepartureMarker(
+            LatLng(location.latitude ?? 0.0, location.longitude ?? 0.0));
       });
     }
   }
@@ -189,7 +209,8 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
             markers: _markers.values.toSet(),
           ),
           Padding(
-            padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.04),
+            padding:
+                EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.04),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -197,10 +218,12 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
                   padding: const EdgeInsets.only(top: 3),
                   child: ElevatedButton(
                     onPressed: () {
-                      push(context, DashBoardCabService(user: MyAppState.currentUser));
+                      push(context,
+                          DashBoardCabService(user: MyAppState.currentUser));
                     },
                     style: ElevatedButton.styleFrom(
-                      shape: const CircleBorder(), backgroundColor: Colors.white,
+                      shape: const CircleBorder(),
+                      backgroundColor: Colors.white,
                       padding: const EdgeInsets.all(8),
                     ),
                     child: const Icon(
@@ -210,11 +233,17 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   child: Container(
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: isDarkMode(context) ? Colors.black87 : Colors.white),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: isDarkMode(context)
+                            ? Colors.black87
+                            : Colors.white),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 10),
                       child: Column(
                         children: [
                           Row(
@@ -225,7 +254,8 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
                               ),
                               Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
                                   child: Column(
                                     children: [
                                       Row(
@@ -236,32 +266,55 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
                                                 Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                    builder: (context) => PlacePicker(
+                                                    builder: (context) =>
+                                                        PlacePicker(
                                                       apiKey: GOOGLE_API_KEY,
                                                       onPlacePicked: (result) {
                                                         setState(() {
-                                                          departureController.text = result.formattedAddress.toString();
-                                                          setDepartureMarker(LatLng(result.geometry!.location.lat, result.geometry!.location.lng));
+                                                          departureController
+                                                                  .text =
+                                                              result
+                                                                  .formattedAddress
+                                                                  .toString();
+                                                          setDepartureMarker(
+                                                              LatLng(
+                                                                  result
+                                                                      .geometry!
+                                                                      .location
+                                                                      .lat,
+                                                                  result
+                                                                      .geometry!
+                                                                      .location
+                                                                      .lng));
                                                         });
 
-                                                        Navigator.of(context).pop();
+                                                        Navigator.of(context)
+                                                            .pop();
                                                       },
-                                                      initialPosition: LatLng(-33.8567844, 151.213108),
+                                                      initialPosition: LatLng(
+                                                          -33.8567844,
+                                                          151.213108),
                                                       useCurrentLocation: true,
-                                                      selectInitialPosition: true,
-                                                      usePinPointingSearch: true,
-                                                      usePlaceDetailSearch: true,
+                                                      selectInitialPosition:
+                                                          true,
+                                                      usePinPointingSearch:
+                                                          true,
+                                                      usePlaceDetailSearch:
+                                                          true,
                                                       zoomGesturesEnabled: true,
                                                       zoomControlsEnabled: true,
-                                                       initialMapType: MapType.terrain,
-                                                      resizeToAvoidBottomInset: false, // only works in page mode, less flickery, remove if wrong offsets
+                                                      initialMapType:
+                                                          MapType.terrain,
+                                                      resizeToAvoidBottomInset:
+                                                          false, // only works in page mode, less flickery, remove if wrong offsets
                                                     ),
                                                   ),
                                                 );
                                               },
                                               child: buildTextField(
                                                 title: "Departure".tr(),
-                                                textController: departureController,
+                                                textController:
+                                                    departureController,
                                               ),
                                             ),
                                           ),
@@ -273,7 +326,9 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
                                             icon: Icon(
                                               Icons.my_location_outlined,
                                               size: 18,
-                                              color: isDarkMode(context) ? Colors.white : Colors.black,
+                                              color: isDarkMode(context)
+                                                  ? Colors.white
+                                                  : Colors.black,
                                             ),
                                           ),
                                         ],
@@ -288,27 +343,36 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
                                                 apiKey: GOOGLE_API_KEY,
                                                 onPlacePicked: (result) {
                                                   setState(() {
-                                                    destinationController.text = result.formattedAddress.toString();
-                                                    setDestinationMarker(LatLng(result.geometry!.location.lat, result.geometry!.location.lng));
+                                                    destinationController.text =
+                                                        result.formattedAddress
+                                                            .toString();
+                                                    setDestinationMarker(LatLng(
+                                                        result.geometry!
+                                                            .location.lat,
+                                                        result.geometry!
+                                                            .location.lng));
                                                   });
 
                                                   Navigator.of(context).pop();
                                                 },
-                                                initialPosition: LatLng(-33.8567844, 151.213108),
+                                                initialPosition: LatLng(
+                                                    -33.8567844, 151.213108),
                                                 useCurrentLocation: true,
                                                 selectInitialPosition: true,
                                                 usePinPointingSearch: true,
                                                 usePlaceDetailSearch: true,
                                                 zoomGesturesEnabled: true,
                                                 zoomControlsEnabled: true,
-                                                 initialMapType: MapType.terrain,
-                                                resizeToAvoidBottomInset: false, // only works in page mode, less flickery, remove if wrong offsets
+                                                initialMapType: MapType.terrain,
+                                                resizeToAvoidBottomInset:
+                                                    false, // only works in page mode, less flickery, remove if wrong offsets
                                               ),
                                             ),
                                           );
                                         },
                                         child: buildTextField(
-                                          title: "Where do you want to go ?".tr(),
+                                          title:
+                                              "Where do you want to go ?".tr(),
                                           textController: destinationController,
                                         ),
                                       ),
@@ -328,9 +392,13 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: statusOfOrder == ORDER_STATUS_PLACED || statusOfOrder == ORDER_STATUS_DRIVER_PENDING || statusOfOrder == ORDER_STATUS_DRIVER_REJECTED
+            child: statusOfOrder == ORDER_STATUS_PLACED ||
+                    statusOfOrder == ORDER_STATUS_DRIVER_PENDING ||
+                    statusOfOrder == ORDER_STATUS_DRIVER_REJECTED
                 ? waitingDialog()
-                : statusOfOrder == ORDER_STATUS_DRIVER_ACCEPTED || statusOfOrder == ORDER_STATUS_SHIPPED || statusOfOrder == ORDER_STATUS_IN_TRANSIT
+                : statusOfOrder == ORDER_STATUS_DRIVER_ACCEPTED ||
+                        statusOfOrder == ORDER_STATUS_SHIPPED ||
+                        statusOfOrder == ORDER_STATUS_IN_TRANSIT
                     ? driverDialog(_cabOrderModel)
                     : statusOfOrder == ORDER_REACHED_DESTINATION
                         ? completeRide()
@@ -356,12 +424,18 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20),
       child: MaterialButton(
         onPressed: () async {
-          await getDurationDistance(departureLatLong!, destinationLatLong!).then((durationValue) async {
+          await getDurationDistance(departureLatLong!, destinationLatLong!)
+              .then((durationValue) async {
             print("----->${durationValue.toString()}");
             if (durationValue != null) {
               setState(() {
-                distance = durationValue['rows'].first['elements'].first['distance']['value'] / 1000.00;
-                duration = durationValue['rows'].first['elements'].first['duration']['text'];
+                distance = durationValue['rows']
+                        .first['elements']
+                        .first['distance']['value'] /
+                    1000.00;
+                duration = durationValue['rows']
+                    .first['elements']
+                    .first['duration']['text'];
                 statusOfOrder = "vehicleType";
               });
             }
@@ -377,7 +451,8 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
         child: const Text(
           "Continue",
           textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+          style: TextStyle(
+              color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
         ).tr(),
       ),
     );
@@ -402,7 +477,8 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: Text(
                 "Select Your Vehicle Type".tr(),
-                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
             ),
             ListView.builder(
@@ -416,7 +492,8 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
                     onTap: () {
                       setState(() {
                         selectedVehicleType = vehicleType[index];
-                        selectedVehicleTypeName = vehicleType[index].name.toString();
+                        selectedVehicleTypeName =
+                            vehicleType[index].name.toString();
                       });
                     },
                     child: Container(
@@ -424,14 +501,18 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
                             color: isDarkMode(context)
-                                ? selectedVehicleTypeName == vehicleType[index].name.toString()
+                                ? selectedVehicleTypeName ==
+                                        vehicleType[index].name.toString()
                                     ? Colors.white
                                     : const Color(DarkContainerBorderColor)
-                                : selectedVehicleTypeName == vehicleType[index].name.toString()
+                                : selectedVehicleTypeName ==
+                                        vehicleType[index].name.toString()
                                     ? Colors.black
                                     : Colors.grey.shade100,
                             width: 1),
-                        color: isDarkMode(context) ? const Color(DarkContainerColor) : Colors.white,
+                        color: isDarkMode(context)
+                            ? const Color(DarkContainerColor)
+                            : Colors.white,
                         boxShadow: [
                           isDarkMode(context)
                               ? const BoxShadow()
@@ -442,28 +523,34 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
                         ],
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 10),
                         child: Row(
                           children: [
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: CachedNetworkImage(
-                                imageUrl: vehicleType[index].vehicleIcon.toString(),
+                                imageUrl:
+                                    vehicleType[index].vehicleIcon.toString(),
                                 height: 60,
                                 width: 60,
-                                imageBuilder: (context, imageProvider) => Container(
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
-                                    image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                                    image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.cover),
                                   ),
                                 ),
                                 placeholder: (context, url) => Center(
                                     child: CircularProgressIndicator.adaptive(
-                                  valueColor: AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
+                                  valueColor: AlwaysStoppedAnimation(
+                                      Color(COLOR_PRIMARY)),
                                 )),
                                 errorWidget: (context, url, error) => ClipRRect(
                                     borderRadius: BorderRadius.circular(20),
-                                    child: Image.network(
+                                    child: Image.asset(
                                       placeholderImage,
                                       fit: BoxFit.cover,
                                     )),
@@ -472,19 +559,29 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
                             ),
                             Expanded(
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      vehicleType[index].name.toString() + " | " + distance.toStringAsFixed(currencyData!.decimal) + "km",
-                                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 1),
+                                      vehicleType[index].name.toString() +
+                                          " | " +
+                                          distance.toStringAsFixed(
+                                              currencyData!.decimal) +
+                                          "km",
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          letterSpacing: 1),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(top: 2.0),
                                       child: Text(
                                         duration,
-                                        style: const TextStyle(fontWeight: FontWeight.w400, letterSpacing: 1),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            letterSpacing: 1),
                                       ),
                                     ),
                                   ],
@@ -493,9 +590,14 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
                             ),
                             Text(
                               // symbol + getAmount(vehicleType[index]).toStringAsFixed(decimal),
-                              amountShow(amount: getAmount(vehicleType[index]).toString()),
+                              amountShow(
+                                  amount:
+                                      getAmount(vehicleType[index]).toString()),
 
-                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 1),
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1),
                             ),
                           ],
                         ),
@@ -514,17 +616,19 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
                   if (MyAppState.currentUser == null) {
                     push(context, const AuthScreen());
                   } else {
-                    final result = await Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => CabPaymentSelectionScreen(
-                            distance: distance.toString(),
-                            duration: duration,
-                            departureLatLong: departureLatLong,
-                            destinationLatLong: destinationLatLong,
-                            vehicleId: selectedVehicleType!.id,
-                            vehicleType: selectedVehicleType,
-                            departureName: departureController.text,
-                            destinationName: destinationController.text,
-                            subTotal: getAmount(selectedVehicleType!).toStringAsFixed(currencyData!.decimal))));
+                    final result = await Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => CabPaymentSelectionScreen(
+                                distance: distance.toString(),
+                                duration: duration,
+                                departureLatLong: departureLatLong,
+                                destinationLatLong: destinationLatLong,
+                                vehicleId: selectedVehicleType!.id,
+                                vehicleType: selectedVehicleType,
+                                departureName: departureController.text,
+                                destinationName: destinationController.text,
+                                subTotal: getAmount(selectedVehicleType!)
+                                    .toStringAsFixed(currencyData!.decimal))));
                     print("----->${result}");
                     if (result != null) {
                       getCurrentOrder();
@@ -542,14 +646,24 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Book".tr() + " ${selectedVehicleType == null ? "" : selectedVehicleType!.name}",
+                    "Book".tr() +
+                        " ${selectedVehicleType == null ? "" : selectedVehicleType!.name}",
                     textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600),
                   ),
                   Text(
-                    selectedVehicleType == null ? amountShow(amount: "0.0") : amountShow(amount: getAmount(selectedVehicleType!).toString()),
+                    selectedVehicleType == null
+                        ? amountShow(amount: "0.0")
+                        : amountShow(
+                            amount: getAmount(selectedVehicleType!).toString()),
                     textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600),
                   ),
                 ],
               ),
@@ -563,7 +677,8 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
   double getAmount(VehicleType vehicleType) {
     double totalAmount = 0.0;
     if (distance <= vehicleType.minimum_delivery_charges_within_km!) {
-      totalAmount = double.parse(vehicleType.minimum_delivery_charges.toString());
+      totalAmount =
+          double.parse(vehicleType.minimum_delivery_charges.toString());
     } else {
       totalAmount = vehicleType.delivery_charges_per_km! * distance;
     }
@@ -576,8 +691,11 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
       if (statusOfOrder == ORDER_STATUS_DRIVER_ACCEPTED) {
         await FireStoreUtils.sendRideBookEmail(orderModel: _cabOrderModel);
       }
-      if (statusOfOrder == ORDER_STATUS_DRIVER_ACCEPTED || statusOfOrder == ORDER_STATUS_SHIPPED || statusOfOrder == ORDER_STATUS_IN_TRANSIT) {
-        driverStream = FireStoreUtils().getDriver(_cabOrderModel!.driverID.toString());
+      if (statusOfOrder == ORDER_STATUS_DRIVER_ACCEPTED ||
+          statusOfOrder == ORDER_STATUS_SHIPPED ||
+          statusOfOrder == ORDER_STATUS_IN_TRANSIT) {
+        driverStream =
+            FireStoreUtils().getDriver(_cabOrderModel!.driverID.toString());
         driverStream.listen((event) {
           setState(() {
             _driverModel = event;
@@ -585,14 +703,22 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
           getDirections();
         });
 
-        await getDurationDistance(LatLng(_cabOrderModel!.sourceLocation.latitude, _cabOrderModel!.sourceLocation.longitude),
-                LatLng(_cabOrderModel!.destinationLocation.latitude, _cabOrderModel!.destinationLocation.longitude))
+        await getDurationDistance(
+                LatLng(_cabOrderModel!.sourceLocation.latitude,
+                    _cabOrderModel!.sourceLocation.longitude),
+                LatLng(_cabOrderModel!.destinationLocation.latitude,
+                    _cabOrderModel!.destinationLocation.longitude))
             .then((durationValue) async {
           print("----->${durationValue.toString()}");
           if (durationValue != null) {
             setState(() {
-              distance = durationValue['rows'].first['elements'].first['distance']['value'] / 1000.00;
-              duration = durationValue['rows'].first['elements'].first['duration']['text'];
+              distance = durationValue['rows']
+                      .first['elements']
+                      .first['distance']['value'] /
+                  1000.00;
+              duration = durationValue['rows']
+                  .first['elements']
+                  .first['duration']['text'];
             });
           }
         });
@@ -640,9 +766,15 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
               ? const CircularProgressIndicator()
               : Container(
                   decoration: BoxDecoration(
-                      color: isDarkMode(context) ? const Color(DarkContainerColor) : Colors.white, borderRadius: const BorderRadius.only(topLeft: Radius.circular(26), topRight: Radius.circular(26))),
+                      color: isDarkMode(context)
+                          ? const Color(DarkContainerColor)
+                          : Colors.white,
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(26),
+                          topRight: Radius.circular(26))),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15.0, vertical: 20),
                     child: Column(
                       children: [
                         const SizedBox(
@@ -654,8 +786,11 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("${cabOrderModel!.driver!.carNumber} \n${cabOrderModel.driver!.carMakes} ${cabOrderModel.driver!.carName}",
-                                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                                  Text(
+                                      "${cabOrderModel!.driver!.carNumber} \n${cabOrderModel.driver!.carMakes} ${cabOrderModel.driver!.carName}",
+                                      style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600)),
                                   Padding(
                                     padding: const EdgeInsets.only(top: 15),
                                     child: Text(
@@ -672,13 +807,20 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
                                         color: Color(COLOR_PRIMARY),
                                       ),
                                       const SizedBox(width: 3),
-                                      Text(_driverModel!.reviewsCount != 0 ? (_driverModel!.reviewsSum / _driverModel!.reviewsCount).toStringAsFixed(1) : 0.toString(),
+                                      Text(
+                                          _driverModel!.reviewsCount != 0
+                                              ? (_driverModel!.reviewsSum /
+                                                      _driverModel!
+                                                          .reviewsCount)
+                                                  .toStringAsFixed(1)
+                                              : 0.toString(),
                                           style: const TextStyle(
                                             letterSpacing: 0.5,
                                             color: Color(0xff000000),
                                           )),
                                       const SizedBox(width: 3),
-                                      Text('(${cabOrderModel.driver!.reviewsCount.toStringAsFixed(1)})',
+                                      Text(
+                                          '(${cabOrderModel.driver!.reviewsCount.toStringAsFixed(1)})',
                                           style: const TextStyle(
                                             letterSpacing: 0.5,
                                             color: Color(0xff666666),
@@ -694,19 +836,24 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: CachedNetworkImage(
-                                    imageUrl: cabOrderModel.driver!.profilePictureURL,
+                                    imageUrl:
+                                        cabOrderModel.driver!.profilePictureURL,
                                     height: 80.0,
                                     width: 80.0,
                                     placeholder: (context, url) => Center(
-                                        child: CircularProgressIndicator.adaptive(
-                                      valueColor: AlwaysStoppedAnimation(Color(COLOR_PRIMARY)),
+                                        child:
+                                            CircularProgressIndicator.adaptive(
+                                      valueColor: AlwaysStoppedAnimation(
+                                          Color(COLOR_PRIMARY)),
                                     )),
-                                    errorWidget: (context, url, error) => ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Image.network(
-                                          placeholderImage,
-                                          fit: BoxFit.cover,
-                                        )),
+                                    errorWidget: (context, url, error) =>
+                                        ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            child: Image.asset(
+                                              placeholderImage,
+                                              fit: BoxFit.cover,
+                                            )),
                                   ),
                                 ),
                                 const SizedBox(
@@ -721,10 +868,12 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
                                         strokeWidth: 2,
                                         dashPattern: const [5],
                                         child: Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 12, vertical: 5),
                                           child: Text(
                                             cabOrderModel.otpCode.toString(),
-                                            style: const TextStyle(color: Colors.black),
+                                            style: const TextStyle(
+                                                color: Colors.black),
                                           ),
                                         ))
                               ],
@@ -741,18 +890,23 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
                               Expanded(
                                 child: MaterialButton(
                                   onPressed: () async {
-                                    if (cabOrderModel.driver!.phoneNumber.isNotEmpty) {
-                                      UrlLauncher.launch("tel://${cabOrderModel.driver!.phoneNumber}");
+                                    if (cabOrderModel
+                                        .driver!.phoneNumber.isNotEmpty) {
+                                      UrlLauncher.launch(
+                                          "tel://${cabOrderModel.driver!.phoneNumber}");
                                     } else {
                                       SnackBar snack = SnackBar(
                                         content: Text(
-                                          "Driver Phone number is not available".tr(),
-                                          style: const TextStyle(color: Colors.white),
+                                          "Driver Phone number is not available"
+                                              .tr(),
+                                          style: const TextStyle(
+                                              color: Colors.white),
                                         ),
                                         duration: const Duration(seconds: 2),
                                         backgroundColor: Colors.black,
                                       );
-                                      ScaffoldMessenger.of(context).showSnackBar(snack);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(snack);
                                     }
                                   },
                                   height: 42,
@@ -764,14 +918,18 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      const Icon(Icons.wifi_calling_3, color: Colors.white),
+                                      const Icon(Icons.wifi_calling_3,
+                                          color: Colors.white),
                                       const SizedBox(
                                         width: 10,
                                       ),
                                       const Text(
                                         "Call",
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600),
                                       ).tr(),
                                     ],
                                   ),
@@ -783,23 +941,34 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
                               Expanded(
                                 child: MaterialButton(
                                   onPressed: () async {
-                                    await showProgress(context, "Please wait".tr(), false);
+                                    await showProgress(
+                                        context, "Please wait".tr(), false);
 
-                                    User? customer = await FireStoreUtils.getCurrentUser(cabOrderModel.authorID);
-                                    User? driver = await FireStoreUtils.getCurrentUser(cabOrderModel.driverID.toString());
+                                    User? customer =
+                                        await FireStoreUtils.getCurrentUser(
+                                            cabOrderModel.authorID);
+                                    User? driver =
+                                        await FireStoreUtils.getCurrentUser(
+                                            cabOrderModel.driverID.toString());
 
                                     hideProgress();
                                     push(
                                         context,
                                         ChatScreens(
                                           type: "cab_parcel_chat",
-                                          customerName: customer!.firstName + " " + customer.lastName,
-                                          restaurantName: driver!.firstName + " " + driver.lastName,
+                                          customerName: customer!.firstName +
+                                              " " +
+                                              customer.lastName,
+                                          restaurantName: driver!.firstName +
+                                              " " +
+                                              driver.lastName,
                                           orderId: cabOrderModel.id,
                                           restaurantId: driver.userID,
                                           customerId: customer.userID,
-                                          customerProfileImage: customer.profilePictureURL,
-                                          restaurantProfileImage: driver.profilePictureURL,
+                                          customerProfileImage:
+                                              customer.profilePictureURL,
+                                          restaurantProfileImage:
+                                              driver.profilePictureURL,
                                           token: driver.fcmToken,
                                           chatType: 'Driver',
                                         ));
@@ -823,7 +992,10 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
                                       Text(
                                         "Message".tr(),
                                         textAlign: TextAlign.center,
-                                        style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600),
                                       ),
                                     ],
                                   ),
@@ -834,15 +1006,26 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
                         ),
                         MaterialButton(
                           onPressed: () async {
-                            await showProgress(context, "Please wait".tr(), false);
+                            await showProgress(
+                                context, "Please wait".tr(), false);
 
-                            LocationData location = await currentLocation.getLocation();
+                            LocationData location =
+                                await currentLocation.getLocation();
 
-                            await FireStoreUtils().getSOS(_cabOrderModel!.id).then((value) async {
+                            await FireStoreUtils()
+                                .getSOS(_cabOrderModel!.id)
+                                .then((value) async {
                               if (value == false) {
-                                await FireStoreUtils().setSos(_cabOrderModel!.id, UserLocation(latitude: location.latitude!, longitude: location.longitude!)).then((value) {
+                                await FireStoreUtils()
+                                    .setSos(
+                                        _cabOrderModel!.id,
+                                        UserLocation(
+                                            latitude: location.latitude!,
+                                            longitude: location.longitude!))
+                                    .then((value) {
                                   hideProgress();
-                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
                                     content: Builder(builder: (context) {
                                       return const Text(
                                         "Your SOS request has been submitted to admin ",
@@ -854,7 +1037,8 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
                                 });
                               } else {
                                 hideProgress();
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
                                   content: Builder(builder: (context) {
                                     return const Text(
                                       "Your SOS request is already submitted",
@@ -885,7 +1069,10 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
                               const Text(
                                 "SOS",
                                 textAlign: TextAlign.center,
-                                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600),
                               ).tr(),
                             ],
                           ),
@@ -909,7 +1096,8 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
         icon: departureIcon!,
       );
       departureLatLong = departure;
-      _controller!.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(departure.latitude, departure.longitude), zoom: 14)));
+      _controller!.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+          target: LatLng(departure.latitude, departure.longitude), zoom: 14)));
 
       // _controller?.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(departure.latitude, departure.longitude), zoom: 18)));
       if (departureLatLong != null && destinationLatLong != null) {
@@ -965,7 +1153,8 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
                         departureLatLong = null;
                         destinationLatLong = null;
                         MyAppState.currentUser!.inProgressOrderID = null;
-                        FireStoreUtils.updateCurrentUser(MyAppState.currentUser!);
+                        FireStoreUtils.updateCurrentUser(
+                            MyAppState.currentUser!);
                       });
                     },
                     height: 42,
@@ -977,7 +1166,10 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
                     child: const Text(
                       "Cancel Ride",
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600),
                     ).tr(),
                   ),
                 )
@@ -1006,11 +1198,12 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
             padding: const EdgeInsets.symmetric(vertical: 10.0),
             child: MaterialButton(
               onPressed: () async {
-                final result = await Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => CabPaymentScreen(
-                          cabOrderModel: _cabOrderModel,
-                          taxModel: taxList,
-                        )));
+                final result =
+                    await Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => CabPaymentScreen(
+                              cabOrderModel: _cabOrderModel,
+                              taxModel: taxList,
+                            )));
                 print("----------->${result.toString()}");
                 if (result != null) {
                   statusOfOrder = "";
@@ -1034,7 +1227,10 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
               child: Text(
                 "Complete Your Payment".tr(),
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600),
               ),
             ),
           ),
@@ -1062,12 +1258,14 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
     });
   }
 
-  Widget buildTextField({required title, required TextEditingController textController}) {
+  Widget buildTextField(
+      {required title, required TextEditingController textController}) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0),
       child: TextField(
         controller: textController,
-        style: TextStyle(color: isDarkMode(context) ? Colors.white : Colors.black),
+        style:
+            TextStyle(color: isDarkMode(context) ? Colors.white : Colors.black),
         decoration: InputDecoration(
           hintText: title,
           border: InputBorder.none,
@@ -1085,8 +1283,10 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
 
       PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
         GOOGLE_API_KEY,
-        PointLatLng(_cabOrderModel!.sourceLocation.latitude, _cabOrderModel!.sourceLocation.longitude),
-        PointLatLng(_cabOrderModel!.destinationLocation.latitude, _cabOrderModel!.destinationLocation.longitude),
+        PointLatLng(_cabOrderModel!.sourceLocation.latitude,
+            _cabOrderModel!.sourceLocation.longitude),
+        PointLatLng(_cabOrderModel!.destinationLocation.latitude,
+            _cabOrderModel!.destinationLocation.longitude),
         travelMode: TravelMode.driving,
       );
 
@@ -1099,14 +1299,16 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
       _markers['Departure'] = Marker(
         markerId: const MarkerId('Departure'),
         infoWindow: const InfoWindow(title: "Departure"),
-        position: LatLng(_cabOrderModel!.sourceLocation.latitude, _cabOrderModel!.sourceLocation.longitude),
+        position: LatLng(_cabOrderModel!.sourceLocation.latitude,
+            _cabOrderModel!.sourceLocation.longitude),
         icon: departureIcon!,
       );
       _markers.remove("Destination");
       _markers['Destination'] = Marker(
         markerId: const MarkerId('Destination'),
         infoWindow: const InfoWindow(title: "Destination"),
-        position: LatLng(_cabOrderModel!.destinationLocation.latitude, _cabOrderModel!.destinationLocation.longitude),
+        position: LatLng(_cabOrderModel!.destinationLocation.latitude,
+            _cabOrderModel!.destinationLocation.longitude),
         icon: destinationIcon!,
       );
       addPolyLine(polylineCoordinates);
@@ -1115,8 +1317,10 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
 
       PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
         GOOGLE_API_KEY,
-        PointLatLng(_driverModel!.location.latitude, _driverModel!.location.longitude),
-        PointLatLng(_cabOrderModel!.sourceLocation.latitude, _cabOrderModel!.sourceLocation.longitude),
+        PointLatLng(
+            _driverModel!.location.latitude, _driverModel!.location.longitude),
+        PointLatLng(_cabOrderModel!.sourceLocation.latitude,
+            _cabOrderModel!.sourceLocation.longitude),
         travelMode: TravelMode.driving,
       );
 
@@ -1130,7 +1334,8 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
       _markers['Driver'] = Marker(
           markerId: const MarkerId('Driver'),
           infoWindow: const InfoWindow(title: "Driver"),
-          position: LatLng(_driverModel!.location.latitude, _driverModel!.location.longitude),
+          position: LatLng(_driverModel!.location.latitude,
+              _driverModel!.location.longitude),
           icon: taxiIcon!,
           rotation: double.parse(_driverModel!.rotation.toString()));
 
@@ -1138,7 +1343,8 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
       _markers['Departure'] = Marker(
         markerId: const MarkerId('Departure'),
         infoWindow: const InfoWindow(title: "Departure"),
-        position: LatLng(_cabOrderModel!.sourceLocation.latitude, _cabOrderModel!.sourceLocation.longitude),
+        position: LatLng(_cabOrderModel!.sourceLocation.latitude,
+            _cabOrderModel!.sourceLocation.longitude),
         icon: departureIcon!,
       );
 
@@ -1146,18 +1352,22 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
       _markers['Destination'] = Marker(
         markerId: const MarkerId('Destination'),
         infoWindow: const InfoWindow(title: "Destination"),
-        position: LatLng(_cabOrderModel!.destinationLocation.latitude, _cabOrderModel!.destinationLocation.longitude),
+        position: LatLng(_cabOrderModel!.destinationLocation.latitude,
+            _cabOrderModel!.destinationLocation.longitude),
         icon: destinationIcon!,
       );
 
       addPolyLine(polylineCoordinates);
-    } else if (statusOfOrder == ORDER_STATUS_IN_TRANSIT || statusOfOrder == ORDER_REACHED_DESTINATION) {
+    } else if (statusOfOrder == ORDER_STATUS_IN_TRANSIT ||
+        statusOfOrder == ORDER_REACHED_DESTINATION) {
       List<LatLng> polylineCoordinates = [];
 
       PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
         GOOGLE_API_KEY,
-        PointLatLng(_driverModel!.location.latitude, _driverModel!.location.longitude),
-        PointLatLng(_cabOrderModel!.destinationLocation.latitude, _cabOrderModel!.destinationLocation.longitude),
+        PointLatLng(
+            _driverModel!.location.latitude, _driverModel!.location.longitude),
+        PointLatLng(_cabOrderModel!.destinationLocation.latitude,
+            _cabOrderModel!.destinationLocation.longitude),
         travelMode: TravelMode.driving,
       );
 
@@ -1172,7 +1382,8 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
         _markers['Driver'] = Marker(
             markerId: const MarkerId('Driver'),
             infoWindow: const InfoWindow(title: "Driver"),
-            position: LatLng(_driverModel!.location.latitude, _driverModel!.location.longitude),
+            position: LatLng(_driverModel!.location.latitude,
+                _driverModel!.location.longitude),
             icon: taxiIcon!,
             rotation: double.parse(_driverModel!.rotation.toString()));
       });
@@ -1181,23 +1392,27 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
       _markers['Departure'] = Marker(
         markerId: const MarkerId('Departure'),
         infoWindow: const InfoWindow(title: "Departure"),
-        position: LatLng(_cabOrderModel!.sourceLocation.latitude, _cabOrderModel!.sourceLocation.longitude),
+        position: LatLng(_cabOrderModel!.sourceLocation.latitude,
+            _cabOrderModel!.sourceLocation.longitude),
         icon: departureIcon!,
       );
       _markers.remove("Destination");
       _markers['Destination'] = Marker(
         markerId: const MarkerId('Destination'),
         infoWindow: const InfoWindow(title: "Destination"),
-        position: LatLng(_cabOrderModel!.destinationLocation.latitude, _cabOrderModel!.destinationLocation.longitude),
+        position: LatLng(_cabOrderModel!.destinationLocation.latitude,
+            _cabOrderModel!.destinationLocation.longitude),
         icon: destinationIcon!,
       );
       addPolyLine(polylineCoordinates);
-    } else if (statusOfOrder == "conformation" || statusOfOrder == "vehicleType") {
+    } else if (statusOfOrder == "conformation" ||
+        statusOfOrder == "vehicleType") {
       List<LatLng> polylineCoordinates = [];
       PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
         GOOGLE_API_KEY,
         PointLatLng(departureLatLong!.latitude, departureLatLong!.longitude),
-        PointLatLng(destinationLatLong!.latitude, destinationLatLong!.longitude),
+        PointLatLng(
+            destinationLatLong!.latitude, destinationLatLong!.longitude),
         travelMode: TravelMode.driving,
       );
 
@@ -1220,7 +1435,8 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
       geodesic: true,
     );
     polyLines[id] = polyline;
-    updateCameraLocation(polylineCoordinates.first, polylineCoordinates.last, _controller);
+    updateCameraLocation(
+        polylineCoordinates.first, polylineCoordinates.last, _controller);
     setState(() {});
   }
 
@@ -1233,12 +1449,17 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
 
     LatLngBounds bounds;
 
-    if (source.latitude > destination.latitude && source.longitude > destination.longitude) {
+    if (source.latitude > destination.latitude &&
+        source.longitude > destination.longitude) {
       bounds = LatLngBounds(southwest: destination, northeast: source);
     } else if (source.longitude > destination.longitude) {
-      bounds = LatLngBounds(southwest: LatLng(source.latitude, destination.longitude), northeast: LatLng(destination.latitude, source.longitude));
+      bounds = LatLngBounds(
+          southwest: LatLng(source.latitude, destination.longitude),
+          northeast: LatLng(destination.latitude, source.longitude));
     } else if (source.latitude > destination.latitude) {
-      bounds = LatLngBounds(southwest: LatLng(destination.latitude, source.longitude), northeast: LatLng(source.latitude, destination.longitude));
+      bounds = LatLngBounds(
+          southwest: LatLng(destination.latitude, source.longitude),
+          northeast: LatLng(source.latitude, destination.longitude));
     } else {
       bounds = LatLngBounds(southwest: source, northeast: destination);
     }
@@ -1248,7 +1469,8 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
     return checkCameraLocation(cameraUpdate, mapController);
   }
 
-  Future<void> checkCameraLocation(CameraUpdate cameraUpdate, GoogleMapController mapController) async {
+  Future<void> checkCameraLocation(
+      CameraUpdate cameraUpdate, GoogleMapController mapController) async {
     mapController.animateCamera(cameraUpdate);
     LatLngBounds l1 = await mapController.getVisibleRegion();
     LatLngBounds l2 = await mapController.getVisibleRegion();
@@ -1258,7 +1480,8 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
     }
   }
 
-  Future<dynamic> getDurationDistance(LatLng departureLatLong, LatLng destinationLatLong) async {
+  Future<dynamic> getDurationDistance(
+      LatLng departureLatLong, LatLng destinationLatLong) async {
     double originLat, originLong, destLat, destLong;
     originLat = departureLatLong.latitude;
     originLong = departureLatLong.longitude;
@@ -1266,13 +1489,15 @@ class _CabServiceScreenState extends State<CabServiceScreen> {
     destLong = destinationLatLong.longitude;
 
     String url = 'https://maps.googleapis.com/maps/api/distancematrix/json';
-    http.Response restaurantToCustomerTime = await http.get(Uri.parse('$url?units=metric&origins=$originLat,'
-        '$originLong&destinations=$destLat,$destLong&key=$GOOGLE_API_KEY'));
+    http.Response restaurantToCustomerTime =
+        await http.get(Uri.parse('$url?units=metric&origins=$originLat,'
+            '$originLong&destinations=$destLat,$destLong&key=$GOOGLE_API_KEY'));
 
     var decodedResponse = jsonDecode(restaurantToCustomerTime.body);
 
     print(decodedResponse);
-    if (decodedResponse['status'] == 'OK' && decodedResponse['rows'].first['elements'].first['status'] == 'OK') {
+    if (decodedResponse['status'] == 'OK' &&
+        decodedResponse['rows'].first['elements'].first['status'] == 'OK') {
       return decodedResponse;
     }
     return null;

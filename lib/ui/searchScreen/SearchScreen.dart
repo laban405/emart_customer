@@ -72,13 +72,13 @@ class SearchScreenState extends State<SearchScreen> {
                           borderSide: BorderSide(
                               color: Color(COLOR_PRIMARY), width: 2.0)),
                       errorBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Theme.of(context).colorScheme.error),
+                        borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.error),
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       focusedErrorBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Theme.of(context).colorScheme.error),
+                        borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.error),
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       enabledBorder: OutlineInputBorder(
@@ -224,7 +224,7 @@ class SearchScreenState extends State<SearchScreen> {
                     ),
                 errorWidget: (context, url, error) => ClipRRect(
                     borderRadius: BorderRadius.circular(5),
-                    child: Image.network(
+                    child: Image.asset(
                       placeholderImage,
                       fit: BoxFit.cover,
                     ))),
@@ -319,7 +319,7 @@ class SearchScreenState extends State<SearchScreen> {
                     ),
                 errorWidget: (context, url, error) => ClipRRect(
                     borderRadius: BorderRadius.circular(5),
-                    child: Image.network(
+                    child: Image.asset(
                       placeholderImage,
                       fit: BoxFit.cover,
                     ))),

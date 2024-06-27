@@ -20,13 +20,16 @@ class OnDemandReviewScreen extends StatefulWidget {
   final OnProviderOrderModel order;
   final String reviewFor;
 
-  const OnDemandReviewScreen({Key? key, required this.order, required this.reviewFor}) : super(key: key);
+  const OnDemandReviewScreen(
+      {Key? key, required this.order, required this.reviewFor})
+      : super(key: key);
 
   @override
   _OnDemandReviewScreenState createState() => _OnDemandReviewScreenState();
 }
 
-class _OnDemandReviewScreenState extends State<OnDemandReviewScreen> with TickerProviderStateMixin {
+class _OnDemandReviewScreenState extends State<OnDemandReviewScreen>
+    with TickerProviderStateMixin {
   RatingModel? ratingModel;
   final _formKey = GlobalKey<FormState>();
   FireStoreUtils fireStoreUtils = FireStoreUtils();
@@ -57,7 +60,10 @@ class _OnDemandReviewScreenState extends State<OnDemandReviewScreen> with Ticker
   getReview() async {
     print(widget.order.id);
     if (widget.reviewFor == "Provider") {
-      await fireStoreUtils.getReviewsbyProviderID(widget.order.id, widget.order.provider.author.toString()).then((value) {
+      await fireStoreUtils
+          .getReviewsbyProviderID(
+              widget.order.id, widget.order.provider.author.toString())
+          .then((value) {
         if (value != null) {
           setState(() {
             ratingModel = value;
@@ -67,7 +73,10 @@ class _OnDemandReviewScreenState extends State<OnDemandReviewScreen> with Ticker
         }
       });
     } else {
-      await fireStoreUtils.getReviewsbyWorkerID(widget.order.id, widget.order.workerId.toString()).then((value) {
+      await fireStoreUtils
+          .getReviewsbyWorkerID(
+              widget.order.id, widget.order.workerId.toString())
+          .then((value) {
         if (value != null) {
           setState(() {
             ratingModel = value;
@@ -79,12 +88,14 @@ class _OnDemandReviewScreenState extends State<OnDemandReviewScreen> with Ticker
     }
     //Worker
     if (widget.reviewFor == "Worker") {
-      await FireStoreUtils.getWorker(widget.order.workerId.toString())!.then((value) {
+      await FireStoreUtils.getWorker(widget.order.workerId.toString())!
+          .then((value) {
         workerModel = value;
         if (value != null) {
           if (ratingModel != null) {
             workerReviewCount = value.reviewsCount! - 1;
-            workerReviewSum = value.reviewsSum! - num.parse(ratingModel!.rating.toString());
+            workerReviewSum =
+                value.reviewsSum! - num.parse(ratingModel!.rating.toString());
           } else {
             workerReviewCount = value.reviewsCount;
             workerReviewSum = value.reviewsSum;
@@ -93,12 +104,15 @@ class _OnDemandReviewScreenState extends State<OnDemandReviewScreen> with Ticker
         }
       });
     } else {
-      await FireStoreUtils.getCurrentUser(widget.order.provider.author.toString()).then((value) {
+      await FireStoreUtils.getCurrentUser(
+              widget.order.provider.author.toString())
+          .then((value) {
         provider = value;
         if (value != null) {
           if (ratingModel != null) {
             providerReviewCount = value.reviewsCount - 1;
-            providerReviewSum = value.reviewsSum - num.parse(ratingModel!.rating.toString());
+            providerReviewSum =
+                value.reviewsSum - num.parse(ratingModel!.rating.toString());
           } else {
             providerReviewCount = value.reviewsCount;
             providerReviewSum = value.reviewsSum;
@@ -106,11 +120,14 @@ class _OnDemandReviewScreenState extends State<OnDemandReviewScreen> with Ticker
           setState(() {});
         }
       });
-      await FireStoreUtils.getCurrentProvider(widget.order.provider.id.toString()).then((value) {
+      await FireStoreUtils.getCurrentProvider(
+              widget.order.provider.id.toString())
+          .then((value) {
         providerServiceModel = value;
         if (ratingModel != null) {
           serviceReviewCount = value!.reviewsCount ?? 0 - 1;
-          serviceReviewSum = value.reviewsSum ?? 0 - num.parse(ratingModel!.rating.toString());
+          serviceReviewSum =
+              value.reviewsSum ?? 0 - num.parse(ratingModel!.rating.toString());
         } else {
           serviceReviewCount = value!.reviewsCount;
           serviceReviewSum = value.reviewsSum;
@@ -136,7 +153,11 @@ class _OnDemandReviewScreenState extends State<OnDemandReviewScreen> with Ticker
             color: isDarkMode(context) ? Colors.white : Colors.black,
           ),
         ),
-        title: Text(ratingModel != null ? "Update Review".tr() : "Add Review".tr(), style: TextStyle(color: isDarkMode(context) ? Colors.white : Colors.black)).tr(),
+        title: Text(
+                ratingModel != null ? "Update Review".tr() : "Add Review".tr(),
+                style: TextStyle(
+                    color: isDarkMode(context) ? Colors.white : Colors.black))
+            .tr(),
       ),
       body: Form(
           key: _formKey,
@@ -156,10 +177,12 @@ class _OnDemandReviewScreenState extends State<OnDemandReviewScreen> with Ticker
                       child: Stack(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left: 20, right: 20, top: 42, bottom: 20),
+                            padding: const EdgeInsets.only(
+                                left: 20, right: 20, top: 42, bottom: 20),
                             child: Card(
                               elevation: 2,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
                               child: SingleChildScrollView(
                                 child: Padding(
                                   padding: const EdgeInsets.only(top: 65),
@@ -168,19 +191,33 @@ class _OnDemandReviewScreenState extends State<OnDemandReviewScreen> with Ticker
                                       Column(
                                         children: [
                                           Padding(
-                                            padding: const EdgeInsets.only(top: 20),
+                                            padding:
+                                                const EdgeInsets.only(top: 20),
                                             child: Text(
                                               'Rate for'.tr(),
                                               textAlign: TextAlign.center,
-                                              style: TextStyle(color: isDarkMode(context) ? Colors.white : Colors.black.withOpacity(0.60), letterSpacing: 0.8),
+                                              style: TextStyle(
+                                                  color: isDarkMode(context)
+                                                      ? Colors.white
+                                                      : Colors.black
+                                                          .withOpacity(0.60),
+                                                  letterSpacing: 0.8),
                                             ),
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.only(top: 8),
+                                            padding:
+                                                const EdgeInsets.only(top: 8),
                                             child: Text(
-                                              widget.reviewFor == "Provider" ? "${widget.order.provider.authorName}" : "${workerModel!.fullName()}",
-                                              style:
-                                                  TextStyle(fontSize: 18, color: isDarkMode(context) ? Colors.white : Colors.black, fontWeight: FontWeight.bold, letterSpacing: 2),
+                                              widget.reviewFor == "Provider"
+                                                  ? "${widget.order.provider.authorName}"
+                                                  : "${workerModel!.fullName()}",
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  color: isDarkMode(context)
+                                                      ? Colors.white
+                                                      : Colors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                  letterSpacing: 2),
                                             ),
                                           ),
                                         ],
@@ -193,8 +230,11 @@ class _OnDemandReviewScreenState extends State<OnDemandReviewScreen> with Ticker
                                           direction: Axis.horizontal,
                                           allowHalfRating: true,
                                           itemCount: 5,
-                                          itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                                          itemBuilder: (context, _) => const Icon(
+                                          itemPadding:
+                                              const EdgeInsets.symmetric(
+                                                  horizontal: 4.0),
+                                          itemBuilder: (context, _) =>
+                                              const Icon(
                                             Icons.star,
                                             color: Colors.amber,
                                           ),
@@ -204,37 +244,63 @@ class _OnDemandReviewScreenState extends State<OnDemandReviewScreen> with Ticker
                                         ),
                                       ),
                                       Padding(
-                                          padding: const EdgeInsets.only(top: 30, left: 20, right: 20),
+                                          padding: const EdgeInsets.only(
+                                              top: 30, left: 20, right: 20),
                                           child: TextFormField(
                                             controller: comment,
-                                            textInputAction: TextInputAction.send,
-                                            style: TextStyle(color: Colors.black),
+                                            textInputAction:
+                                                TextInputAction.send,
+                                            style:
+                                                TextStyle(color: Colors.black),
                                             decoration: InputDecoration(
                                                 counterText: "",
-                                                contentPadding: const EdgeInsets.all(8),
+                                                contentPadding:
+                                                    const EdgeInsets.all(8),
                                                 fillColor: Colors.white,
                                                 filled: true,
-                                                focusedBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(color: Color(COLOR_PRIMARY), width: 0.7),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color:
+                                                          Color(COLOR_PRIMARY),
+                                                      width: 0.7),
                                                 ),
-                                                enabledBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(color: Color(COLOR_PRIMARY), width: 0.7),
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color:
+                                                          Color(COLOR_PRIMARY),
+                                                      width: 0.7),
                                                 ),
                                                 errorBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(color: Color(COLOR_PRIMARY), width: 0.7),
+                                                  borderSide: BorderSide(
+                                                      color:
+                                                          Color(COLOR_PRIMARY),
+                                                      width: 0.7),
                                                 ),
                                                 border: OutlineInputBorder(
-                                                  borderSide: BorderSide(color: Color(COLOR_PRIMARY), width: 0.7),
+                                                  borderSide: BorderSide(
+                                                      color:
+                                                          Color(COLOR_PRIMARY),
+                                                      width: 0.7),
                                                 ),
-                                                hintText: "Type comment....".tr(),
-                                                hintStyle: TextStyle(color: Colors.black.withOpacity(0.60))),
+                                                hintText:
+                                                    "Type comment....".tr(),
+                                                hintStyle: TextStyle(
+                                                    color: Colors.black
+                                                        .withOpacity(0.60))),
                                             maxLines: 5,
                                           )),
                                       Padding(
-                                        padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 20),
+                                        padding: const EdgeInsets.only(
+                                            top: 20,
+                                            left: 20,
+                                            right: 20,
+                                            bottom: 20),
                                         child: MaterialButton(
                                           onPressed: () {
-                                            if (widget.reviewFor == "Provider") {
+                                            if (widget.reviewFor ==
+                                                "Provider") {
                                               //Provider review
                                               reviewSubmit();
                                             } else {
@@ -243,15 +309,23 @@ class _OnDemandReviewScreenState extends State<OnDemandReviewScreen> with Ticker
                                             }
                                           },
                                           height: 42,
-                                          minWidth: MediaQuery.of(context).size.width,
+                                          minWidth:
+                                              MediaQuery.of(context).size.width,
                                           elevation: 0.5,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
                                           ),
                                           color: Color(COLOR_PRIMARY),
                                           child: Text(
-                                            ratingModel != null ? "Update Review".tr() : "Add Review".tr(),
-                                            style: TextStyle(color: isDarkMode(context) ? Colors.white : Colors.black, fontSize: 16),
+                                            ratingModel != null
+                                                ? "Update Review".tr()
+                                                : "Add Review".tr(),
+                                            style: TextStyle(
+                                                color: isDarkMode(context)
+                                                    ? Colors.white
+                                                    : Colors.black,
+                                                fontSize: 16),
                                           ),
                                         ),
                                       ),
@@ -279,19 +353,26 @@ class _OnDemandReviewScreenState extends State<OnDemandReviewScreen> with Ticker
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(60),
                                 child: CachedNetworkImage(
-                                    imageUrl: widget.reviewFor == "Provider" ? widget.order.provider.authorProfilePic.toString() : workerModel!.profilePictureURL.toString(),
+                                    imageUrl: widget.reviewFor == "Provider"
+                                        ? widget.order.provider.authorProfilePic
+                                            .toString()
+                                        : workerModel!.profilePictureURL
+                                            .toString(),
                                     height: 110,
                                     width: 110,
                                     fit: BoxFit.cover,
-                                    placeholder: (context, url) => const CircularProgressIndicator(),
-                                    errorWidget: (context, url, error) => ClipRRect(
-                                        borderRadius: BorderRadius.circular(60),
-                                        child: Image.network(
-                                          placeholderImage,
-                                          fit: BoxFit.cover,
-                                          height: 110,
-                                          width: 110,
-                                        ))),
+                                    placeholder: (context, url) =>
+                                        const CircularProgressIndicator(),
+                                    errorWidget: (context, url, error) =>
+                                        ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(60),
+                                            child: Image.asset(
+                                              placeholderImage,
+                                              fit: BoxFit.cover,
+                                              height: 110,
+                                              width: 110,
+                                            ))),
                               ),
                             ),
                           ),
@@ -326,7 +407,8 @@ class _OnDemandReviewScreenState extends State<OnDemandReviewScreen> with Ticker
           orderId: ratingModel!.orderId,
           vendorId: ratingModel!.vendorId!,
           createdAt: Timestamp.now(),
-          uname: MyAppState.currentUser!.firstName + MyAppState.currentUser!.lastName,
+          uname: MyAppState.currentUser!.firstName +
+              MyAppState.currentUser!.lastName,
           profile: MyAppState.currentUser!.profilePictureURL,
         );
 
@@ -347,7 +429,8 @@ class _OnDemandReviewScreenState extends State<OnDemandReviewScreen> with Ticker
         provider!.reviewsCount = providerReviewCount + 1;
         provider!.reviewsSum = providerReviewSum + ratings;
 
-        DocumentReference documentReference = firestore.collection(Order_Rating).doc();
+        DocumentReference documentReference =
+            firestore.collection(Order_Rating).doc();
         RatingModel rate = RatingModel(
           id: documentReference.id,
           productId: widget.order.provider.id,
@@ -357,7 +440,8 @@ class _OnDemandReviewScreenState extends State<OnDemandReviewScreen> with Ticker
           orderId: widget.order.id,
           vendorId: widget.order.provider.author.toString(),
           customerId: MyAppState.currentUser!.userID,
-          uname: MyAppState.currentUser!.firstName + MyAppState.currentUser!.lastName,
+          uname: MyAppState.currentUser!.firstName +
+              MyAppState.currentUser!.lastName,
           profile: MyAppState.currentUser!.profilePictureURL,
           createdAt: Timestamp.now(),
         );
@@ -391,7 +475,8 @@ class _OnDemandReviewScreenState extends State<OnDemandReviewScreen> with Ticker
           orderId: ratingModel!.orderId,
           driverId: ratingModel!.driverId!,
           createdAt: Timestamp.now(),
-          uname: MyAppState.currentUser!.firstName + MyAppState.currentUser!.lastName,
+          uname: MyAppState.currentUser!.firstName +
+              MyAppState.currentUser!.lastName,
           profile: MyAppState.currentUser!.profilePictureURL,
         );
         await FireStoreUtils.updateReviewbyId(ratingProduct);
@@ -406,7 +491,8 @@ class _OnDemandReviewScreenState extends State<OnDemandReviewScreen> with Ticker
         workerModel!.reviewsCount = workerReviewCount + 1;
         workerModel!.reviewsSum = workerReviewSum + ratings;
 
-        DocumentReference documentReference = firestore.collection(Order_Rating).doc();
+        DocumentReference documentReference =
+            firestore.collection(Order_Rating).doc();
         RatingModel rate = RatingModel(
           id: documentReference.id,
           productId: widget.order.provider.id,
@@ -416,7 +502,8 @@ class _OnDemandReviewScreenState extends State<OnDemandReviewScreen> with Ticker
           orderId: widget.order.id,
           driverId: widget.order.workerId.toString(),
           customerId: MyAppState.currentUser!.userID,
-          uname: MyAppState.currentUser!.firstName + MyAppState.currentUser!.lastName,
+          uname: MyAppState.currentUser!.firstName +
+              MyAppState.currentUser!.lastName,
           profile: MyAppState.currentUser!.profilePictureURL,
           createdAt: Timestamp.now(),
         );
@@ -428,7 +515,8 @@ class _OnDemandReviewScreenState extends State<OnDemandReviewScreen> with Ticker
     }
   }
 
-  showAlertDialog(BuildContext context, String title, String content, bool addOkButton) {
+  showAlertDialog(
+      BuildContext context, String title, String content, bool addOkButton) {
     // set up the AlertDialog
     Widget? okButton;
     if (addOkButton) {
@@ -452,7 +540,10 @@ class _OnDemandReviewScreenState extends State<OnDemandReviewScreen> with Ticker
             return alert;
           });
     } else {
-      AlertDialog alert = AlertDialog(title: Text(title), content: Text(content), actions: [if (okButton != null) okButton]);
+      AlertDialog alert = AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: [if (okButton != null) okButton]);
 
       showDialog(
         context: context,

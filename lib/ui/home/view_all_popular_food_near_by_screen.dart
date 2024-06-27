@@ -15,10 +15,12 @@ class ViewAllPopularFoodNearByScreen extends StatefulWidget {
   const ViewAllPopularFoodNearByScreen({Key? key}) : super(key: key);
 
   @override
-  _ViewAllPopularFoodNearByScreenState createState() => _ViewAllPopularFoodNearByScreenState();
+  _ViewAllPopularFoodNearByScreenState createState() =>
+      _ViewAllPopularFoodNearByScreenState();
 }
 
-class _ViewAllPopularFoodNearByScreenState extends State<ViewAllPopularFoodNearByScreen> {
+class _ViewAllPopularFoodNearByScreenState
+    extends State<ViewAllPopularFoodNearByScreen> {
   late Stream<List<VendorModel>> vendorsFuture;
   final fireStoreUtils = FireStoreUtils();
   Stream<List<VendorModel>>? lstAllStore;
@@ -69,7 +71,10 @@ class _ViewAllPopularFoodNearByScreenState extends State<ViewAllPopularFoodNearB
   getFoodType() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     setState(() {
-      selctedOrderTypeValue = sp.getString("foodType") == "" || sp.getString("foodType") == null ? "Delivery".tr() : sp.getString("foodType");
+      selctedOrderTypeValue =
+          sp.getString("foodType") == "" || sp.getString("foodType") == null
+              ? "Delivery".tr()
+              : sp.getString("foodType");
     });
   }
 
@@ -100,27 +105,35 @@ class _ViewAllPopularFoodNearByScreenState extends State<ViewAllPopularFoodNearB
                         print("Vendor ====${vendors.length}");
                         popularNearFoodVendorModel = null;
                         for (int a = 0; a < vendors.length; a++) {
-                          print(vendors[a].id.toString() + "===<><><><==" + lstNearByFood[index].vendorID);
+                          print(vendors[a].id.toString() +
+                              "===<><><><==" +
+                              lstNearByFood[index].vendorID);
                           if (vendors[a].id == lstNearByFood[index].vendorID) {
                             popularNearFoodVendorModel = vendors[a];
                           }
                         }
                       }
                       return popularNearFoodVendorModel == null
-                          ? (totItem == 0 && index == (lstNearByFood.length - 1))
-                              ? showEmptyState('No top selling found'.tr(), context)
+                          ? (totItem == 0 &&
+                                  index == (lstNearByFood.length - 1))
+                              ? showEmptyState(
+                                  'No top selling found'.tr(), context)
                               : Container()
-                          : buildVendorItemData(context, index, popularNearFoodVendorModel!);
+                          : buildVendorItemData(
+                              context, index, popularNearFoodVendorModel!);
                     }),
       ),
     );
   }
 
-  Widget buildVendorItemData(BuildContext context, int index, VendorModel popularNearFoodVendorModel) {
+  Widget buildVendorItemData(
+      BuildContext context, int index, VendorModel popularNearFoodVendorModel) {
     totItem++;
     return GestureDetector(
       onTap: () {
-        print(popularNearFoodVendorModel.id.toString() + " *** " + popularNearFoodVendorModel.title.toString());
+        print(popularNearFoodVendorModel.id.toString() +
+            " *** " +
+            popularNearFoodVendorModel.title.toString());
         push(
           context,
           NewVendorProductsScreen(vendorModel: popularNearFoodVendorModel),
@@ -145,7 +158,8 @@ class _ViewAllPopularFoodNearByScreenState extends State<ViewAllPopularFoodNearB
                 imageBuilder: (context, imageProvider) => Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                    image: DecorationImage(
+                        image: imageProvider, fit: BoxFit.cover),
                   ),
                 ),
                 placeholder: (context, url) => Center(
@@ -154,7 +168,7 @@ class _ViewAllPopularFoodNearByScreenState extends State<ViewAllPopularFoodNearB
                 )),
                 errorWidget: (context, url, error) => ClipRRect(
                     borderRadius: BorderRadius.circular(15),
-                    child: Image.network(
+                    child: Image.asset(
                       placeholderImage,
                       fit: BoxFit.cover,
                       width: MediaQuery.of(context).size.width,
@@ -192,10 +206,14 @@ class _ViewAllPopularFoodNearByScreenState extends State<ViewAllPopularFoodNearB
                   const SizedBox(
                     height: 5,
                   ),
-                  lstNearByFood[index].disPrice == "" || lstNearByFood[index].disPrice == "0"
+                  lstNearByFood[index].disPrice == "" ||
+                          lstNearByFood[index].disPrice == "0"
                       ? Text(
                           amountShow(amount: lstNearByFood[index].price),
-                          style: TextStyle(fontSize: 16, letterSpacing: 0.5, color: Color(COLOR_PRIMARY)),
+                          style: TextStyle(
+                              fontSize: 16,
+                              letterSpacing: 0.5,
+                              color: Color(COLOR_PRIMARY)),
                         )
                       : Row(
                           children: [
@@ -212,7 +230,10 @@ class _ViewAllPopularFoodNearByScreenState extends State<ViewAllPopularFoodNearB
                             ),
                             Text(
                               '${amountShow(amount: lstNearByFood[index].price)}',
-                              style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey, decoration: TextDecoration.lineThrough),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey,
+                                  decoration: TextDecoration.lineThrough),
                             ),
                           ],
                         ),

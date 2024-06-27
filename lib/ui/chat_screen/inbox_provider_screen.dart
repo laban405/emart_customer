@@ -32,8 +32,10 @@ class _InboxProviderScreenState extends State<InboxProviderScreen> {
             onTap: () async {
               await showProgress(context, "Please wait".tr(), false);
 
-              User? customer = await FireStoreUtils.getCurrentUser(inboxModel.customerId.toString());
-              User? provider = await FireStoreUtils.getCurrentUser(inboxModel.restaurantId.toString());
+              User? customer = await FireStoreUtils.getCurrentUser(
+                  inboxModel.customerId.toString());
+              User? provider = await FireStoreUtils.getCurrentUser(
+                  inboxModel.restaurantId.toString());
 
               await hideProgress();
               push(
@@ -67,7 +69,7 @@ class _InboxProviderScreenState extends State<InboxProviderScreen> {
                         ),
                     errorWidget: (context, url, error) => ClipRRect(
                         borderRadius: BorderRadius.circular(5),
-                        child: Image.network(
+                        child: Image.asset(
                           placeholderImage,
                           fit: BoxFit.cover,
                         ))),
@@ -75,7 +77,10 @@ class _InboxProviderScreenState extends State<InboxProviderScreen> {
               title: Row(
                 children: [
                   Expanded(child: Text(inboxModel.restaurantName.toString())),
-                  Text(DateFormat('MMM d, yyyy').format(DateTime.fromMillisecondsSinceEpoch(inboxModel.createdAt!.millisecondsSinceEpoch)),
+                  Text(
+                      DateFormat('MMM d, yyyy').format(
+                          DateTime.fromMillisecondsSinceEpoch(
+                              inboxModel.createdAt!.millisecondsSinceEpoch)),
                       style: TextStyle(color: Colors.grey, fontSize: 14)),
                 ],
               ),
@@ -86,7 +91,10 @@ class _InboxProviderScreenState extends State<InboxProviderScreen> {
         shrinkWrap: true,
         onEmpty: const Center(child: Text("No Conversion found")),
         // orderBy is compulsory to enable pagination
-        query: FirebaseFirestore.instance.collection('chat_provider').where("customerId", isEqualTo: MyAppState.currentUser!.userID).orderBy('createdAt', descending: true),
+        query: FirebaseFirestore.instance
+            .collection('chat_provider')
+            .where("customerId", isEqualTo: MyAppState.currentUser!.userID)
+            .orderBy('createdAt', descending: true),
         //Change types customerId
         itemBuilderType: PaginateBuilderType.listView,
         initialLoader: const CircularProgressIndicator(),
